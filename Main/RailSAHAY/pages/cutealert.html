@@ -1,0 +1,95 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Cute Alert Box Examples</title>
+<link href="/RailSAHAY/resources/css/sticky-alert.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css" />
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1>Cute Alert Box Examples</h1>
+    <div class="mt-3 mb-3"><div id="carbon-block"></div></div>
+    <p class="lead">A Vanilla JavaScript dialog popup library to create alert notifications, confirm popup boxes, and toast messages on the web app.</p>
+    <button class="btn btn-success" id="success">Success</button>
+    <button class="btn btn-error" id="error">error</button>
+    <button class="btn btn-warning" id="warning">Warning</button>
+    <button class="btn btn-info" id="info">Info</button>
+    <button class="btn btn-danger" id="confirm">Confirm</button>
+    <button class="btn btn-primary" id="toast">Toast</button>
+  </div>
+<script src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<script>
+var success = document.getElementById("success");
+success.addEventListener("click", ()=>{
+  cuteAlert({
+      type: "success",
+      title: "Success Title",
+      message: "Success Message",
+      buttonText: "Okay"
+  })
+})
+
+var error = document.getElementById("error");
+error.addEventListener("click", ()=>{
+  cuteAlert({
+      type: "error",
+      title: "Error Title",
+      message: "Error Message",
+      buttonText: "Okay"
+  })
+})
+
+var warning = document.getElementById("warning");
+warning.addEventListener("click", ()=>{
+  cuteAlert({
+      type: "warning",
+      title: "Warning Title",
+      message: "Warning Message",
+      buttonText: "Okay"
+  })
+})
+
+var info = document.getElementById("info");
+info.addEventListener("click", ()=>{
+  cuteAlert({
+      type: "info",
+      title: "Info Title",
+      message: "Info Message",
+      buttonText: "Okay"
+  })
+})
+
+var confirm = document.getElementById("confirm");
+confirm.addEventListener("click", ()=>{
+  cuteAlert({
+      type: "question",
+      title: "Confirm Title",
+      message: "Confirm Message",
+      confirmText: "Okay",
+      cancelText: "Cancel"
+  }).then((e)=>{
+    if ( e == ("confirm")){
+	alert("confirm");
+  } else {
+    alert(":-(");
+  }
+  })
+})
+
+var toast = document.getElementById("toast");
+toast.addEventListener("click", ()=>{
+  cuteToast({
+      type: "success",
+      message: "Info Message",
+      timer: 5000
+  })
+})
+</script>
+</body>
+</html>

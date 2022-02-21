@@ -1,0 +1,97 @@
+body
+{
+	background:#fff;
+}
+   .spnAnlyHrcy
+        {
+        	position:absolute;
+        	right:50px;
+        	font-weight:bold;
+        }
+        
+	.zonedesc
+	{
+		color:#fff;
+	}
+	.zoneboundaries
+	{
+		<!--fill:#ff9933;-->
+		cursor:pointer;
+	}
+	.activezone
+	{
+		fill:#ff6600;
+		cursor:pointer;
+	}
+	.selectedzone
+	{
+		fill:#0099ff;
+		cursor:pointer;
+	}
+    .zonedesc 
+    {
+      fill: #000;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 40px;
+    }
+    .zoneboundaries:hover
+    {
+      fill: #D3D3D3;
+      opacity: 0.5;
+    }
+    .zoneboundaries
+    {
+	    cursor: pointer;
+	    opacity: 1;
+    }
+span.locnhrcy
+{
+	font-size:13px;
+	font-weight:600;
+	cursor:pointer;
+}
+.chart-head
+{
+	font-size:13px;
+	font-weight:600;
+	cursor:pointer;
+	padding: 0.5rem 1rem;
+}
+
+a.perf-link
+{
+	margin-left:1rem;
+	font-weight:600;
+	color:#0059b3 !important;
+}
+.dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left:1rem;
+}
+nav.bg-dark1 {
+    background: #1976d2;
+    color: #fff;
+    margin-bottom:1rem;
+}
+.navbar-brand1
+{
+	font-weight:600;
+	padding:5px;
+	font-size:14px;
+}
+.cy-ind
+{
+	color:#4C6FDB;
+	margin-left:1rem;
+	margin-right:5px;
+}
+.ly-ind
+{
+	color:#FF4C4C;
+	margin-left:1rem;
+	margin-right:5px;
+}

@@ -1,0 +1,124 @@
+body{
+    background: #fff;
+}
+.contact-form{
+    background: #fff;
+    margin: 5%;
+    width: 94%;
+     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+.contact-image{
+    text-align: center;
+}
+.contact-form .form-control
+{
+    font-size:0.9rem;
+}
+.contact-form .text-label
+{
+    font-size:0.8rem;
+    color:#4d4d4d;
+    font-weight:600;
+}
+.contact-image img{
+    border-radius: 6rem;
+    width: 11%;
+    margin-top: -3%;
+    transform: rotate(29deg);
+}
+.contact-form form{
+    padding: 5%;
+    padding-top: 14%;
+    padding-bottom:15%;
+}
+.contact-form form .row{
+    margin-bottom: -7%;
+}
+.contact-form h3{
+    margin-bottom: 5%;
+    margin-top: -15%;
+    text-align: center;
+    color: #0062cc;
+    font-size:1.5rem;
+}
+.contact-form .btnContact {
+    width: 50%;
+    border: none;
+    border-radius: 1rem;
+    padding: 1.5%;
+    background: #dc3545;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.btnContactSubmit
+{
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    color: #fff;
+    background-color: #0062cc;
+    border: none;
+    cursor: pointer;
+}
+.data-grid {
+    max-height:75vh;
+    overflow-y:auto;
+    overflow-x:auto;
+    padding:10px;
+}
+.table-data {    
+    margin:10px;
+}
+.table-data tr:nth-child(even) 
+{background-color:#e6f5ff !important;}
+.table-data th {    
+    background:#0052cc;
+    color:#fff;
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    padding:0.25rem;
+}
+.table-data td {    
+    color:#000;
+    font-size:12px;
+    padding:0.4rem;
+}
+.data-grid-head {
+    font-family:'Roboto';
+    font-weight:700;
+    font-size:0.9rem;
+    color:#47476b;
+    margin-left:0.8rem;
+    position:relative;
+    text-align:left;
+    margin-top:1rem;
+    padding-bottom:10px;
+}
+.data-grid-head::after {
+    position: absolute;
+    content: "";
+    background: #C20E39;
+    height: 3px;
+    width: 64px;
+    left: 0;
+    bottom: 0;
+    margin: 0 auto;
+}
+.btn-icon
+{
+    border-radius:3px;
+    padding:2px;
+    font-weight:500;
+    line-height:1;
+}
+.table-data tr.selected-row {
+    background:#ffe066 !important;    
+}
+a.file-link {
+    font-weight:600;
+    text-decoration:none;
+    color:#0052cc;
+}

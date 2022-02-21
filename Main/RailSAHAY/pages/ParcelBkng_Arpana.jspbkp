@@ -1,0 +1,983 @@
+
+<!doctype html>
+<%
+int intDataSize =0;
+String Call 			=	"A";
+String strBaseMapDomn	=	"BHUVAN";
+System.out.println("TracFNR Map New:");
+String strDtls1[][]=(String[][])request.getAttribute("Details2");
+System.out.println("Length of Data:"+strDtls1.length);
+String strCallFlag=(String)request.getAttribute("CallFlag");
+System.out.println("strCallFlag:"+strCallFlag);
+String strFNR=(String)request.getAttribute("FNR");
+String strCordDetails[]=(String[])request.getAttribute("CordDetails");
+//int intCordDataSize	=	strCordDetails.length;
+//System.out.println("intCordDataSize:"+intCordDataSize);
+String strDesc1=(String)request.getAttribute("Desc");
+System.out.println("strDesc1:"+strDesc1);
+
+String[] strDesc	= strDesc1.split("#");
+
+for(int j=0;j<strDesc.length;j++)
+{
+	 System.out.println("strDesc[j]:"+strDesc[j]);
+}
+
+String[] strRows	= strDtls1[0][9].split("#");
+
+System.out.println("DataSize5:");
+for(int j=0;j<strRows.length;j++)
+{
+	 System.out.println("strRows[j]:"+strRows[j]);
+}	
+System.out.println("strCordDetails:"+strCordDetails);
+System.out.println("Length of Data:"+strDtls1.length);
+int intCrntCntr=0;
+
+if (strDtls1 == null)
+{
+	intDataSize =0;
+	Call ="B";
+	System.out.println("DataSize3:");
+}
+else
+{
+	System.out.println("DataSize4:");
+	intDataSize=strDtls1.length;
+	System.out.println("strRows:"+strDtls1[0][9]);
+	String[] strRows	= strDtls1[0][9].split("#");
+	   
+	System.out.println("DataSize5:");
+	for(int j=0;j<strRows.length;j++)
+	{
+		 System.out.println("strRows[j]:"+strRows[j]);
+	}	
+}
+System.out.println("DataSize:"+intDataSize);
+int zoom =8;
+%>
+<html lang="en">
+
+  <head>
+    <title>RAIL SAHAY: Logistics Partners</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700|Oswald:400,700" rel="stylesheet">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    
+    <link rel="stylesheet" href="/RailSAHAY/resources/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/aos.css">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/style.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/stepform.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/smart.css">
+	
+<!--  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDX-cwIo4xvSzjxyVRtxhoQy-KhLwRpgeM&region=IN&callback=initMap" type="text/javascript"></script>
+-->
+<script type="text/javascript" src="/RailSAHAY/resources/scripts/OpenLayers-2.13.1/OpenLayers.js"></script>
+
+<style>
+   html, body, #TestMap {
+       width: 100%;
+       height: 100%;
+       margin: 0;
+   }   
+
+</style>
+<style type="text/css">
+#btnData1{
+ position: absolute;
+ top: 35px;
+ left: 45%;
+ z-index:9999; 
+}
+</style>
+<style type="text/css">
+#lblInfo{
+ position: absolute;
+ top: 90%;
+}
+</style>
+<script>
+var map;
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#legend").slideUp();
+    });
+</script>
+<script>
+
+	 $(document).ready(function(){
+        $('#imgLoctIcon').bind('click', function(){
+        	$("#legend").slideToggle();
+        });
+    });
+</script>
+
+<script>
+$(document).ready(function() { 
+$('#txtGotoLocn').tooltip({'trigger':'focus', 'title': 'Enter Zone/Division/Section', 'placement':'bottom'});
+});
+</script>
+<script>
+$(document).ready(function() { 
+$("#TestMap").bind("contextmenu", function(e) {
+    e.preventDefault();
+});
+});
+</script>
+<script>
+strBaseMapDomn	=	'<%=strBaseMapDomn%>';
+ $(document).ready(function() { 
+      $("#frmGoTo").submit(function(e){
+      var locn=($("#txtGotoLocn").val()).trim().toUpperCase();
+      getLocnCoord(locn);
+      var locnCoord=($("#txtAjaxData").val()).trim();
+      var lat=parseFloat((locnCoord.substr(0,locnCoord.indexOf("#"))).trim());
+      var lng=parseFloat((locnCoord.substr(locnCoord.indexOf("#")+1)).trim());
+      var sourcePrj1 = new OpenLayers.Projection("EPSG:4326");
+
+      	<%
+	 if(strBaseMapDomn.equals("GOOGLE"))
+	 {
+      	%>   		
+		map.zoomTo(7);
+      		map.panTo(new OpenLayers.LonLat(lng,lat).transform(sourcePrj1, map.getProjectionObject()));
+      	<%
+	}
+	else
+	{
+	%>
+		map.zoomTo(7);
+		map.panTo(new OpenLayers.LonLat(lng,lat));
+	<%
+	}
+	%>
+
+      e.preventDefault();
+      });
+    });
+</script>
+<script>    
+var zoomlevel;
+	function init() 
+	{  
+	 	var iconwidth	=	"24";
+	    var iconheight	=	"24";
+	   	var iconwidth1	=	"10";
+	    var iconheight1	=	"10";
+	    
+       <%if ((intDataSize ==0 )){%>
+       		alert("Data Not Available For the Given Input");
+       <%}%>
+     	var geographic = new OpenLayers.Projection("EPSG:4326");
+        var mercator = new OpenLayers.Projection("EPSG:900913");
+         //Defining bounds    
+        var world = new OpenLayers.Bounds(-180, -89, 180, 89).transform(geographic, mercator);
+        
+        var options = {
+            projection: mercator,
+            displayProjection: geographic,
+            units: "m",
+            maxExtent: world,
+            maxResolution: 156543.0399,
+        };
+	   
+      	   var wms;  
+      var extent = new OpenLayers.Bounds(68,8,98,37);
+       if("<%=strBaseMapDomn%>"=="BHUVAN")
+      {
+        var options = {
+                  restrictedExtent: extent
+        };
+        map = new OpenLayers.Map("TestMap",options);
+      	wms = new OpenLayers.Layer.WMS("OpenLayers WMS",
+ 											"https://bhuvan-vec1.nrsc.gov.in/bhuvan/gwc/service/wms/", 
+ 											{layers: 'india3'
+ 											},									
+ 											{
+ 											opacity:0.6,
+ 											transitionEffect:'resize'
+ 											} 	
+ 											);
+ 	  }
+ 	  else
+ 	  {	
+ 	   var options = {
+	              projection: mercator,
+	              displayProjection: geographic,
+	              units: "m",
+	              maxExtent: world,
+	              maxResolution: 156543.0399,
+        	};
+ 	    map = new OpenLayers.Map("TestMap",options);						
+ 	 	wms  = new OpenLayers.Layer.Google("Google India Base" , {type : google.maps.MapTypeId.ROADMAP, sphericalMercator : true });
+ 	  }
+ 										
+  	 var dm_wms = new OpenLayers.Layer.WMS("Rail Track",
+           								 "http://fois.indianrail.gov.in/geoserver/wms/",
+			            				{
+						                layers: 'foisws:rail_track_clip',
+						                transparent: 'true'
+			            				},
+            							{opacity : 1,
+            							isBaseLayer: false,            							
+ 										transitionEffect:'resize'}
+ 										,{ numZoomLevels: 15,minZoomLevel: 1, maxZoomLevel: 15 }
+       									 );		
+
+	   var wms_sttnname = new OpenLayers.Layer.WMS("IR Stations",
+	              								 "http://fois.indianrail.gov.in/geoserver/wms/",
+	   			            				{
+	               						    layers: 'foisws:sttnnamenew',
+	   						                transparent: 'true'
+	   			            				},
+	               							{
+	               							opacity: 1,
+	               							isBaseLayer: false,            							
+	    										transitionEffect:'resize'}
+       									 );
+       								
+       														 
+       	var lineLayer 	= 	new OpenLayers.Layer.Vector("FNR Route");	
+		var markers		=	new OpenLayers.Layer.Markers("Route Station Layer");      			
+        map.addLayers([wms, dm_wms,wms_sttnname, lineLayer,markers]);        
+        
+        var popup ="";
+      map.events.register("zoomend", map, function()
+      {
+		    while( map.popups.length ) 
+		         map.removePopup(map.popups[0]);      	 
+      	 zoomlevel = map.getZoom();
+      	 //alert(zoomlevel);
+      	if(zoomlevel < 4)	
+      		map.zoomTo(4);
+      	 else if (zoomlevel > 15)
+      	 {
+      	 	map.zoomTo(15);
+      	 }
+      	  if(zoomlevel == 5 || zoomlevel == 6 )
+	        {
+	        	iconwidth	=	"20";
+			    iconheight	=	"20";
+			   	iconwidth1	=	"6";
+			    iconheight1	=	"6";
+	        }   
+	 		else if(zoomlevel == 7 || zoomlevel == 8)
+	        {
+	        	iconwidth	=	"24";
+			    iconheight	=	"24";
+			   	iconwidth1	=	"10";
+			    iconheight1	=	"10";
+	        }	  	
+	   		else if(zoomlevel == 9 || zoomlevel > 9)
+	        {
+	        	iconwidth	=	"28";
+			    iconheight	=	"28";
+			   	iconwidth1	=	"14";
+			    iconheight1	=	"14";
+	        }
+	        markers.clearMarkers()  
+      	 //zoomlevel = map.getZoom();
+         //map.clearMarkers();
+        
+        <%
+         	String strImg="";
+			for(int j=0;j<intDataSize;j++)
+			{ 
+				if(strDtls1[j][10].equals("C")) intCrntCntr=j;
+				if(j==0)
+				{// System.out.println("strDtls1[0][9]::"+strDtls1[0][9]);				
+					strDesc=strDtls1[0][9].split("#");
+					
+					for(int k=0;k<strDesc.length;k++)
+					{
+						// System.out.println("strDesc[k]:"+strDesc[k]);
+					}
+				}
+				
+				if(strDtls1[j][10].equals("S"))
+	     			strImg="src.png";
+				else if(strDtls1[j][10].equals("P"))
+	     			strImg="greenicon.png";
+				else if(strDtls1[j][10].equals("C"))
+	     			strImg="bMapIcon.png";
+				else if(strDtls1[j][10].equals("F"))
+	     			strImg="redicon.png";
+				else if(strDtls1[j][10].equals("D"))
+	     			strImg="dstn.png";
+							
+				
+		
+		 if((strDtls1[j][10].equals("S"))||(strDtls1[j][10].equals("P"))||(strDtls1[j][10].equals("C"))||(strDtls1[j][10].equals("D")))
+		 {
+		 %> 
+			<%if((strDtls1[j][10].equals("S"))||(strDtls1[j][10].equals("C"))||(strDtls1[j][10].equals("D")))	     														
+			{%>
+				
+				//var size = new OpenLayers.Size(24, 24);
+				var size = new OpenLayers.Size(iconwidth, iconheight);
+				
+			<% }
+			else
+			{%>
+				//var size = new OpenLayers.Size(10, 10);
+				var size = new OpenLayers.Size(iconwidth1, iconheight1);
+				
+			<% }%>
+				
+				var offset = new OpenLayers.Pixel(-size.w/2,-size.h);
+				var icon = new OpenLayers.Icon("/FOISWebPortal/resources/images/<%=strImg%>", size, offset);
+				var lonlat = new OpenLayers.LonLat(<%=strDtls1[j][5]%>,<%=strDtls1[j][4]%>);
+				if("<%=strBaseMapDomn%>"=="BHUVAN")
+      			{
+      			 	var marker<%=j%>= new OpenLayers.Marker(lonlat, icon);
+      			}
+      			else  /*For Google Map*/
+      			{
+					var sourcePrj = new OpenLayers.Projection("EPSG:4326");
+					var marker<%=j%>= new OpenLayers.Marker(lonlat.transform(sourcePrj, map.getProjectionObject()), icon);
+				}				 
+ 				icon.setOpacity(0.9); 	
+ 				
+ 				if("<%=strDtls1[j][10]%>"=="C")
+				{
+									
+					  var mrkrdtls<%=j%> = '<div id="content">'+
+											'<table>'+
+											'<tr style="border:0px;font-size:16px;color: blue;font-weight:bold;" align="center"><td colspan="2" align="center"><b><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</b></td></tr>'+					
+											'<tr><td colspan="2"></td></tr>'+											
+											'<tr><td><b>Detail</b></td><td><%=strDesc[2]%>/<%=strDesc[3]%>/<%=strDesc[4]%></td></tr>'+
+											'<tr><td><b>From</b></td><td><%=strDesc[0]%></td></tr>'+
+											'<tr><td><b>To</b></td><td><%=strDesc[1]%></td></tr>'+
+											'<tr><td><b>Station</b></td><td><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</td></tr>'+
+											'<tr><td><b>Zone (Division) </b></td><td><%=strDtls1[j][8]%> (<%=strDtls1[j][7]%>)</td></tr>'+																										
+											'<tr><td><b>Arrival</b></td><td><%=strDtls1[j][1]%></td></tr>'+
+											'<tr><td><b>Departure</b></td><td><%=strDtls1[j][2]%></td></tr>'+
+											'<tr><td><b>ETA At Destination</b></td><td><%=strDtls1[j][11]%></td></tr>'+
+											'</table>'+
+											'</div>';																
+				}
+				else if("<%=strDtls1[j][10]%>"=="F")
+				{				
+					  var mrkrdtls<%=j%> = '<div id="content">'+
+											'<table>'+
+											'<tr style="border:0px;font-size:12px;color: blue;font-weight:bold;" align="center"><td colspan="2" align="center"><b><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</b></td></tr>'+					
+											'<tr><td><b>Station</b></td><td><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</td></tr>'+
+											'<tr><td><b>Zone (Division) </b></td><td><%=strDtls1[j][8]%> (<%=strDtls1[j][7]%>)</td></tr>'+																										
+											'</table>'+
+											'</div>';							 
+		         }
+		        else if("<%=strDtls1[j][10]%>"=="S")
+				{				
+					  var mrkrdtls<%=j%> = '<div id="content">'+
+											'<table>'+
+											'<tr style="border:0px;font-size:16px;color: blue;font-weight:bold;" align="center"><td colspan="2" align="center"><b><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</b></td></tr>'+					
+											'<tr><td colspan="2"></td></tr>'+							
+											'<tr><td><b>Station</b></td><td><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</td></tr>'+
+											'<tr><td><b>Zone (Division) </b></td><td><%=strDtls1[j][8]%> (<%=strDtls1[j][7]%>)</td></tr>'+																										
+											'<tr><td><b>Departure Time</b></td><td><%=strDtls1[j][2]%></td></tr>'+
+											'</table>'+
+											'</div>';			
+		         }
+		        else if("<%=strDtls1[j][10]%>"=="P")
+				{				
+					  var mrkrdtls<%=j%> = '<div id="content">'+
+											'<table>'+
+											'<tr style="border:0px;font-size:12px;color: blue;font-weight:bold;" align="center"><td colspan="2" align="center"><b><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</b></td></tr>'+					
+											'<tr><td><b>Station</b></td><td><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</td></tr>'+
+											'<tr><td><b>Zone (Division) </b></td><td><%=strDtls1[j][8]%> (<%=strDtls1[j][7]%>)</td></tr>'+																										
+											'</table>'+
+											'</div>';								 
+		         }
+				else if("<%=strDtls1[j][10]%>"=="D")
+				{				
+					  var mrkrdtls<%=j%> = '<div id="content">'+
+											'<table>'+
+											'<tr style="border:0px;font-size:16px;color: blue;font-weight:bold;" align="center"><td colspan="2" align="center"><b><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</b></td></tr>'+					
+											'<tr><td colspan="2"></td></tr>'+																	
+											'<tr><td><b>Station</b></td><td><%=strDtls1[j][0]%>(<%=strDtls1[j][6]%>)</td></tr>'+
+											'<tr><td><b>Zone (Division) </b></td><td><%=strDtls1[j][8]%> (<%=strDtls1[j][7]%>)</td></tr>'+																										
+											'<tr><td><b>ETA At Destination</b></td><td><%=strDtls1[j][11]%></td></tr>'+
+											'</table>'+
+											'</div>';
+					
+		         }			
+ 					marker<%=j%>.events.register("click", marker<%=j%>,
+					 function() {
+					 var popup = new OpenLayers.Popup.FramedCloud(
+					 "marker<%=j%>_popup",
+					 this.lonlat,
+					 new OpenLayers.Size(250, 100),
+					 mrkrdtls<%=j%>,
+					 null,
+					 true,
+					 null);
+					 marker<%=j%>.popup = popup;
+					 map.addPopup(popup);
+					 });
+					 
+	 				marker<%=j%>.events.register("touchstart", marker<%=j%>,
+					 function() {
+					 var popup = new OpenLayers.Popup.FramedCloud(
+					 "marker<%=j%>_popup",
+					 this.lonlat,
+					 new OpenLayers.Size(250, 100),
+					 mrkrdtls<%=j%>,
+					 null,
+					 true,
+					 null);				 
+					 marker<%=j%>.popup = popup;
+					 map.addPopup(popup);
+					 });
+					 
+					 marker<%=j%>.events.register("mouseover", marker<%=j%>,
+					 function() {
+					 this.inflate(1.3);
+					 this.setOpacity(1);
+					 });
+					 
+					 marker<%=j%>.events.register("mouseout", marker<%=j%>,
+					 function() {
+					 this.inflate(1/1.3);
+					 this.setOpacity(0.9);
+				 	});
+				 markers.addMarker(marker<%=j%>);
+		<%}}%>
+
+
+        var pointGeometries = [];
+        var pointGeometry;
+        var lineGeometry;
+        var lineFeature;
+        var lng;
+        var lat;
+         <%for(int j=0;j<intDataSize;j++)
+         {
+         
+         if((strDtls1[j][10].equals("S"))||(strDtls1[j][10].equals("P"))||(strDtls1[j][10].equals("C"))||(strDtls1[j][10].equals("D")))
+		 {
+		 %>
+	         lng=Number(<%=strDtls1[j][5]%>);
+	         lat=Number(<%=strDtls1[j][4]%>);
+	        if("<%=strBaseMapDomn%>"=="BHUVAN")
+	        	pointGeometry = new OpenLayers.Geometry.Point(lng,lat);
+			else
+				pointGeometry = new OpenLayers.Geometry.Point(lng,lat).transform(geographic, mercator);
+	 		pointGeometries.push(pointGeometry);
+	 		
+	 		if("<%=strDtls1[j][10]%>"=="C")
+				{									
+					var style<%=j%> =  {strokeColor: '#009900',
+	 	    							strokeWidth: 4,
+			    						pointRadius:10};		    
+				}
+				else if("<%=strDtls1[j][10]%>"=="F")
+				{				
+					 var style<%=j%> =  {strokeColor: '#ff0000',
+	 	    							strokeWidth: 4,
+			    						pointRadius:10};	
+		         }
+		        else if("<%=strDtls1[j][10]%>"=="S")
+				{				
+					var style<%=j%> =  {strokeColor: '#009900',
+	 	    							strokeWidth: 4,
+			    						pointRadius:10};	
+		         }
+		        else if("<%=strDtls1[j][10]%>"=="P")
+				{				
+					  var style<%=j%> =  {strokeColor: '#009900',
+	 	    							strokeWidth: 4,
+			    						pointRadius:10};	
+		         }
+				else if("<%=strDtls1[j][10]%>"=="D")
+				{				
+					 var style<%=j%> =  {strokeColor: '#ff0000',
+	 	    							strokeWidth: 4,
+			    						pointRadius:10};	
+		         }			
+ 			
+		    
+	 		lineGeometry = new OpenLayers.Geometry.LineString(pointGeometries);
+	 		lineFeature = new OpenLayers.Feature.Vector(lineGeometry, null, style<%=j%>);
+			lineLayer.addFeatures(lineFeature);	
+			pointGeometries=[];
+	        lng=Number(<%=strDtls1[j][5]%>);
+	        lat=Number(<%=strDtls1[j][4]%>);
+	        if("<%=strBaseMapDomn%>"=="BHUVAN")
+			{
+			  pointGeometry = new OpenLayers.Geometry.Point(lng,lat);
+			}
+			else
+			{
+			  pointGeometry = new OpenLayers.Geometry.Point(lng,lat).transform(geographic, mercator);
+			}
+	 		pointGeometries.push(pointGeometry);        
+		<%}}%>
+
+		
+		lineGeometry = new OpenLayers.Geometry.LineString(pointGeometries);
+ 		lineFeature = new OpenLayers.Feature.Vector(lineGeometry, null, style<%=intDataSize-1%>);
+		lineLayer.addFeatures(lineFeature);
+		
+		
+		 
+		});
+		
+			map.addControl(new OpenLayers.Control.LayerSwitcher()); 
+		   
+	
+		if("<%=strBaseMapDomn%>"=="BHUVAN")
+      	{	
+			<% if(intDataSize>0) { %>
+	      		map.setCenter(new OpenLayers.LonLat(<%=strDtls1[intCrntCntr][5]%>,<%=strDtls1[intCrntCntr][4]%>),6);
+			<% } else { %>
+			map.setCenter(new OpenLayers.LonLat(78,21),6);
+			<% } %>
+      	}
+      	else
+      	{
+			var sourcePrj1 = new OpenLayers.Projection("EPSG:4326");
+			<% if(intDataSize>0) { %>
+			map.setCenter(new OpenLayers.LonLat(<%=strDtls1[intCrntCntr][5]%>,<%=strDtls1[intCrntCntr][4]%>).transform(sourcePrj1, map.getProjectionObject()),6);
+			<% } else { %>
+			map.setCenter(new OpenLayers.LonLat(78,21).transform(sourcePrj1, map.getProjectionObject()),6);
+			<% } %>
+
+		}
+
+	}
+    </script>
+<script>
+$(document).ready(function(){
+  //alert('ready');
+  var x = document.getElementById("TestMap");
+  x.style.display = "none";
+  
+  var y = document.getElementById("btnData");
+  y.style.display = "none";
+  
+   var z = document.getElementById("btnData1");
+  z.style.display = "none";
+  
+});
+</script>
+<script>
+function myFunction() {
+//alert('myFunction');
+  var x = document.getElementById("TestMap");
+  var z = document.getElementById("maindiv");
+  
+  if (x.style.display === "none") 
+  {
+    x.style.display = "block";
+    
+    
+    var y = document.getElementById("btnData");
+    y.style.display = "block";
+    
+    var y1 = document.getElementById("btnData1");
+    y1.style.display = "block";
+    
+    z.style.display = "none";
+  } 
+  
+  else {
+    x.style.display = "none";
+    
+    var y = document.getElementById("btnData");
+    y.style.display = "none";
+    
+    var y1 = document.getElementById("btnData1");
+    y1.style.display = "none";
+  }
+}
+</script>
+<script>
+function myFunction2() {
+//alert('myFunction2');
+  var x = document.getElementById("TestMap");
+  if (x.style.display === "none") {
+    //alert('none');
+    x.style.display = "block";
+    
+    var y = document.getElementById("btnData");
+    y.style.display = "block";
+    
+     var y1 = document.getElementById("btnData1");
+    y1.style.display = "block";
+  
+    
+  } else {
+   //alert('else');
+    x.style.display = "none";
+    
+    var y = document.getElementById("btnData");
+    y.style.display = "none";
+    
+    var y1 = document.getElementById("btnData1");
+    y1.style.display = "none";
+    
+    var z = document.getElementById("maindiv");
+ 	z.style.display = "block";
+  }
+}
+</script>
+<script>
+$(window).resize(function(){
+//alert('resize');
+  //var isFullscreen = ((typeof document.webkitIsFullScreen) !== 'undefined') ? document.webkitIsFullScreen : document.mozFullScreen;
+if ((document.fullScreenElement && document.fullScreenElement !== null) ||(!document.mozFullScreen && !document.webkitIsFullScreen)) 
+            { $("#btnData1").html("Full Screen");
+	    			$("#btnData1").removeClass("btn-warning").addClass("btn-default");
+	    			var y = document.getElementById("btnData");
+    				y.style.display = "block";
+            }
+            else
+            { $("#btnData1").html("Normal Screen");
+    				$("#btnData1").removeClass("btn-default").addClass("btn-warning");
+            }
+
+});
+</script>
+<script>
+function toggleFullScreen() {
+
+            if ((document.fullScreenElement && document.fullScreenElement !== null) ||(!document.mozFullScreen && !document.webkitIsFullScreen)) 
+            {
+            	//alert('3');
+             //$scope.topMenuData.showSmall = true;
+                if (document.documentElement.requestFullScreen) 
+                {
+                    document.documentElement.requestFullScreen();
+                    $("#btnData1").html("Normal Screen");
+    				$("#btnData1").removeClass("btn-default").addClass("btn-warning");
+                } 
+                else if (document.documentElement.mozRequestFullScreen) 
+                {
+                    document.documentElement.mozRequestFullScreen();
+                    $("#btnData1").html("Normal Screen");
+    				$("#btnData1").removeClass("btn-default").addClass("btn-warning");
+                } 
+                else if (document.documentElement.webkitRequestFullScreen) 
+                {
+                	//alert('3.0');
+                    document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                    $("#btnData1").html("Normal Screen");
+    				$("#btnData1").removeClass("btn-default").addClass("btn-warning");
+                }
+                var y = document.getElementById("btnData");
+    			y.style.display = "none";  			  			               
+            } 
+            else {
+
+                  //$scope.topMenuData.showSmall = false;
+                if (document.cancelFullScreen) 
+                {
+                    document.cancelFullScreen();                   
+	    			$("#btnData1").html("Full Screen");
+	    			$("#btnData1").removeClass("btn-warning").addClass("btn-default");
+                } 
+                else if (document.mozCancelFullScreen) 
+                {
+                    document.mozCancelFullScreen();
+	    			$("#btnData1").html("Full Screen");
+	    			$("#btnData1").removeClass("btn-warning").addClass("btn-default");
+                } 
+                else if (document.webkitCancelFullScreen) 
+                {
+                 	//alert('3.1');
+                    document.webkitCancelFullScreen();                   
+	    			$("#btnData1").html("Full Screen");
+	    			$("#btnData1").removeClass("btn-warning").addClass("btn-default");
+                }
+                var y = document.getElementById("btnData");
+    			y.style.display = "block";
+    			
+            }
+        }
+        </script>
+  </head>
+
+  <body onload="init();" data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <div class="site-wrap" id="home-section">
+
+      <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+          <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+          </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+      </div>
+      <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
+
+        <div class="container">
+          <div class="row align-items-center position-relative">
+
+
+            <div class="site-logo">
+		<img src="/RailSAHAY/resources/images/irlogo3.png" style="margin-right:1rem;"  alt="IR Logo"><a href="/RailSAHAY/index.jsp" class="text-black"><span class="text-primary">RAIL SAHAY</a>
+            </div>
+
+            <div class="col-12">
+                <nav class="site-navigation text-right ml-auto " role="navigation">
+				  <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+				 <li><a href="/RailSAHAY/pages/AboutUs.jsp" class="nav-link">About Us</a></li>
+				<li class="has-children">
+				  <a href="#about-section" class="nav-link">Booking</a>
+				  <ul class="dropdown arrow-top">
+					<li><a href="https://www.fois.indianrail.gov.in/foisEfnote/OpenPages/Login_new.jsp" class="nav-link" target="_blank">e-Demand</a></li>
+					<li><a href="/RailSAHAY/pages/FrgtCalc.jsp" class="nav-link">Freight Calculator</a></li>
+					<li><a href="#" class="nav-link">Freight Rates</a></li>
+					<li><a href="/RailSAHAY/pages/ParcelBkng.jsp" class="nav-link">Parcel Booking</a></li>
+
+					<%--
+					<li class="has-children">
+					  <a href="#">More Links</a>
+					  <ul class="dropdown">
+						<li><a href="#">Menu One</a></li>
+						<li><a href="#">Menu Two</a></li>
+						<li><a href="#">Menu Three</a></li>
+					  </ul>
+					</li>
+					--%>
+				  </ul>
+					</li>
+				<li class="has-children">
+				  <a href="#about-section" class="nav-link">Facilities</a>
+				  <ul class="dropdown arrow-top">
+					<li><a href="/RailSAHAY/pages/SttnList.jsp" class="nav-link">Station Help</a></li>
+					<li><a href="/RailSAHAY/pages/SttnProf.jsp" class="nav-link">Station Profile</a></li>
+					<li><a href="/RailSAHAY/pages/LdngLocn.jsp" class="nav-link">Loading Locations</a></li>
+					<li><a href="/RailSAHAY/pages/UldgLocn.jsp" class="nav-link">Unloading Locations</a></li>
+					<li><a href="/RailSAHAY/pages/CRTLocn.jsp" class="nav-link">CRT Locations</a></li>
+					<li><a href="/RailSAHAY/pages/PFTLocn.jsp" class="nav-link">PFT Locations</a></li>
+				  </ul>
+					</li>
+					<li><a href="/RailSAHAY/pages/SMART.jsp"  class="nav-link">Partners</a></li>
+					<li><a href="/RailSAHAY/pages/FNREnquiryIN.jsp" class="nav-link">Track & Trace</a></li>
+					<li><a href="/RailSAHAY/pages/FAQs.jsp" class="nav-link">FAQs</a></li>
+					<li><a href="/RailSAHAY/pages/LodgeConcern.jsp" class="nav-link">Contact Us</a></li>
+					<li><a href="/RailSAHAY/pages/eDmndLogin.jsp" class="nav-link">Sign In</a></li>
+				  </ul>
+              </nav>
+            </div>
+
+            <div class="toggle-button d-inline-block d-lg-none"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
+
+          </div>
+        </div>
+      </header>
+	  <nav class="navbar navbar-expand-sm bg-origprimary navbar-dark" style="margin-top:12px;">
+	</nav>
+      <div class="container-fullwidth">
+	        <div class="row align-items-center justify-content-center text-center">
+	          <div class="col-lg-12">
+	            <div class="box-shadow-content">
+	              <div class="block-heading-1" style="margin-top:15px;">
+	                <h3 class="mb-4" data-aos="fade-up" data-aos-delay="100">Status of your Consignment with FNR no. <%=(String)request.getParameter("FNRNumb")%></h3>
+	              </div>
+	            </div>
+	           </div>
+	          </div>
+         
+         
+	 <div class="row">
+	 <div class="col-lg-10 offset-lg-1 col-sm-12">
+			<div class="optncard">
+			<ul class="nav nav-pills">
+			<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#FNRDtls">FNR Detail</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#FNRMap">View On Map</a>
+			</li>	
+			</ul>
+			</div>
+			
+			<div class="optncard">
+			<div class="tab-content">
+			<div class="tab-pane container active" id="FNRDtls">
+			 <div class="iconbggreen"><i class="fas fa-route fa-lg"></i></div>
+			  <div class="container">
+				
+         		<%
+					String strFNRNumb=(String)request.getParameter("FNRNumb");
+					System.out.println("ARPANA FNRNumb:"+strFNRNumb);
+					java.util.ArrayList fnrlist   =   (java.util.ArrayList) model.FSH_FNREnqTX.getFRNEnquiry(strFNRNumb);
+					if(fnrlist!=null)
+					System.out.println("ARPANA fnrlist.size():"+fnrlist.size());
+					if(fnrlist.size()>0)
+					{
+					    String strDtls[][]      =  (String[][]) model.FSH_FNREnqTX.getFRNEnquiry(strFNRNumb).get(0); //FNR Detals
+					    //String strMapDtls[][]   =  (String [][]) model.FSH_FNREnqTX.getFRNEnquiry(strFNRNumb).get(1); //FNR Map Detals
+					    if(strDtls != null)
+					    {
+					        System.out.println("ARPANA No. of rows got:"+strDtls.length);
+					%> 
+					
+					<div class="card" align="center">
+					   <div class="card-header" style="text-align:center;" align="center">
+					  
+				 	<div align="center" style="width:100%;">
+				 		<table align="center" class="table table-striped1">
+										<tbody>
+										<% for (int i=0;i<strDtls.length;i++){ %>
+											<tr>
+												<td style="text-align:left;"><b>STATION FROM</b></td>
+												<td style="text-align:left;"><%=strDtls[i][11] %></td>
+											</tr>
+											<tr>
+												<td style="text-align:left;"><b>STATION TO</b></td>
+												<td style="text-align:left;"><%=strDtls[i][12]%></td>
+											</tr>
+											<tr>
+												<td style="text-align:left;"><b>LAST REPORTED STATUS</b></td>
+												<td style="text-align:left;"><%=strDtls[i][13]%></td>
+											</tr>
+											
+											<tr>
+												<td style="text-align:left;"><b>EXPECTED AT DESTINATION</b></td>
+												<td style="text-align:left;"><%=strDtls[i][9]%></td>
+											</tr>
+										<%}%>
+										</tbody>
+								</table>
+					  		</div>
+							</div>
+							<br/>
+							<div class="alert alert-info" align="left">
+							<b>DISCLAIMER:</b><br/>
+							1. DETAILS SHOWN ABOVE ARE FOR INFORMATION PURPOSE.<br/>
+							2. DETAILS SHOULD BE VERIFIED FROM CONCERNED RAILWAY.
+							</div>
+							<br/>
+							<br/>
+					</div>
+<% }} else { //System.out.println("No Detail Found for the Specified FNR"); 
+%>
+<div class="alert alert-danger col col-lg-8 col-md-8 col-sm-12" align="center">
+No Detail Found for the Specified FNR.</div>
+							<br/>
+							<br/>
+<% } %>				
+              </div>
+            </div>
+            
+            <div class="tab-pane container fade" id="FNRMap">
+	 <div class="iconbggreen"><i class="fas fa-route fa-lg"></i></div>
+		  <div class="container">
+			<h4><b>List of Terminals for Parcel Booking</b></h4>
+			<div class="list-group-flush">
+			  <div class="list-group-item"></div>
+			  <div class="list-group-item"></div>
+			  <div class="list-group-item"></div>
+			  <div class="list-group-item"></div>
+			  <div class="list-group-item"></div>
+			  <div class="list-group-item"></div>
+	  		</div>
+		</div>
+	</div>
+	</div>
+            
+            
+            
+        </div>
+		</div>
+		</div>
+	  </div>
+	</div>
+	
+	
+ <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-7">
+                <h2 class="footer-heading mb-4">About Us</h2>
+                <p>We, the Indian Railways, are the backbone of logistics sector of the country carrying  more than 1.2 Billon tonnes of freight traffic every year over 68000 km of our network.</p>
+              </div>
+              <div class="col-md-4 ml-auto">
+                <h2 class="footer-heading mb-4">Features</h2>
+                <ul class="list-unstyled">
+                  <li><a href="/RailSAHAY/pages/NewCustomer.jsp" target="_self">Transport with Us</a></li>
+                  <li><a href="/RailSAHAY/pages/Policy.jsp" target="_self">Innovative Schemes</a></li>
+                  <li><a href="/RailSAHAY/pages/TimeTblTran.jsp" target="_self">Timetabled Movements</a></li>
+                  <li><a href="/RailSAHAY/pages/SMART.jsp" target="_self">Logistics Partners</a></li>
+                  <li><a href="/RailSAHAY/pages/LodgeConcern.jsp" target="_self">Contact Us</a></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-4 ml-auto">
+
+            <div class="mb-5">
+              <h2 class="footer-heading mb-4">Subscribe to Newsletter</h2>
+             
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control border-secondary text-white bg-transparent" placeholder="Enter Email" aria-label="Enter Email" aria-describedby="button-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary text-white" type="button" id="button-addon2">Subscribe</button>
+                  </div>
+                </div>
+            </div>
+
+
+            <h2 class="footer-heading mb-4"><a href="https://www.youtube.com/channel/UCZB-E4AHWbh9vYSfqb7nsEg?reload=9&app=desktop&persist_app=1" target="_blank">Follow Us on Youtube</a></h2>
+          </div>
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <div class="border-top pt-5">
+              <p class="copyright">
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Portal has been designed and developed by CRIS
+            </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+
+
+	    </div>
+
+	    <script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/popper.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/bootstrap.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/owl.carousel.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/jquery.sticky.js"></script>
+	    <script src="/RailSAHAY/resources/js/jquery.waypoints.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/jquery.animateNumber.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/jquery.fancybox.min.js"></script>
+	    <script src="/RailSAHAY/resources/js/jquery.easing.1.3.js"></script>
+	    <script src="/RailSAHAY/resources/js/aos.js"></script>
+	    <script src="/RailSAHAY/resources/js/stepform.js"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	    <script src="/RailSAHAY/resources/js/main.js"></script>
+	    <script src="/RailSAHAY/resources/js/smart.js"></script>
+
+
+	  </body>
+
+	</html>

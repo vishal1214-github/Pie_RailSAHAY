@@ -1,0 +1,156 @@
+  function getDataAMScCust()
+{
+        //alert("in getdata");
+        var custcode = '';
+        var cust = '';
+        /*if($("#txtCustCode").val() == "")*/
+        var custOrgn =$("#custList").val();
+       // alert("11");
+        var custOrgn1=$("#custList1").html();
+        if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+            cust=custOrgn;
+        else
+            cust=custOrgn1;
+       if(cust=='')
+       {
+                cuteToast({
+                  type: "info",
+                  message: "Specify Primary Customer Organization",
+                  timer: 5000
+                });    
+                return;
+        }
+        //cust=$("#txtScCustCode").val();
+        //var custcode = '';
+        var emailid=$("#txtEmailId").val();
+        var moblnumb=$("#txtMoblNumb").val();
+        var station = '';
+        if(cust=="" && emailid=="" && moblnumb=="")
+        {            
+                 cuteToast({
+                  type: "info",
+                  message: "Specify filters to select Secondary Customer Organization",
+                  timer: 5000
+                })          
+        }
+        else
+        {
+            if(cust.indexOf("(")>-1)
+            {
+                    //var c=cust.substring(cust.indexOf("-")+1);
+                    custcode=(cust.substring(1,cust.indexOf(")"))).trim();
+            }	
+            else
+            {
+                    custcode=cust.toUpperCase();
+            }
+            fetchData("DATA",moblnumb, emailid, station, custcode) ;
+        }    
+}   
+function addMdfyScCst_New(){
+        GG_CrntView="SeccustAdMf";
+        $("#dataD").hide();
+            $("#frmSr").hide();
+            $("#frmCncrn").hide();
+           // alert("0");
+            $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+            $("#NodlOfcr").hide();
+            $("#divFrgtPymt").hide();
+            $("#divScndCust").hide();
+           // $("#divAdMfScndCust").show();
+           //alert("pop");
+           $("#divScndCustNew").show();    
+}
+ function addMdfySecCust(){
+       GG_CrntView="SeccustAdMf";
+        $("#dataD").hide();
+            $("#frmSr").hide();
+            $("#frmCncrn").hide();
+           // alert("0");
+            $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+            $("#NodlOfcr").hide();
+            $("#divFrgtPymt").hide();
+            $("#divScndCust").hide();
+            $("#divAdMfScndCust").show();
+            $("#divScndCust").html('<div class="spinner-border text-danger"></div>');
+    
+	/* var htmlamseccust= '<nav class="navbar navbar-expand-sm bg-origprimary navbar-light">';
+	 htmlamseccust+='</nav>';*/
+          var htmlamseccust='<form id="frmMR" name="frmMR" method="post" action="\\RailSAHAY\\DownloadMRpdf" target = "_blank" ></form>';
+    
+          /*  htmlamseccust+='<div class="row"><div class="col-lg-4 col-sm-12"><p class="ctgr-title">Secondary Customer</p></div><div class="col-lg-8 col-sm-12"><div class="input-group mb-3 float-right" style="width:300px;font-size:12px;"><div class="input-group-append"><button class="btn btn-primary" onclick="">Add</button></div></div></div></div>';
+            */
+	 htmlamseccust+='<div class="container-fullwidth">';
+         htmlamseccust+='<div class="row align-items-center justify-content-center text-center">';
+           htmlamseccust+='<div class="col-lg-12 ml-1">';
+
+             htmlamseccust+='<div class="box-shadow-content">';
+              htmlamseccust+=' <div class="block-heading-1" style="margin-top:15px;">';
+                 htmlamseccust+='<h3 class="mb-4" data-aos="fade-up" data-aos-delay="100">Add/Modify Secondary Customer</h3>';
+              htmlamseccust+=' </div>';
+            htmlamseccust+=' </div>';
+           htmlamseccust+=' </div>';
+           htmlamseccust+='</div>';
+          htmlamseccust+=' <nav class="navbar navbar-expand-sm bg-light navbar-light">';
+	     htmlamseccust+='<div class="col-lg-4 col-md-5 col-sm-12">';
+	      htmlamseccust+=' <form class="form-inline">';
+	        htmlamseccust+='   <table><tr>'; 
+               // htmlamseccust+='<td> <input class="form-control mr-sm-2 inptcap name" size="40" id="txtCustCode" onclick="fetchOrg("ORG" ,"","","","")" name="txtCustCode" type="text" list="orglist" placeholder="CURRENT OWNER ORGANIZATION">';
+		// htmlamseccust+=' <datalist id="orglist"></datalist>';
+              //   htmlamseccust+=' </td> ';
+                 htmlamseccust+='</tr><tr><td>';
+                   htmlamseccust+='<input class="form-control mr-sm-2 inptcap name" size="40" id="txtScCustCode" onclick="fetchOrg("GORG" ,"","","","")" name="txtScCustCode" type="text" list="orgseclist" placeholder="SELECT SECONDARY CUSTOMER ORGANIZATION">';
+		 htmlamseccust+=' <datalist id="orgseclist"></datalist>';
+		 htmlamseccust+='</td>';
+                  htmlamseccust+=' <td><input class="form-control mr-sm-2 inptcap numb" id="txtMoblNumb" size="10"  name="txtMoblNumb" type="text" maxlength="10"  placeholder="Mobile Number">';
+				 
+		 htmlamseccust+='</td>';
+                htmlamseccust+='<td><input class="form-control mr-sm-2 inptcap" id="txtEmailId" name="txtEmailId" size="30" type="text"  placeholder="EmailId">';
+				  
+		 htmlamseccust+='</td>';
+		 htmlamseccust+='<td><button class="btn btn-data" onclick="getData();">Fetch</button></td></tr></table>';
+  	      htmlamseccust+=' </div>';
+	 htmlamseccust+='</nav> <div class="row">';
+	 htmlamseccust+='<div class="col-lg-6 col-sm-12">';
+		 htmlamseccust+='<div id="divUserDataList" class="trmllistdata"></div>';
+       htmlamseccust+='</div>';
+	 htmlamseccust+='<div class="col-lg-6 col-sm-12" id="divUserDtlsPnl">';
+		 htmlamseccust+='<div class="optncard">';
+			 htmlamseccust+='<ul class="nav nav-pills">';
+			  htmlamseccust+='   <li class="nav-item">';
+			   htmlamseccust+='      <a class="nav-link active" data-toggle="tab" href="#Schd">User Profile</a>';
+			   htmlamseccust+='  </li>';
+			 htmlamseccust+='</ul>';
+		 htmlamseccust+='</div>';
+		 htmlamseccust+='<div class="optncard">';
+		 htmlamseccust+='	<div class="tab-content">';
+		 htmlamseccust+='<div class="tab-pane container active" id="Schd">';
+		 htmlamseccust+='<div id="divUserDtls" class="trmllistdata mr-2 timeline-centered"></div>';
+                  htmlamseccust+='<div id="example"> ';
+                   htmlamseccust+='<table><tr>';
+                   htmlamseccust+='<th style="width:25%">Zone:</th> <th style="width:25%">Division:</th> <th style="width:25%">Station:</th> <th style="width:25%">ChargeType:</th></tr>';
+                   htmlamseccust+=' <tr> <td><select id="multiselect"  class="form-control" name="languages[]" multiple="multiple"></select></td>';
+                   htmlamseccust+='<td> <select id="multiselectD"  class="form-control"  multiple="multiple"></select></td>';
+                   htmlamseccust+='<td> <select id="multiselectS"  class="form-control"  multiple="multiple"></select></td>';
+                    htmlamseccust+='<td> <select id="lstChrgtyp"  class="form-control"  >';
+                                           /* <option value="F">FREIGHT</option> */
+                     htmlamseccust+='<option value="D">DEMURRAGE</option>';
+                     htmlamseccust+='<option value="W">WHARFAGE</option> <option value="L">LOCAL</option> ';
+                    htmlamseccust+=' </select></td>';
+                    htmlamseccust+='<td style="width:0"><label id="lblOrg"></label></td>';
+                     htmlamseccust+='<td><button class="btn btn-outline-primary btn-sm" style="padding: 0.1rem 0.3rem;" title="Add Secondary Customer" onclick="addRow();"><i class="fas fa-plus"></i></button></td>';
+                      htmlamseccust+=' </tr><tr> </tr>';
+                                      /*  <td><button id="butadd" onclick="addRow();" >Add</button><br>
+                       <button id="butsave" onclick="savedata();" >Save</button></td></tr>  */
+                       htmlamseccust+=' </table> <table id="tblLocn" class="table table-striped table-sm table-pymthstr">';
+                       htmlamseccust+='<tr><th style="width:45%">ORGANIZATION</th><th style="width:10%">Zone</th><th style="width:10%">Division</th><th style="width:10%">Station</th><th style="width:15%">Charge Type</th><th style="width:10%">Cust Id</th></tr>';
+                       htmlamseccust+='</table><center><button class="btn btn-outline-primary btn-sm" style="padding: 0.1rem 0.3rem;" title="Save Secondary Customer" onclick="savedata();"><i class="fas fa-save"></i></button></center>';
+                                        
+                       htmlamseccust+=' </div> </div></div></div> </div></div>';
+                       //alert(htmlamseccust);
+                        $("#divAdMfScndCust").html(htmlamseccust); 
+                       // alert($("#divAdMfScndCust").innerHTML);
+                        //console.log($("#divAdMfScndCust").innerHTML);
+ }

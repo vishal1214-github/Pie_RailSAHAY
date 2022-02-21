@@ -1,0 +1,126 @@
+<%@ include file="/pages/GG_Header.jspf" %>
+<% 
+
+strLastUpdate=Logg.setPortal(si_UserId,si_ClntId,si_Theme,si_LangFlag,"TIME TABLED ROUTES","/RailSAHAY/pages/TimeTblTran.jsp",UserDevice,Browser);
+%>
+<script src="/RailSAHAY/resources/js/trmlutil.js"></script>
+<script src="/RailSAHAY/resources/js/RgstSecCust.js"></script>
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/prcldata.css">
+
+<script>
+	$(document).ready(function(){
+	//$("#divUserDataList").hide();
+        fetchOrg("ORG",'', '', '', '') ;
+	//fetchTimeTblRout('','');
+	});
+</script>	
+
+	  <nav class="navbar navbar-expand-sm bg-origprimary navbar-light">
+	</nav>
+	<div class="container-fullwidth">
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-lg-12 ml-1">
+
+            <div class="box-shadow-content">
+              <div class="block-heading-1" style="margin-top:15px;">
+                <h3 class="mb-4" data-aos="fade-up" data-aos-delay="100"><%=E.EH("Add/Modify Secondary Customer")%></h3>
+              </div>
+            </div>
+           </div>
+          </div>
+          <nav class="navbar navbar-expand-sm bg-light navbar-light">
+	    <div class="col-lg-4 col-md-5 col-sm-12">
+	      <form class="form-inline">
+	          <table><tr>
+	          	<td><input class="form-control mr-sm-2 inptcap" id="txtCustCode" onclick="fetchOrg('ORG' ,'', '', '', '')" name="txtCustCode" type="text" list="orglist" placeholder='<%=E.EH("ORGANIZATION")%>'>
+			          <datalist id="orglist"></datalist>
+			</td>
+			<td><input class="form-control mr-sm-2 inptcap" id="txtMoblNumb" name="txtMoblNumb" type="text"  placeholder='<%=E.EH("Mobile Number")%>'>
+				 
+			</td>
+                        <td><input class="form-control mr-sm-2 inptcap" id="txtEmailId" name="txtEmailId" type="text"  placeholder='<%=E.EH("EmailId")%>'>
+				  
+			</td>
+			<td><button class="btn btn-data" onclick="event.preventDefault();getData();"><%=E.EH("Fetch")%></button></td></tr></table>
+  	      </form>
+  	     </div>
+	</nav>
+          <div class="row">
+	<div class="col-lg-6 col-sm-12">
+		<div id="divUserDataList" class="trmllistdata"></div>
+      </div>
+	<div class="col-lg-6 col-sm-12" id="divUserDtlsPnl">
+		<div class="optncard">
+			<ul class="nav nav-pills">
+			    <li class="nav-item">
+			        <a class="nav-link active" data-toggle="tab" href="#Schd"><%=E.EH("User Profile")%></a>
+			    </li>
+			  <!--  <li class="nav-item">
+			        <a class="nav-link" data-toggle="tab" href="#Mvmt"><%=E.EH("Current Train Movements")%></a>
+			    </li>-->
+			</ul>
+		</div>
+		<div class="optncard">
+			<div class="tab-content">
+				  <div class="tab-pane container active" id="Schd">
+					<div id="divUserDtls" class="trmllistdata mr-2 timeline-centered"></div>
+                                         <div class="form-group">
+	                                              <input type="text" class="form-control" placeholder="First Name *" value="" tabindex="1" id="firstname" name="firstname" required="required"  maxlength="30"  onclick="hideMesg()"; />
+	                                          </div>
+	                                          <div class="form-group">
+                                                             <input type="email" id="email" name="email" tabindex="3" placeholder="Your Email *" value=""   maxlength="40" required="required"    style="text-transform:lowercase;" class="form-control">
+	                                            </div>
+	                                          <div class="form-group">
+	                                              <select  id="cncrctgr" tabindex="5" name="cncrctgr" class="form-control" required onchange="chSubCtgr()">
+	                                                  <option class="hidden"  selected disabled>Category</option>
+	                                                  <option value="Edemand_User" >E-Demand User Registration</option>
+	                                                  <option value="Consignment">Application for Diversion/Demmurage etc.</option>
+	                                                  <option value = "Scheme">Application for Discount Scheme</option>
+	                                                  <option value ="Others">Others</option>
+	                                              </select>
+                                                       <input type="text" class="form-control" tabindex="13" placeholder="Please Provide Category" value="" id="ctgrOth" name="ctgrOth" required="required"  maxlength="30"    />
+	                                          </div>
+				  </div>
+				 <!-- <div class="tab-pane container fade" id="Mvmt">
+					<div id="divTTMvmt" class="trmllistdata mr-2"></div>
+				  </div>-->
+			</div>
+		</div>
+      </div>
+      </div>
+        <script>
+            
+           var str='';
+           for (var i=0; i < lstOrg.length;++i){
+            str += '<option value="'+lstOrg[i]+'" />'; // Helplist for station
+            }
+            var my_list=document.getElementById("orglist");
+            my_list.innerHTML = str;
+            //alert("SS:"+str);
+           // var my_list1=document.getElementById("locnlistto");
+            //my_list1.innerHTML = str;*/
+            function getData()
+            {
+	            var cust=$("#txtCustCode").val();
+                    var custcode = '';
+	            var emailid=$("#txtEmailId").val();
+                    var moblnumb=$("#txtMoblNumb").val();
+	            var station = '';
+	            if(cust!="")
+	            {
+			if(cust.indexOf("-")>-1)
+			{
+				var c=cust.substring(cust.indexOf("-")+1);
+				custcode=(sttn.substring(0,sttn.indexOf("("))).trim();
+			}	
+			else
+			{
+				custcode=cust.toUpperCase();
+			}
+		    }
+	            alert(" calling fetchdata ");
+		   fetchData("DATA",moblnumb, emailid, station, custcode) ;
+            }            
+		</script>
+
+<%@ include file="/pages/GG_Footer.jspf" %>

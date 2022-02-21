@@ -1,0 +1,212 @@
+<%@ page import="util.GenFunc.GG_SahayUtil,java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+ String strAccessCount ="";
+String strLastUpdate= "Thu, 10 Sep 2020 11:48:56";    
+String strTheme="";
+String strLangFlag="";
+String strClntId="";
+
+
+String strUserURL =   request.getRequestURL().toString();
+System.out.println("strUserURL"+ strUserURL );
+String strUserCheck = "";
+if (strUserURL.trim().toUpperCase().contains("INDIANRAIL")) 
+{
+	strUserCheck = "P";
+} else {
+	strUserCheck = "R";
+}
+System.out.println("strUserCheck"+ strUserCheck );
+
+strTheme = (String)session.getAttribute("Theme");
+String strThemeClass="";
+if(strTheme==null)
+{	
+	try
+	{
+		strTheme=((String)request.getParameter("txtTheme")).trim();	
+	}
+	catch(Exception e)
+	{
+			strTheme="RD";
+	}
+}
+String strThemeCSS="style";
+if(strTheme.equals("GR")) {  strThemeClass="btn-success"; strThemeCSS="style_green"; }
+if(strTheme.equals("BL")) { strThemeClass="btn-primary-blue"; strThemeCSS="style";  }
+if(strTheme.equals("RD")) { strThemeClass="btn-danger"; strThemeCSS="style_red";  }
+if(strTheme.equals("OR")) { strThemeClass="btn-warning"; strThemeCSS="style_orange";  }
+if(strTheme.equals("GY")) { strThemeClass="btn-default"; strThemeCSS="style_grey";  }
+strLangFlag = (String)session.getAttribute("LangFlag"); 
+if(strLangFlag==null)
+	 {
+		try
+		{
+		strLangFlag=((String)request.getParameter("txtLangFlag")).trim();
+		}
+		catch(Exception e)
+		{
+				strLangFlag="E";
+		}
+	 }
+System.out.println("strLangFlag" + strLangFlag);  
+
+String si_LangCode="0";
+String si_SchmColr="";
+
+if(strLangFlag.equals("H")) { si_LangCode="1" ; }
+if(strTheme.equals("RD")) { si_SchmColr="cc2900"; }
+if(strTheme.equals("BL")) { si_SchmColr="1059c6"; }
+if(strTheme.equals("GR")) { si_SchmColr="2d8659"; }
+if(strTheme.equals("OR")) { si_SchmColr="b34700"; }
+
+strClntId = request.getHeader("X-FORWARDED-FOR");
+if (strClntId == null) 
+{
+	strClntId = request.getRemoteAddr();
+}
+if (strClntId.indexOf(",")>0)
+{
+	strClntId = strClntId.substring(0,strClntId.indexOf(","));
+}
+String si_ClntId=strClntId;
+String si_UserId="SAHAYPRTL";
+String si_Theme =strTheme;
+
+String L = "";
+String si_LangFlag=strLangFlag;
+if(si_LangFlag!=null)
+		L=si_LangFlag;
+util.HindiLocaleUtil E =new util.HindiLocaleUtil(L);
+
+
+util.GenFunc.GG_SahayCmmn Logg  = new util.GenFunc.GG_SahayCmmn();
+String  browserDetails  =   request.getHeader("User-Agent");
+String Info=Logg.getbrowserinfo(browserDetails);
+String UserDevice=(Info.substring(0,Info.indexOf('#'))).trim();
+String Browser=(Info.substring(Info.indexOf('#')+1)).trim();
+strAccessCount = Logg.getAccessCount(si_UserId,si_ClntId);
+
+System.out.println("strAccessCount"+ strAccessCount);
+session.setAttribute("UserID",		si_UserId.trim());
+session.setAttribute("ClntID",		si_ClntId.trim());
+session.setAttribute("Theme",		si_Theme.trim());
+session.setAttribute("LangFlag",		si_LangFlag.trim());
+session.setAttribute("AccessCount",		strAccessCount.trim());
+
+
+String LangFlag=(String)session.getAttribute("LangFlag");  
+String sesid=request.getSession().getId();
+System.out.println("sesid" + sesid);
+String si_LangFlag1=si_LangFlag;
+ si_LangFlag=si_LangFlag+sesid;
+
+
+%>
+
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>Welcome To Indian Railways' Freight Services</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- Google font (font-family: 'Roboto Condensed', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/all.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/fonts/icomoon/style.css">  
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/jquery.fancybox.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/aos.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/openextnlink.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap-select.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!--Finish SAHAY Dashboard-->
+	<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/fontastic.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/fontNew.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/carddesign.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/portalcommon.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/theme/<%=strThemeCSS%>.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/accordion.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/custom.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/css/odometer-theme-car.css" />
+
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/plugins.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/megamenustyle.css">
+   
+<script src="/RailSAHAY/resources/js/odometer.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/jqueryrotate.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/gspeech_pro.js?ver=2.7.0"></script>
+<link rel="stylesheet"  type="text/css" media="screen" href="/RailSAHAY/resources/css/gspeech.css">
+<script src="/RailSAHAY/resources/js/numscroll.js"></script>
+<script src="/RailSAHAY/resources/js/bootstrap-select.js"></script>
+
+    <script src="/RailSAHAY/resources/js/plugins.js"></script>
+    <script src="/RailSAHAY/resources/js/active.js"></script>
+    <script src="/RailSAHAY/resources/js/megamenuscripts.js"></script>
+
+   
+
+<script>
+$(document).ready(function() {
+var langflag = '<%=LangFlag%>';
+
+	 if(document.getElementById("hidLangFlagDiv") == null)
+        {
+		var hidLangForm=document.createElement('FORM');
+		hidLangForm.name='frmLangFlag';
+		hidLangForm.method='POST';
+		hidLangForm.action='#';
+
+		var hidLangTB=document.createElement('INPUT');
+		hidLangTB.type='HIDDEN';
+		hidLangTB.name='hidLangFlagDiv';
+		hidLangTB.id='hidLangFlagDiv';
+		hidLangTB.value='<%=L%>';
+		hidLangForm.appendChild(hidLangTB);
+		document.body.appendChild(hidLangForm);
+	    }
+  });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35338650-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script src="https://www.fois.indianrail.gov.in/botpress/assets/modules/channel-web/inject.js"></script>
+
+ </head>
+
+  <body onload="initFunction()" data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+
+    
+
+ 

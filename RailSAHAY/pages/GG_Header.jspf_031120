@@ -1,0 +1,413 @@
+<%@ page import="util.GenFunc.GG_SahayUtil" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+ String strAccessCount ="";
+String strLastUpdate= "Thu, 10 Sep 2020 11:48:56";    
+String strTheme="";
+String strLangFlag="";
+String strClntId="";
+
+String strUserURL =   request.getRequestURL().toString();
+System.out.println("strUserURL"+ strUserURL );
+String strUserCheck = "";
+if (strUserURL.trim().toUpperCase().contains("INDIANRAIL")) 
+{
+	strUserCheck = "P";
+} else {
+	strUserCheck = "R";
+}
+System.out.println("strUserCheck"+ strUserCheck );
+
+
+GG_SahayUtil SahayUtil=new GG_SahayUtil();
+
+strTheme = (String)session.getAttribute("Theme");
+String strThemeClass="";
+if(strTheme==null)
+{	
+	try
+	{
+		strTheme=((String)request.getParameter("txtTheme")).trim();	
+	}
+	catch(Exception e)
+	{
+			strTheme="RD";
+	}
+}
+String strThemeCSS="style";
+if(strTheme.equals("GR")) {  strThemeClass="btn-success"; strThemeCSS="style_green"; }
+if(strTheme.equals("BL")) { strThemeClass="btn-primary-blue"; strThemeCSS="style";  }
+if(strTheme.equals("RD")) { strThemeClass="btn-danger"; strThemeCSS="style_red";  }
+if(strTheme.equals("OR")) { strThemeClass="btn-warning"; strThemeCSS="style_orange";  }
+if(strTheme.equals("GY")) { strThemeClass="btn-default"; strThemeCSS="style_grey";  }
+strLangFlag = (String)session.getAttribute("LangFlag"); 
+if(strLangFlag==null)
+	 {
+		try
+		{
+		strLangFlag=((String)request.getParameter("txtLangFlag")).trim();
+		}
+		catch(Exception e)
+		{
+				strLangFlag="E";
+		}
+	 }
+System.out.println("strLangFlag" + strLangFlag);  
+
+String si_LangCode="0";
+String si_SchmColr="";
+
+if(strLangFlag.equals("H")) { si_LangCode="1" ; }
+if(strTheme.equals("RD")) { si_SchmColr="cc2900"; }
+if(strTheme.equals("BL")) { si_SchmColr="1059c6"; }
+if(strTheme.equals("GR")) { si_SchmColr="2d8659"; }
+if(strTheme.equals("OR")) { si_SchmColr="b34700"; }
+
+strClntId = request.getHeader("X-FORWARDED-FOR");
+if (strClntId == null) 
+{
+	strClntId = request.getRemoteAddr();
+}
+if (strClntId.indexOf(",")>0)
+{
+	strClntId = strClntId.substring(0,strClntId.indexOf(","));
+}
+String si_ClntId=strClntId;
+String si_UserId="SAHAYPRTL";
+String si_Theme =strTheme;
+
+String L = "";
+String si_LangFlag=strLangFlag;
+if(si_LangFlag!=null)
+		L=si_LangFlag;
+util.HindiLocaleUtil E =new util.HindiLocaleUtil(L);
+
+
+
+util.GenFunc.GG_SahayCmmn Logg  = new util.GenFunc.GG_SahayCmmn();
+String  browserDetails  =   request.getHeader("User-Agent");
+String Info=Logg.getbrowserinfo(browserDetails);
+String UserDevice=(Info.substring(0,Info.indexOf('#'))).trim();
+String Browser=(Info.substring(Info.indexOf('#')+1)).trim();
+
+strAccessCount = Logg.getAccessCount(si_UserId,si_ClntId);
+System.out.println("strAccessCount"+ strAccessCount);
+session.setAttribute("UserID",		si_UserId.trim());
+session.setAttribute("ClntID",		si_ClntId.trim());
+session.setAttribute("Theme",		si_Theme.trim());
+session.setAttribute("LangFlag",		si_LangFlag.trim());
+session.setAttribute("AccessCount",		strAccessCount.trim());
+
+
+String LangFlag=(String)session.getAttribute("LangFlag");  
+String strMesg ="";
+try
+{
+	
+	 strMesg = Logg.getHomePageMsgs(si_UserId,si_ClntId,si_LangFlag,"L",strUserCheck);
+      }
+catch(Exception e)
+{
+	System.out.println("In Exception of Message:"+e.getMessage());
+	strMesg=null;
+	
+}
+
+
+%>
+<% 
+String strCustID=(String)session.getAttribute("custuserid");  
+if(strCustID==null) strCustID="";
+String custCtgr=(String)session.getAttribute("custCtgr");  
+if(custCtgr==null) custCtgr="";
+System.out.println("strCustID in ggheader::"+strCustID+":::::");
+%>
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>Welcome To Indian Railways' Freight Services</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/all.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/fonts/icomoon/style.css">  
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/jquery.fancybox.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/aos.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/openextnlink.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap-select.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!--Finish SAHAY Dashboard-->
+	<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/fontastic.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/fontNew.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/carddesign.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/portalcommon.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/theme/<%=strThemeCSS%>.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/accordion.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/custom.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/css/odometer-theme-car.css" />
+<script src="/RailSAHAY/resources/js/odometer.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/jqueryrotate.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/gspeech_pro.js?ver=2.7.0"></script>
+<link rel="stylesheet"  type="text/css" media="screen" href="/RailSAHAY/resources/css/gspeech.css">
+<script src="/RailSAHAY/resources/js/asttn.js"></script>
+<script src="/RailSAHAY/resources/js/aLocn.js"></script>
+<script src="/RailSAHAY/resources/js/NumCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/SData.js"></script>
+<script src="/RailSAHAY/resources/js/aRakeCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/numscroll.js"></script>
+<script src="/RailSAHAY/resources/js/bootstrap-select.js"></script>
+
+
+
+<script>
+$(document).ready(function() {
+var langflag = '<%=LangFlag%>';
+
+	 if(document.getElementById("hidLangFlagDiv") == null)
+        {
+		var hidLangForm=document.createElement('FORM');
+		hidLangForm.name='frmLangFlag';
+		hidLangForm.method='POST';
+		hidLangForm.action='#';
+
+		var hidLangTB=document.createElement('INPUT');
+		hidLangTB.type='HIDDEN';
+		hidLangTB.name='hidLangFlagDiv';
+		hidLangTB.id='hidLangFlagDiv';
+		hidLangTB.value='<%=L%>';
+		hidLangForm.appendChild(hidLangTB);
+		document.body.appendChild(hidLangForm);
+	    }
+  });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35338650-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script>
+   function gotopage(pagen){
+   
+     var url="/RailSAHAY/Home.jsp";
+     document.getElementById("toPage").value=pagen;
+      $('#frmTheme').attr('action', url);
+      $('#frmTheme').submit();
+     
+   }
+</script>
+<script src="/RailSAHAY/resources/js/homepage.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/sahayutil.js"></script>
+ </head>
+
+  <body onload="initFunction()" data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+<%--
+<!-- Start - Code for audio -->
+<div style="display:none" >
+     	<span class="gspeech_selection gspeech_style_1" roll="1"></span>
+     	<span class="gspeech_pro_main_wrapper">&nbsp;
+     	<span class="audio_tooltip"><span class="the-tooltip top left audio_tooltip_1"><span class="tooltip_inner"></span></span></span>
+     	<span class="sound_container_pro greeting_block sound_div_1" language="en" roll="1" autoplaypro="1" speechtimeout="0" selector="" eventpro="" title="" style=""><span class="sound_text_pro"></span></span>
+</span></div>
+<span id="audio_tooltip_title"><span class="the-tooltip top left dark-midnight-blue"><span class="tooltip_inner"></span></span></span>
+<div id="sound_container" class="sound_div sound_div_basic size_1 speaker_32" title="" style=""><div id="sound_text"></div>
+</div><div id="sound_audio"></div>
+<!-- End - for audio -->
+--%>
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only"><%=E.EH("Loading")%>...</span>
+      </div>
+    </div>
+<div class="site-wrap" id="home-section">
+
+<div class="site-mobile-menu site-navbar-target">
+<div class="site-mobile-menu-header">
+  <div class="site-mobile-menu-close mt-3">
+    <span class="icon-close2 js-menu-toggle"></span>
+  </div>
+</div>
+<div class="site-mobile-menu-body"></div>
+</div>
+<div class="top-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            <span class="mainheadlbl d-none d-sm-none d-md-inline-block">  <%=SahayUtil.getCrntDateTime()%></span>
+             <span class="mx-md-2 d-inline-block"></span>
+              <a href="javascript:void(0)" onclick="showPage('SCREEN_READER');"><span class="d-none d-md-inline-block"><i class="fas fa-volume-up"></i>&nbsp;<span class="mainheadlbl"><%=E.EH("Screen Reader Access")%></span></span></a>
+              <span class="mx-md-2 d-inline-block"></span>
+              <span class="mr-2 mainheadlbl d-none d-sm-none d-md-inline-block"><%=E.EH("Text Size")%></span><span class="font-smallsize d-none d-sm-none d-md-inline-block" onclick="decFontSize();"><%=E.EH("A")%>-</span><span class="font-midsize d-none d-sm-none d-md-inline-block" onclick="setOrigFontSize();"><%=E.EH("A")%></span><span class="font-bigsize d-none d-sm-none d-md-inline-block" onclick="incFontSize();"><%=E.EH("A")%>+</span>
+              <%--<img src="/RailSAHAY/resources/images/speaker1.png" alt='<%=E.EH("NARRATOR")%>' class="d-none d-sm-none d-md-inline-block"  data-toggle="tooltip"   title='<%=E.EH("To use Narrator, select the text and press the button which comes thereafter")%>'>--%>
+              <div class="float-right">
+		<table><tr>
+		<td>			
+			<div class="form-group has-search">
+			 <input type="text" id="inptSearch" class="form-control" placeholder='<%=E.EH("Enter Search")%>..'>
+			 <span class="fa fa-search form-control-feedback" onclick="searchWord();"></span>
+			</div>
+		</td>
+		<td>
+                      <?audit suppress oracle.ide.xml.mismatched-end-tag?><form class="form-inline" method="post" id="frmTheme">
+		<div class="dropdown">
+		  <img src="/RailSAHAY/resources/images/color-scheme4.svg" class="dropdown-toggle" style="height:22px;width:22px;cursor:pointer;margin-right:10px;" data-toggle="dropdown" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selTheme">
+		    <a class="dropdown-item" href="javascript:void(0)" theme="RD" onclick="setTheme('RD');"><span class="badge theme-red badge-theme">&nbsp;&nbsp;</span><%=E.EH("Default")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="GR" onclick="setTheme('GR');"><span class="badge theme-green badge-theme">&nbsp;&nbsp;</span><%=E.EH("Green")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="BL" onclick="setTheme('BL');"><span class="badge theme-blue badge-theme">&nbsp;&nbsp;</span><%=E.EH("Blue")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="OR" onclick="setTheme('OR');"><span class="badge theme-saffron badge-theme">&nbsp;&nbsp;</span><%=E.EH("Orange")%></a>
+		    <%--<a class="dropdown-item" href="javascript:void(0)" theme="GY" onclick="setTheme('GY');"><span class="badge theme-grey badge-theme">&nbsp;&nbsp;</span><%=E.EH("Grey")%></a>--%>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtTheme" name="txtTheme" type="hidden" value="<%=strTheme%>" maxlength="2" >
+  <input type="hidden" name="toPage" id="toPage" value="" />
+
+		  
+		</td>
+                
+                <td>
+
+		<div class="dropdown">
+		  <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    <%if(strLangFlag.equals("E")) { %> English <%} else { %>   &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;<%}%>
+		  </button>
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selLang">
+		    <a class="dropdown-item" href="javascript:void(0)" lang="E" >English</a>
+		    <a class="dropdown-item" href="javascript:void(0)" lang="H" >&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtLangFlag" name="txtLangFlag" type="hidden"  value="<%=strLangFlag%>" maxlength="1" >
+</form>
+
+
+               </td> </tr></table>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+<header class="site-navbar js-sticky-header site-navbar-target" role="banner">
+        <?audit suppress oracle.ide.xml.mismatched-end-tag?>
+        <div class="container">
+<div class="row align-items-center position-relative">
+
+<div class="site-logo">
+<img src="/RailSAHAY/resources/images/irlogo4.png" style="margin-right:1rem;"  alt='<%=E.EH("IR Logo")%>' class="govwebicon" >
+<%--<a href="/RailSAHAY/index.jsp" class="text-black"><span class="text-primary"><%=E.EH("RAIL SAHAY")%></a>--%>
+</div>
+
+<div class="col-12">
+			  <nav class="site-navigation text-right ml-auto " role="navigation">
+		  <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+		 <li><a href="/RailSAHAY/index.jsp" class="nav-link homelink"><%=E.EH("Home")%></a></li>
+		 <li><a href="/RailSAHAY/pages/AboutUs.jsp" class="nav-link"><%=E.EH("About Us")%></a></li>
+		 <li class="has-children">
+		  <a href="#bkngsctn" class="nav-link"><%=E.EH("Transport")%></a>
+		  <ul class="dropdown arrow-top">
+			<li class="has-children">
+			  <a href="#"><%=E.EH("Large Shipment")%><br/>(<%=E.EH("Freight")%>)</a>
+			  <ul class="dropdown">
+				<li><a href="https://www.fois.indianrail.gov.in/foisEfnote/OpenPages/Login_SH.jsp?TH=<%=strTheme%>" class="nav-link" target="_blank"><%=E.EH("Book Now")%></a></li>
+				<li><a href="/RailSAHAY/pages/BkngRegProcess.jsp" class="nav-link"><%=E.EH("Booking Process")%></a></li>
+				<li><a href="/RailSAHAY/pages/RateSlab.jsp" class="nav-link"><%=E.EH("Rate Slabs")%></a></li>
+				<li><a href="/RailSAHAY/pages/FindWgon.jsp" class="nav-link"><%=E.EH("Freight Wagon Catalogue")%></a></li>
+				<li><a href="/RailSAHAY/pages/FrgtCalc.jsp" class="nav-link"><%=E.EH("Freight Calculator")%></a></li>
+
+
+			  </ul>
+			</li>			
+			<li class="has-children">
+                        <li><a href="javascript:void(0)" class="nav-link" onclick="gotoParcel();"><%=E.EH("Parcel")%></a></li>
+			 </li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#fctysctn" class="nav-link"><%=E.EH("Facilities")%></a>
+		  <ul class="dropdown arrow-top">
+			<li><a  onclick="gotopage('SttnList')" class="nav-link"><%=E.EH("Station Help")%></a></li>
+			<%--<li><a  onclick="gotopage('SttnProf')" class="nav-link"><%=E.EH("Station Profile")%></a></li>--%>
+			<li><a  onclick="gotopage('LdngLocn')" class="nav-link"><%=E.EH("Loading Locations")%></a></li>
+			<li><a  onclick="gotopage('UldgLocn')" class="nav-link"><%=E.EH("Unloading Locations")%></a></li>
+			<li><a  onclick="gotopage('CRTLocn')" class="nav-link"><%=E.EH("Container Rail Terminals (CRT)")%></a></li>
+			<li><a  onclick="gotopage('PFTLocn')" class="nav-link"><%=E.EH("Private Freight Terminals (PFT)")%></a></li>
+		  </ul>
+			</li>
+			<li><a href="/RailSAHAY/pages/SMART.jsp"  class="nav-link"><%=E.EH("Partners")%></a></li>
+			<li><a href="/RailSAHAY/pages/FNREnquiryIN.jsp" class="nav-link"><%=E.EH("Track & Trace")%></a></li>
+			<li><a href="/RailSAHAY/pages/FAQs.jsp" class="nav-link"><%=E.EH("FAQs")%></a></li>
+			<%--<li><a href="javascript:void(0)" class="nav-link" onclick="gotoRailMadad();"><%=E.EH("Contact Us")%></a></li>
+			<li><a href="/RailSAHAY/pages/RailMadad.jsp" class="nav-link"><%=E.EH("Contact Us")%></a></li>--%>
+		  <li class="has-children">
+		  <a href="#bkngsctn" class="nav-link"><%=E.EH("Contact Us")%></a>
+		  <ul class="dropdown arrow-top">
+			<li><a href="javascript:void(0)" class="nav-link" onclick="gotoRailMadad();"><%=E.EH("Raise Your Concern")%></a></li>
+			<li><a href="/RailSAHAY/pages/NodlOfcrList.jsp" class="nav-link"><%=E.EH("Nodal Officers")%></a></li>
+		  </ul>
+			</li>
+<%--
+                      <%   if(strCustID.equals(""))
+                              {
+                           %>
+			<li><a href="/RailSAHAY/pages/eDmndLogin.jsp" class="nav-link"><%=E.EH("Sign In")%></a></li>
+                        <% }else{ %>
+                        <li class="has-children">
+                        <a href="#about-section" class="nav-link"><%=E.EH("My Account")%></a>
+                         <ul class="dropdown arrow-top">
+                                      <%   if(custCtgr.equals("RAILWAY")) { %>
+                                            <li><a href="/RailSAHAY/pages/NodalOfcrDashboard.jsp" class="nav-link"><%=E.EH("Dashboard")%></a></li>
+                                      <%  }else{ %>
+                                       <li><a href="/RailSAHAY/pages/SAHAYDashboard.jsp" class="nav-link"><%=E.EH("Dashboard")%></a></li>
+                                    <%    } %>			
+			<li><a href="/RailSAHAY/Logout" class="nav-link"><%=E.EH("Sign Out")%></a></li>
+                        </ul>
+                        </li>
+                        <% } %>
+		--%>
+          
+		  </ul>
+		  <img src="/RailSAHAY/resources/images/ashokaemblem.png" class="d-sm-none d-none d-md-inline-block" style="position:absolute;top:0;right:2;" />
+</nav>
+</div>
+<div class="toggle-button d-inline-block d-lg-none"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
+
+</div>
+<%--
+<table style="width:100%;margin-top:1px;margin-bottom:1px; background-color: #F0F8FF;">
+	<tr>
+		<td style="width:120px;background:#e04006;padding-left:10px;color:#ffffff;"><b>&nbsp;</a><%=E.EH("WHAT'S NEW")%></b></td>
+		<td><marquee onmouseover="this.stop();" onmouseout="this.start();" scrolldelay="120" style="margin-top:5px;color:#000000;">
+                <?audit suppress oracle.ide.xml.validation-error?>
+                <%=strMesg%></marquee></td>
+	</tr>
+</table>
+--%>
+</header>
+

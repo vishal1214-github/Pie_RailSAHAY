@@ -1,0 +1,54 @@
+body
+{
+    background:-webkit-linear-gradient(left, #d9d9d9, #f2f2f2);
+}
+.parcel-form{
+    background: #fff;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    width: 70%;
+}
+.parcel-form .form-control{
+    border-radius:0.2rem;
+}
+.contact-image{
+    text-align: center;
+}
+.contact-image img{
+    border-radius: 6rem;
+    width: 11%;
+    margin-top: -3%;
+    transform: rotate(29deg);
+}
+.parcel-form form{
+    padding: 14%;
+}
+.parcel-form form .row{
+    margin-bottom: -7%;
+}
+.parcel-form h3{
+    margin-bottom: 8%;
+    margin-top: -10%;
+    text-align: center;
+    color: #0062cc;
+}
+.parcel-form .btnContact {
+    width: 50%;
+    border: none;
+    border-radius: 1rem;
+    padding: 1.5%;
+    background: #dc3545;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.btnContactSubmit
+{
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    color: #fff;
+    background-color: #0062cc;
+    border: none;
+    cursor: pointer;
+}

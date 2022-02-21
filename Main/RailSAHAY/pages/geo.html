@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>raman</title>
+<script>
+function showPosition() {
+// If geolocation is available, try to get the visitor's position
+	if(navigator.geolocation)
+	{
+		navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+	}
+	else
+	{
+		alert("Sorry, your browser does not support capturing your location.");
+	}
+}
+function successCallback(position)
+{
+	userLat=position.coords.latitude;
+	userLng=position.coords.longitude;
+	alert(userLat+'    '+userLng);
+}
+function errorCallback()
+{
+	alert("Sorry, your location could not be identified for nearby freight terminals");
+}
+showPosition();
+</script>
+</head>
+<body>
+raman
+</body>
+</html>

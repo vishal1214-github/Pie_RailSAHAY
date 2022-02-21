@@ -1,0 +1,82 @@
+var DrishtiStats=[];
+function fetchDrishtiStats()
+{
+	$("#divCmdtStats").hide();
+	var myurl="/RailSAHAY/GG_CmdtViewJson?Help=DRISTI_DATA";
+	var htmlstr='';
+	$.ajax({
+	url : myurl,
+	type : "post",
+	async : true,
+	success : function(data) {
+	var obj= data;
+	var stts=obj.Stts;
+	var erormesg=obj.ErorMesg;
+	if(stts=="F")
+ 	{
+		alert("Not able to connect to Server:"+erormesg);
+		return false;
+	}
+	if(obj.DristiData.length==0)
+	{
+		return false;
+	}
+	for(var i=0;i<obj.DristiData.length;i++)
+	{
+		DrishtiStats[i]=new Array(10);
+		switch(obj.DristiData[i].Cmdt)
+		{
+			case 'CEMENT AND CLINKER':
+				DrishtiStats[i][0]='CEMT';
+				break;
+			case 'CHEMICAL MANURES':
+				DrishtiStats[i][0]='CHEM';
+				break;
+			case 'COAL AND COKE':
+				DrishtiStats[i][0]='COAL';
+				break;
+			case 'CONTAINER':
+				DrishtiStats[i][0]='CONT';
+				break;
+			case 'FOODGRAINS, FLOURS AND PULSES':
+				DrishtiStats[i][0]='FG';
+				break;
+			case 'IRON OR STEEL':
+				DrishtiStats[i][0]='IS';
+				break;
+			case 'MINERALS AND ORES':
+				DrishtiStats[i][0]='MINO';
+				break;
+			case 'PETROLEUM PRODUCTS AND GASES':
+				DrishtiStats[i][0]='POL';
+				break;
+			case 'OTHERS*':
+				DrishtiStats[i][0]='OTHR';
+				break;
+		}
+		DrishtiStats[i][1]=obj.DristiData[i].Cmdt;
+		DrishtiStats[i][2]=obj.DristiData[i].LdngTngeDlyC;
+		DrishtiStats[i][3]=obj.DristiData[i].LdngTngeDlyP;
+		DrishtiStats[i][4]=obj.DristiData[i].LdngTngeWklyC;
+		DrishtiStats[i][5]=obj.DristiData[i].LdngTngeWklyP;
+		DrishtiStats[i][6]=obj.DristiData[i].LdngTngeMnthC;
+		DrishtiStats[i][7]=obj.DristiData[i].LdngTngeMnthP;
+		DrishtiStats[i][8]=obj.DristiData[i].LdngTngeYrC;
+		DrishtiStats[i][9]=obj.DristiData[i].LdngTngeYrP;
+
+		if(DrishtiStats[i][0]==GG_MainCmdtCode)
+		{
+			$("#divCmdtStats").show();
+			$("#spnDlyTngeC").html(DrishtiStats[i][2]);
+			$("#spnDlyTngeP").html(DrishtiStats[i][3]);
+			$("#spnWkTngeC").html(DrishtiStats[i][4]);
+			$("#spnWkTngeP").html(DrishtiStats[i][5]);
+			$("#spnMnthTngeC").html(DrishtiStats[i][6]);
+			$("#spnMnthTngeP").html(DrishtiStats[i][7]);
+			$("#spnYearTngeC").html(DrishtiStats[i][8]);
+			$("#spnYearTngeP").html(DrishtiStats[i][9]);
+		}
+	}
+	}
+});
+}

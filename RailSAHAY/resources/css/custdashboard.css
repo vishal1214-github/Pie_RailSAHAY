@@ -1,0 +1,117 @@
+h3, .h3 
+{
+    font-size: 20px;
+}
+.pcustid 
+{
+    font-size: 12px !important;
+}
+h4, .h4 
+{
+    font-size: 15px;
+    margin-bottom:0px;
+}
+section.dashboard-counts .row 
+{
+    padding: 10px 15px;
+    margin: 0;
+}
+section.dashboard-counts .title {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #111;
+    margin: 0 20px;
+}
+p.ctgr-title
+{
+color:#b32400;
+font-weight:600;
+font-family:'Josefin Sans','Roboto Condensed';
+font-size:1rem;
+}
+.register1
+{
+	background: rgba(255,255,255,1);
+	background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+	background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
+	background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+	background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+	background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+	background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=1 );
+	padding:10px;
+	position:relative;animation:animatebottom 1.6s
+}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
+.db-link
+{
+	font-weight:600 !important;
+	cursor:pointer;
+	font-family:'Roboto Condensed',Sans serif;
+}
+.db-link:hover
+{
+	background:#fff;
+}
+.p-od
+{
+    font-size: 12px;
+    color: #000;
+    margin-block-end:2px;
+}
+.p-stts
+{
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+    margin-block-end:2px;
+}
+.p-eta
+{
+    font-size: 12px;
+    font-weight: 600;
+    color: #4d4d4d;
+    margin-block-end:2px;
+}
+.fnr-link
+{
+   cursor:pointer;
+}
+.fnr-link:hover
+{
+   color:#b32400;
+}
+.badge
+{
+	font-size:13px;
+	padding:2px;
+}
+.badge-success
+{
+	color:#fff;
+}
+select option
+{
+	color:#000;
+}
+span.file-footer
+{
+	font-size:11px;
+	font-weight:600;
+	color:#4d4d4d;
+}
+.form-request
+{
+	width:100%;
+	height:auto;
+	overflow:auto;
+	background:White;
+	padding:5px;
+}
+.alert-dismissible
+{
+	font-size:12px !important;
+}
+.modal-ku {
+width: 80vw;
+height: 60vh;
+}

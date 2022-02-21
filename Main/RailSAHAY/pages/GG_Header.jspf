@@ -1,0 +1,849 @@
+<%@ page import="util.GenFunc.GG_SahayUtil,java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+ String strAccessCount ="";
+String strLastUpdate= "Thu, 10 Sep 2020 11:48:56";    
+String strTheme="";
+String strLangFlag="";
+String strClntId="";
+
+Hashtable HtParamCntl=null; 
+
+String strUserURL =   request.getRequestURL().toString();
+System.out.println("strUserURL"+ strUserURL );
+String strUserCheck = "";
+if (strUserURL.trim().toUpperCase().contains("INDIANRAIL")) 
+{
+	strUserCheck = "P";
+} else {
+	strUserCheck = "R";
+}
+System.out.println("strUserCheck"+ strUserCheck );
+
+ 
+String GG_MainCmdtCode="";
+String GG_MainCmdtName="";
+String GG_SubCmdtCode="";
+String GG_SubCmdtName="";
+try
+{
+	GG_MainCmdtCode=((String)session.getAttribute("MainCmdtCode")).trim();
+	GG_MainCmdtName=((String)session.getAttribute("MainCmdtName")).trim();
+}
+catch(Exception e)
+{
+	GG_MainCmdtCode="";
+	GG_MainCmdtName="";
+}
+try
+{
+	GG_SubCmdtCode=((String)session.getAttribute("SubCmdtCode")).trim();
+	GG_SubCmdtName=((String)session.getAttribute("SubCmdtName")).trim();
+}
+catch(Exception e)
+{
+	GG_SubCmdtCode="";
+	GG_SubCmdtName="";
+}
+
+GG_SahayUtil SahayUtil=new GG_SahayUtil();
+
+strTheme = (String)session.getAttribute("Theme");
+String strThemeClass="";
+if(strTheme==null)
+{	
+	try
+	{
+		strTheme=((String)request.getParameter("txtTheme")).trim();	
+	}
+	catch(Exception e)
+	{
+			strTheme="RD";
+	}
+}
+String strThemeCSS="style";
+if(strTheme.equals("GR")) {  strThemeClass="btn-success"; strThemeCSS="style_green"; }
+if(strTheme.equals("BL")) { strThemeClass="btn-primary-blue"; strThemeCSS="style";  }
+if(strTheme.equals("RD")) { strThemeClass="btn-danger"; strThemeCSS="style_red";  }
+if(strTheme.equals("OR")) { strThemeClass="btn-warning"; strThemeCSS="style_orange";  }
+if(strTheme.equals("GY")) { strThemeClass="btn-default"; strThemeCSS="style_grey";  }
+strLangFlag = (String)session.getAttribute("LangFlag"); 
+if(strLangFlag==null)
+	 {
+		try
+		{
+		strLangFlag=((String)request.getParameter("txtLangFlag")).trim();
+		}
+		catch(Exception e)
+		{
+				strLangFlag="E";
+		}
+	 }
+System.out.println("strLangFlag" + strLangFlag);  
+
+String si_LangCode="0";
+String si_SchmColr="";
+
+if(strLangFlag.equals("H")) { si_LangCode="1" ; }
+if(strTheme.equals("RD")) { si_SchmColr="cc2900"; }
+if(strTheme.equals("BL")) { si_SchmColr="1059c6"; }
+if(strTheme.equals("GR")) { si_SchmColr="2d8659"; }
+if(strTheme.equals("OR")) { si_SchmColr="b34700"; }
+
+strClntId = request.getHeader("X-FORWARDED-FOR");
+if (strClntId == null) 
+{
+	strClntId = request.getRemoteAddr();
+}
+if (strClntId.indexOf(",")>0)
+{
+	strClntId = strClntId.substring(0,strClntId.indexOf(","));
+}
+String si_ClntId=strClntId;
+String si_UserId="SAHAYPRTL";
+String si_Theme =strTheme;
+
+String L = "";
+String si_LangFlag=strLangFlag;
+if(si_LangFlag!=null)
+		L=si_LangFlag;
+util.HindiLocaleUtil E =new util.HindiLocaleUtil(L);
+
+try
+{
+	HtParamCntl=((Hashtable)session.getAttribute("ParamCntl"));
+}
+catch(Exception e)
+{
+	HtParamCntl=null;
+	//do nothing	
+}
+util.GenFunc.GG_SahayCmmn Logg  = new util.GenFunc.GG_SahayCmmn();
+String  browserDetails  =   request.getHeader("User-Agent");
+String Info=Logg.getbrowserinfo(browserDetails);
+String UserDevice=(Info.substring(0,Info.indexOf('#'))).trim();
+String Browser=(Info.substring(Info.indexOf('#')+1)).trim();
+strAccessCount = Logg.getAccessCount(si_UserId,si_ClntId);
+
+System.out.println("strAccessCount"+ strAccessCount);
+session.setAttribute("UserID",		si_UserId.trim());
+session.setAttribute("ClntID",		si_ClntId.trim());
+session.setAttribute("Theme",		si_Theme.trim());
+session.setAttribute("LangFlag",		si_LangFlag.trim());
+session.setAttribute("AccessCount",		strAccessCount.trim());
+
+
+String LangFlag=(String)session.getAttribute("LangFlag");  
+String sesid=request.getSession().getId();
+System.out.println("sesid" + sesid);
+String si_LangFlag1=si_LangFlag;
+ si_LangFlag=si_LangFlag+sesid;
+
+
+%>
+<% 
+String strCustID=(String)session.getAttribute("custuserid");  
+if(strCustID==null) strCustID="";
+String custCtgr=(String)session.getAttribute("custCtgr");  
+if(custCtgr==null) custCtgr="";
+System.out.println("strCustID in ggheader::"+strCustID+":::::");
+%>
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>Welcome To Indian Railways' Freight Services</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- Google font (font-family: 'Roboto Condensed', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/all.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/fonts/icomoon/style.css">  
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/jquery.fancybox.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/aos.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/openextnlink.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap-select.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!--Finish SAHAY Dashboard-->
+	<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/fontastic.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/fontNew.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/carddesign.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/portalcommon.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/theme/<%=strThemeCSS%>.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/accordion.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/custom.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/css/odometer-theme-car.css" />
+
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/plugins.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/megamenustyle.css">
+    <style>
+    </style>
+<script src="/RailSAHAY/resources/js/odometer.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/jqueryrotate.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/gspeech_pro.js?ver=2.7.0"></script>
+<link rel="stylesheet"  type="text/css" media="screen" href="/RailSAHAY/resources/css/gspeech.css">
+<script src="/RailSAHAY/resources/js/asttn.js"></script>
+<script src="/RailSAHAY/resources/js/aLocn.js"></script>
+<script src="/RailSAHAY/resources/js/NumCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/SData.js"></script>
+<script src="/RailSAHAY/resources/js/aRakeCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/validate.js"></script>
+<script src="/RailSAHAY/resources/js/numscroll.js"></script>
+<script src="/RailSAHAY/resources/js/bootstrap-select.js"></script>
+
+    <script src="/RailSAHAY/resources/js/plugins.js"></script>
+    <script src="/RailSAHAY/resources/js/active.js"></script>
+    <script src="/RailSAHAY/resources/js/megamenuscripts.js"></script>
+<% if(HtParamCntl==null) { %>
+<script>
+$(document).ready(function(){
+	var myurl="/RailSAHAY/GG_SahayEnty";
+	$.ajax({
+		url : myurl,
+		type : "post",
+		data: {Optn:'PARAMCNTL'},
+		async : true,
+		success : function(data) {
+		//DO NOTHING
+	}
+});
+});
+</script>
+<% } %>
+
+    <script>
+    	$(document).ready(function(){
+    		$(".main-link").hover(function(){
+    			var nHead=$(this).attr("narrative-head");
+    			var nDesc=$(this).attr("narrative-desc");
+    			var nLinks=$(this).attr("narrative-links");
+    			var nLinkArr=nLinks.split('#');
+    			var htmlLinkDesc='<p class="n-head">'+nHead+'</p><p class="n-desc">'+nDesc+'</p>';
+    			for(var i=0;i<nLinkArr.length;i++)
+    			{
+    				htmlLinkDesc+=nLinkArr[i]+'</br>';
+    			}
+			if($(this).hasClass("main-link1"))
+				htmlLinkDesc+='<p class="mesg-cnt"><img src="/RailSAHAY/resources/images/rarrow.gif" style="width:60px;height:40px;"/>&nbsp;<%=E.EH("To avail the benefits of our exclusive offerings")%> <a href="javascript:void(0)" onclick="regUser();" class="card-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Register With Us")%></a></p>';
+
+				$(".link-desc").html(htmlLinkDesc);
+    		});
+		$("a.head-menu").hover(function(){
+			var optntrg=$(this).attr("optn-trigger");
+			showIntro(optntrg);
+		});
+		
+    	});
+	function showIntro(optntrg)
+	{
+		var htmlText='';
+		switch(optntrg)
+		{
+			
+			case 'NR':
+				htmlText='<img src="/RailSAHAY/resources/images/NewCustIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><b><%=E.EH("Let us make the right offer for you </b><br/>Allow us to take you through the options (choose terminals, choose wagons, choose transportation products, get expected freight and transit times, explore rebate schemes and long term contracts, plan first and last mile arrangements, register demand on-line")%>.</p><hr/><p class="mesg-cnt"><img src="/RailSAHAY/resources/images/rarrow.gif" style="width:60px;height:40px;"/>&nbsp;<%=E.EH("To avail the benefits of our exclusive offerings")%> <a href="javascript:void(0)" onclick="regUser();" class="card-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Register With Us")%></a></p>'; 
+				break;
+			case 'IN':
+				htmlText='<img src="/RailSAHAY/resources/images/IndustryIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><%=E.EH("We offer <strong>energy-efficient, economical, green and reliable transportation solution</strong> for all the major industries")%></p>'; 
+				htmlText+='<div class="container-fluid"><div class="row text-center"></div><div class="row">';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/coalindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Coal")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/fgindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Food Grain")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/cementindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Cement")%></p></div>';
+	  		      	htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/ironoreindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Iron Ore")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/automobileindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Automobile")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/containerindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Container")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/steelindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Steel")%></p></div>';
+        			htmlText+='<div class="image-block col-sm-3" style="background: url(/RailSAHAY/resources/images/industry/polindus.jpg) no-repeat center top;background-size:cover;"><p><%=E.EH("Mineral Oil")%></p></div>';
+				htmlText+='</div></div>';
+				break;
+			case 'SR':
+				htmlText='<img src="/RailSAHAY/resources/images/ServiceIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><%=E.EH("We offer <b>myriad of services with unmatched benefits</b> for all your transporation needs across the country. Timetabled Movement, Single/Multi-Point Movement and real-time Track and Trace of your cargo")%></p>'; 
+				break;
+			case 'PU':
+				htmlText='<img src="/RailSAHAY/resources/images/PartnerIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><%=E.EH("Join hands with Indian Railways for long term business opportunities by becoming part of our network (through <strong>Development of New Terminal</strong> or by <strong>Investing in New Line</strong>), <strong>Investing in Wagons, partnering in provisions of Seamless Logistics Solutions</strong> by serving our customers in First & Last Mile, associating with Indian Railways in Long Term Contracts availing Freight Incentives and Rebates")%></p>'; 
+				break;
+			case 'CU':
+				htmlText='<img src="/RailSAHAY/resources/images/ContUsIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><%=E.EH("We value your invaluable relationship with Indian Railways and are commited to give you the <b>best in class transporation experience</b> with us. For all your queries and concerns, you may directly connect to Indian Railway Freight Officials to get the required assistance and best resolution in no time")%></p>'; 
+				break;
+			case 'CS':
+				htmlText='<img src="/RailSAHAY/resources/images/ContUsIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc"><%=E.EH("Existing Rail Users can avail customized online facilities and services on their personalized dashboard. In order to select the right terminal, wagon, transportation service and obtain freight & transit time estimation, please explore the Tools and Services Menu")%>.</p>'; 
+				break;
+		}
+		$(".link-desc").html(htmlText);
+	}
+    </script>
+
+<script>
+$(document).ready(function() {
+var langflag = '<%=LangFlag%>';
+
+	 if(document.getElementById("hidLangFlagDiv") == null)
+        {
+		var hidLangForm=document.createElement('FORM');
+		hidLangForm.name='frmLangFlag';
+		hidLangForm.method='POST';
+		hidLangForm.action='#';
+
+		var hidLangTB=document.createElement('INPUT');
+		hidLangTB.type='HIDDEN';
+		hidLangTB.name='hidLangFlagDiv';
+		hidLangTB.id='hidLangFlagDiv';
+		hidLangTB.value='<%=L%>';
+		hidLangForm.appendChild(hidLangTB);
+		document.body.appendChild(hidLangForm);
+	    }
+  });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35338650-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script src="/RailSAHAY/resources/js/homepage.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/sahayutil.js"></script>
+
+<script src="https://www.fois.indianrail.gov.in/botpress/assets/modules/channel-web/inject.js"></script>
+
+ </head>
+
+  <body onload="initFunction()" data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+<%--
+<!-- Start - Code for audio -->
+<div style="display:none" >
+     	<span class="gspeech_selection gspeech_style_1" roll="1"></span>
+     	<span class="gspeech_pro_main_wrapper">&nbsp;
+     	<span class="audio_tooltip"><span class="the-tooltip top left audio_tooltip_1"><span class="tooltip_inner"></span></span></span>
+     	<span class="sound_container_pro greeting_block sound_div_1" language="en" roll="1" autoplaypro="1" speechtimeout="0" selector="" eventpro="" title="" style=""><span class="sound_text_pro"></span></span>
+</span></div>
+<span id="audio_tooltip_title"><span class="the-tooltip top left dark-midnight-blue"><span class="tooltip_inner"></span></span></span>
+<div id="sound_container" class="sound_div sound_div_basic size_1 speaker_32" title="" style=""><div id="sound_text"></div>
+</div><div id="sound_audio"></div>
+<!-- End - for audio -->
+--%>
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only"><%=E.EH("Loading")%>...</span>
+      </div>
+    </div>
+<div class="site-wrap" id="home-section">
+
+<div class="site-mobile-menu site-navbar-target">
+<div class="site-mobile-menu-header">
+  <div class="site-mobile-menu-close mt-3">
+    <span class="icon-close2 js-menu-toggle"></span>
+  </div>
+</div>
+<div class="site-mobile-menu-body"></div>
+</div>
+<div class="top-bar d-none d-sm-none d-md-none d-lg-block">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            <span class="mainheadlbl d-none d-sm-none d-md-inline-block">  <%=SahayUtil.getCrntDateTime()%></span>
+             <span class="mx-md-2 d-inline-block"></span>
+              <a href="javascript:void(0)" onclick="showPage('SCREEN_READER');"><span class="d-none d-md-inline-block"><i class="fas fa-volume-up"></i>&nbsp;<span class="mainheadlbl"><%=E.EH("Screen Reader Access")%></span></span></a>
+              <span class="mx-md-2 d-inline-block"></span>
+              <span class="mr-2 mainheadlbl d-none d-sm-none d-md-inline-block"><%=E.EH("Text Size")%></span><span class="font-smallsize d-none d-sm-none d-md-inline-block" onclick="decFontSize();"><%=E.EH("A")%>-</span><span class="font-midsize d-none d-sm-none d-md-inline-block" onclick="setOrigFontSize();"><%=E.EH("A")%></span><span class="font-bigsize d-none d-sm-none d-md-inline-block" onclick="incFontSize();"><%=E.EH("A")%>+</span>
+              <%--<img src="/RailSAHAY/resources/images/speaker1.png" alt='<%=E.EH("NARRATOR")%>' class="d-none d-sm-none d-md-inline-block"  data-toggle="tooltip"   title='<%=E.EH("To use Narrator, select the text and press the button which comes thereafter")%>'>--%>
+              <div class="float-right">
+		<table><tr>
+		<%--<td>			
+			<div class="form-group has-search">
+			 <input type="text" id="inptSearch" class="form-control" placeholder='<%=E.EH("Enter Search")%>..'>
+			 <span class="fa fa-search form-control-feedback" onclick="searchWord();"></span>
+			</div>
+		</td>--%>
+		<td>
+                      <?audit suppress oracle.ide.xml.mismatched-end-tag?><form class="form-inline" method="post" id="frmTheme">
+		<div class="dropdown">
+		  <img src="/RailSAHAY/resources/images/color-scheme4.svg" class="dropdown-toggle" style="height:22px;width:22px;cursor:pointer;margin-right:10px;" data-toggle="dropdown" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selTheme">
+		    <a class="dropdown-item" href="javascript:void(0)" theme="RD" onclick="setTheme('RD');"><span class="badge theme-red badge-theme">&nbsp;&nbsp;</span><%=E.EH("Default")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="GR" onclick="setTheme('GR');"><span class="badge theme-green badge-theme">&nbsp;&nbsp;</span><%=E.EH("Green")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="BL" onclick="setTheme('BL');"><span class="badge theme-blue badge-theme">&nbsp;&nbsp;</span><%=E.EH("Blue")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="OR" onclick="setTheme('OR');"><span class="badge theme-saffron badge-theme">&nbsp;&nbsp;</span><%=E.EH("Orange")%></a>
+		    <%--<a class="dropdown-item" href="javascript:void(0)" theme="GY" onclick="setTheme('GY');"><span class="badge theme-grey badge-theme">&nbsp;&nbsp;</span><%=E.EH("Grey")%></a>--%>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtTheme" name="txtTheme" type="hidden" value="<%=strTheme%>" maxlength="2" >
+  <input type="hidden" name="toPage" id="toPage" value="" />
+
+		  
+		</td>
+                
+                <td>
+
+		<div class="dropdown">
+		  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    <%if(strLangFlag.equals("E")) { %> English <%} else { %>   &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;<%}%>
+		  </button>
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selLang">
+		    <a class="dropdown-item" href="javascript:void(0)" lang="E" >English</a>
+		    <a class="dropdown-item" href="javascript:void(0)" lang="H" >&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtLangFlag" name="txtLangFlag" type="hidden"  value="<%=strLangFlag%>" maxlength="1" >
+</form>
+
+
+               </td> </tr></table>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    <div class="wrapper" id="wrapper">
+        <!-- Header -->
+        <header class="header header-style sticky-header d-none d-sm-none d-md-block">
+            <div class="container-fullwidth d-none d-lg-block">
+                <div class="row">
+		    <div class="col-lg-1">
+
+<div class="site-logo">
+<img src="/RailSAHAY/resources/images/irlogo4.png" style="margin-right:1rem;"  alt='<%=E.EH("IR Logo")%>' class="govwebicon" >
+</div>
+</div>
+                    <div class="col-lg-11">
+                        <div class="header-inner">
+                            <nav class="menu">
+
+                                <ul>
+                                    <li>
+                                        <a href="/RailSAHAY/index.jsp" class="head-menu" target="_self"><%=E.EH("Home")%></a>
+
+                                    </li>
+									<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="NR"><%=E.EH("New To Rail")%></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title"><%=E.EH("New to Rail")%>?</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-4 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('BKNG_PROCESS');" class="main-link main-link1" narrative-head='<%=E.EH("Booking Process")%>' narrative-desc='<%=E.EH("Would you like to take a tour of the <strong>stages involved in booking</strong> freight by Indian Railways")%>?' narrative-links='<a href="javascript:void(0)" onclick=showPage("BKNG_PROCESS") target="_self" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Booking Process")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('TRML_DASHBOARD');" class="main-link main-link1" narrative-head='<%=E.EH("Find a Suitable Terminal")%>' narrative-desc='<%=E.EH("Use our smart Terminal Dashboard to <strong>select the appropriate origin and destination rail terminals</strong> best suited for your transportation needs")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("TRML_DASHBOARD") target="_self" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Find a Suitable Terminal")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('FIND_WGON');" class="main-link main-link1" narrative-head='<%=E.EH("Find the Right Wagon")%>' narrative-desc='<%=E.EH("<strong>Select the most suitable wagon</strong> from our wagon catalogue")%>.' narrative-links='<a href="javascript:void(0)" onclick=showPage("FIND_WGON") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Select the Right Wagon")%></a>
+													</li>
+													<%--
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('FIND_WGON');" class="main-link main-link1" narrative-head='<%=E.EH("Find the Right Transportation Service")%>' narrative-desc='<%=E.EH("Depending on the commodity, lot-size, destinations, required transit time- select the best suited transportation service offered by Indian Railways")%>.' narrative-links='<a href="/RailSAHAY/pages/BkngRegProcess.jsp" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Select The Right Transportation Service")%></a>
+													</li>
+													--%>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="main-link main-link1" narrative-head='<%=E.EH("Expected Freight Charges & Transit Time")%>' narrative-desc='<%=E.EH("Learn about the <strong>freight charges applicable</strong> to the selected options and the <strong>expected transit times</strong>. We also provide a glimpse of the applicable incentives and rebates")%>.' narrative-links='<a href="javascript:void(0)" onclick=showPage("FRGT_CALC") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Get Expected Freight Charges & Transit Time")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('POLICY');" class="main-link main-link1" narrative-head='<%=E.EH("Rebate Schemes & Long Term Contracts")%>' narrative-desc='<%=E.EH("Learn more about the <strong>freight incentive schemes and long term contracts</strong> suitable for your requirements")%>.' narrative-links='<a href="javascript:void(0)" onclick=showPage("POLICY") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Explore Rebate Schemes & Long Term Contracts")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('STTN_HELP');" class="main-link main-link1" narrative-head='<%=E.EH("First & Last Mile Service Providers")%>' narrative-desc='<%=E.EH("Connect to service providers at terminals i.e. <strong>aggregators, truckers, handling agents, warehouse service providers</strong> and more")%>.' narrative-links='<a href="javascript:void(0)" onclick=showPage("SMART") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Connect to First & Last Mile Service Providers")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="regUser();" class="main-link main-link5" narrative-head='<%=E.EH("User Registration")%>' narrative-desc='<%=E.EH("<strong>Register with us</strong> for numerous benefits")%>'  narrative-links='<a href="javascript:void(0)" onclick="regUser();" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("User Registration")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="gotoeDmnd();" class="main-link main-link1" narrative-head='<%=E.EH("e-Registration of Demand")%>' narrative-desc='<%=E.EH("Use this option to <strong>place your indent online</strong> after registering for e-RD (e-Registeration of Demand) and carrying out the KYC formalities")%>.' narrative-links='<a href="javascript:void(0)" onclick="gotoeDmnd();" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Register your Demand Online")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="gotoRailMadad();" class="main-link main-link5" narrative-head='<%=E.EH("Support Services")%>' narrative-desc='<%=E.EH("For all your queries and concerns, <strong>connect directly to Indian Railways Freight Officials</strong>")%>.'  narrative-links='<a href="javascripot:void(0)" onclick="gotoRailMadad();" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Support Services")%></a>
+													</li>
+													<%--
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('REG_SEC_CUST');" class="main-link main-link5" narrative-head='<%=E.EH("Regisgter As a Customer")%>' narrative-desc=''  narrative-links='<a href="javascript:void(0)"  class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Register As a Customer")%></a>
+													</li>
+													--%>
+												</ul>
+											</div>
+											<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc1"></div>
+											</div></div>
+
+										</div>
+                                    </li>
+				    <li class="cr-megamenu">
+					<a href="javascript:;" class="head-menu" optn-trigger="CS"><%=E.EH("Existing Customers")%></a>
+					<div class="cr-megamenu-wrap">
+						<!-- Megamenu Single Block -->
+						<div class="cr-megamenu-single">
+							<h6 class="heading-title"><%=E.EH("My business with Indian Railways")%></h6>
+						<div class="row" style="height:85%;">
+						<div class="col-lg-4 col-sm-12 main-menu-links">
+							<ul>
+								<li>
+									<a href="javascript:void(0)" onclick="gotoECust();" class="main-link main-link5" narrative-head='<%=E.EH("Corporate Login")%>' narrative-desc='<%=E.EH("E-Payment Customers can login through their ids to access their customized page.<br/><strong>Login to access the customized Freight Business Reports</strong> <ul><li>My Terminals Statistics</li><li>Status of Business Policy Enrollments (LTTC, GPWIS)</li><li>E-Payment Detail</li><li>Inward/Outward/Insight and Diversion Detail</li><li>and many more..</li></ul>")%>' narrative-links='' ><i class="fas fa-sign-in-alt"></i>&nbsp;<%=E.EH("Corporate Login")%></a>
+								</li>
+								<% if(strCustID.equals("")) {  %>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('IND_LOGIN');" class="main-link main-link5" narrative-head='<%=E.EH("Dashboard Login")%>' narrative-desc='<%=E.EH("If you have registered on this portal, use your login id to <strong>access your customized page</strong>. Customers who have registered for e-Registration of Demand (e-RD) may login using their e-RD credentials.<br/><strong>Login to monitor & analyze the current state of business portfolio with Indian Railways</strong><ul><li>Live track the status of booked and on-run consignments</li><li>Raising Requests for waiver of punitive charges</li><li>Policy Enrollments</li><li>Status of Applications/Investments</li><li>and many more..</li></ul>")%>'  narrative-links=""><i class="fas fa-sign-in-alt"></i>&nbsp;<%=E.EH("Individual Login")%></a>
+								</li>
+								<% } %>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('TRACK_TRACE');" class="main-link main-link5" narrative-head='<%=E.EH("Track & Trace")%>' narrative-desc='<%=E.EH("Enter FNR Number to <strong>live track the status of your cargo</strong>")%>'  narrative-links=''><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Track & Trace")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="main-link main-link5" narrative-head='<%=E.EH("Freight Calculator")%>' narrative-desc='<%=E.EH("Learn about the <strong>freight charges applicable</strong> to the selected options and the <strong>expected transit times</strong>. We also provide a glimpse of the applicable incentives and rebates")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("POLICY") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Freight Charges & Transit Time Estimator")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('RAISE_REQ');" class="main-link main-link5" narrative-head='<%=E.EH("Raise a Request")%>' narrative-desc='<%=E.EH("<strong>Apply for services</strong> such as stacking permission, diversion, re-booking, waiver of demmurage/wharfage charges, I-bond Delivery, Delivery short of destination etc")%>.'  narrative-links='<a href="javascript:void(0)" onclick=showPage("RAISE_REQ") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Raise a Request")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('TRACK_REQ');" class="main-link main-link5" narrative-head='<%=E.EH("Track your Request")%>' narrative-desc='<%=E.EH("<strong>Track the status of your service request</strong> based on your request id")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("TRACK_REQ") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Track your Request")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('ODR_RAS');" class="main-link main-link5" narrative-head='<%=E.EH("Indents Outstanding & Rake Allotments")%>' narrative-desc='<%=E.EH("View your <strong>COAL Rake Allotment Plan, Arrears in Supply of Rakes for COAL Traffic, Advance Rake Allotment Plan for Iron Ore and Latest updated status of pendency of Indents</strong> over Indian Railways")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("ODR_RAS") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Indents Outstanding & Rake Allotments (RAS)")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('TAX_INVC');" class="main-link main-link5" narrative-head='<%=E.EH("GST Tax Invoice")%>' narrative-desc='<%=E.EH("Visit us If you wish to <strong>download the GST Tax Invoice</strong> for any of your Digital Railway Receipt generated through Indian Railways Freight Operations Information System (FOIS)")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("TAX_INVC") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Download GST Tax Invoice")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('POLICY');" class="main-link main-link5" narrative-head='<%=E.EH("Rebate Schemes & Long Term Contracts")%>' narrative-desc='<%=E.EH("Learn more about the <strong>freight incentive schemes</strong> and <strong>long term contracts</strong> suitable for your requirements")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("POLICY") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Rebate Schemes & Long Term Contracts")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="showPage('STTN_HELP');" class="main-link main-link5" narrative-head='<%=E.EH("First & Last Mile Service Providers")%>' narrative-desc='<%=E.EH("Connect with service providers at terminals i.e. <strong>aggregators, truckers, handling agents, warehouse service providers</strong> and more")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("STTN_HELP") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("First & Last Mile Service Providers")%></a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" onclick="gotoeDmnd();" class="main-link main-link5" narrative-head='<%=E.EH("e-Registration of Demands")%>' narrative-desc='<%=E.EH("Use this option to <strong>place your indent online</strong> after registering for e-RD (e-Registeration of Demand) and carrying out the KYC formalities")%>'  narrative-links='<a href="javascripot:void(0)" onclick="gotoeDmnd();" class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("e-Registration of Demands")%></a>
+								</li>
+							</ul>
+						</div>
+						<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc5"></div>
+						</div></div>
+					</div>	
+                                    </li>
+<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="IN"><%=E.EH("Commodities")%></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title"><%=E.EH("Commodities we Transport")%></h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-4 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('COAL','COAL & COKE');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Coal & Coke")%>' narrative-desc='<%=E.EH("Indian Railways (IR) is the principle transporter of Coal in the country. Coal constitute around 45-50% of IR freight business, both, in terms of revenue as well as throughput. Rail remains the preferred mode for coal transportation over longer leads. In 2019-20, Indian Railways transported 587 Million Tonnes of Coal  across the country")%>.' narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("COAL") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Coal & Coke")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('ORES','MINERALS & ORES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Minerals & Ores")%>' narrative-desc='<%=E.EH("Minerals and Ores being bulk commodities are best suited to be transported by Railways. Indian Railway offers most affordable and cleanest transportation services for these commodities")%>.' narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("ORES") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Minerals & Ores")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('FG','FOOD GRAINS, FLOURS & PULSES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Food Grains, Flours & Pulses")%>' narrative-desc='<%=E.EH("Indian Railways plays a vital role in distribution of Food Grain from food surplus states to food deficit states in the country. In 2019-20, Indian Railways transported 37.53 MT of Food grains across the country")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("FG") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Food Grains, Flours & Pulses")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('CEMT','CEMENT & CLINKER');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Cement & Clinker")%>' narrative-desc='<%=E.EH("Rail, which is considered to be the most economical and therefore logical form of transport for Cement and Clinker.  Cement is the second largest revenue contributor to Indian Railways. In 2019-20, Indian Railways transported 110.7 MT of Cement and Clinker across the country.Indian Railways offer several incentive schemes for cement transport which include Long Term Tariff Contract Scheme, Freight Incentive Scheme for loading bagged consignments in open and flat wagons, Incentive Scheme for Auto Traditional Empty Flow Directions and General Purpose Wagon Investment")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("CEMT") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Cement & Clinker")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('CHEM','CHEMICAL MANURES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Chemical Manures")%>' narrative-desc='<%=E.EH("Indian Railways is the most competitive mode of Transportation for Fertiliser industry  with around 80 per cent of the total production and imports of fertilizers movement by Rail.  Fertiliser generally has longer hauls which makes Railways as more convenient and cost effective mode of transport. In 2019-20, Indian Railways transported 51.61  MT of Fertilisers across the country")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("CHEM") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Chemical Manures")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('IS','IRON & STEEL');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Iron & Steel")%>' narrative-desc='<%=E.EH("Indian Railways is considered as a preferred mode of transportation for Iron and Steel Industry across the country. Indian Railways has introduced freight incentive schemes like freight concession for Long Lead Traffic for Iron and Steel products")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("IS") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Iron & Steel")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('POL','PETROLEUM PRODUCTS & GASES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Petroleum Products & Gases")%>' narrative-desc='<%=E.EH("Indian Railways with its network of 31 POL sidings  remains a preferred mode of transportation over road for longer lead for petroleum  products across the country. In 2019-20, Indian Railways transported 45 MT of Petroleum Products  across the country")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("POL") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Petroleum Products & Gases")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('CONT','CONTAINER SERVICES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Container Service")%>' narrative-desc='<%=E.EH("Containerization of cargo and its transportation by railways is increasingly being adopted across the commodities. Railways is the most cost effective and green mode of transportation for containers. The transportation of container traffic by Railways is witnessing sustained growth over the years thanks to various incentive schemes offered by Indian Railways customised to Container Traffic")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("CONT") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Container Services")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('AUTO','AUTOMOBILES');" target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Automobile")%>' narrative-desc='<%=E.EH("Automobile industry is increasingly relying on Indian Railways for transporting its finished goods by the rail route rather than sticking to the conventional road based logistics model thanks to Indian Railways wide network, better reliability and cost efficiency compared to road logistics. Specially designed wagons and Auto-hubs  are delivering immense value to its customers. Indian Railways encourages private investment in specially designed Automobile wagons through Automobile Freight Train Operator (AFTO) Scheme")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("AUTO") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Automobile")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('SSSO','SUGAR, SALT, SPICES, OILS AND MORE..');"  target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Sugar, Salt, Spices, Oils and more")%>' narrative-desc='<%=E.EH("Indian Railways play an important role in providing Cost Effective Transportation of  Sugar, Salt, Spices and Edible Oil. A number of freight incentive schemes are available for these commodities. Please explore freight incentive schemes, wagon types, Terminals suitable for these commodities")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("SSSO") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Sugar, Salt, Spices, Oils")%></a> 
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('PIGI','PIG, SPONGE, WROUGHT IRON AND MORE..');"  target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Pig, Sponge, Wrought Iron and more")%>' narrative-desc='<%=E.EH("Indian Railways is best suited for bulk transportation of various types of iron.  Please explore freight incentive schemes, wagon types, Terminals suitable for these commodities")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("PIGI") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Pig, Sponge, Wrought Iron")%></a> 
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('STON','STONE/BAMBOO CHIPS, GRANITE AND MORE..');"  target="_self" class="main-link main-link2" narrative-head='<%=E.EH("Stone/Bamboo Chips, Granite and more")%>' narrative-desc='<%=E.EH("Indian Railways is considered as a preferred mode of transportation of Stone/Bamboo Chips, Granite. A number of freight incentive schemes are available for these commodities. Please explore freight incentive schemes, wagon types, Terminals suitable for these commodities")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("STON") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Stone/Bamboo Chips, Granite")%></a> 
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="setMainCmdt('OTHR','OTHERS');"  target="_self" class="main-link main-link2" narrative-head='<%=E.EH("More Commodities")%>' narrative-desc='<%=E.EH("Indian Railways is committed to transport almost all type of commodities through is wide network of 4000+ Terminals, more than 67,000 km of route network across the country. Customers may find suitable wagon, terminal and freight charges for specific commodity")%>.'  narrative-links='<a href="javascript:void(0)" onclick=setMainCmdtCode("OTHR") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("More")%>..</a> 
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc2"></div>
+											</div></div>
+				   </div>
+                                    </li>
+									<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="SR"><%=E.EH("Tools & Services")%></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title"><%=E.EH("Tools & Services We Offer")%></h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-4 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<b style='font-family:"Roboto Condensed",Sans-serif;color:#666666;font-size:12px;'><%=E.EH("TOOLS")%></b>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('TRML_DASHBOARD');" class="main-link main-link3" narrative-head='<%=E.EH("Terminal Selector")%>' narrative-desc='<%=E.EH("<strong>Search the most suitable Terminal</strong> to transport your cargo from a wide network of 4000+ Terminals of Indian Railways based on your location, district, state, PINCODE, Railway Division or Railway Zone")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("TRML_DASHBOARD") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Terminal Selector")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('FIND_WGON');" class="main-link main-link3" narrative-head='<%=E.EH("Wagon Selector")%>' narrative-desc='<%=E.EH("<strong>Search the right Wagon</strong> to transport your commodity from 196 types of Wagons operated over Indian Railways network with their capacity and preference by other customers")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("FIND_WGON") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Wagon Selector")%></a>
+													</li>
+													<%--
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('TRANSPORT_SERVICES');" class="main-link main-link3" narrative-head='<%=E.EH("Transportation Services Tool")%>' narrative-desc='<%=E.EH("You may <strong>estimate freight charges and Transit Time</strong> to transport your cargo using our smart freight calculator which also displays concessions and Vikalp option for congested terminals")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("TRANSPORT_SERVICES") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Transportation Services")%></a>
+													</li>
+													--%>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="main-link main-link3" narrative-head='<%=E.EH("Freight & Transit Time Estimator")%>' narrative-desc='<%=E.EH("You may <strong>estimate freight charges and Transit Time</strong> to transport your cargo using our smart freight calculator which also displays concessions and Vikalp option for congested terminals")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("FRGT_CALC") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Freight & Transit Time Estimator")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('TRACK_TRACE');" class="main-link main-link3" narrative-head='<%=E.EH("Track & Trace")%>' narrative-desc='<%=E.EH("<strong>Track and Trace your cargo on GIS map</strong> to know real time location of your cargo and expected time of arrival at destination")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("TRACK_TRACE") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Track & Trace")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('RATE_SLAB');" class="main-link main-link3" narrative-head='<%=E.EH("Rate Slabs")%>' narrative-desc='<%=E.EH("<strong>Know applicable freight rates</strong> for a commodity distance slab wise")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("RATE_SLAB") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Rate Slabs")%></a>
+													</li>
+													<li>
+														<b style='font-family:"Roboto Condensed",Sans-serif;color:#666666;font-size:12px;'><%=E.EH("SERVICES")%></b>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('ML_POINT');" class="main-link main-link3" narrative-head='<%=E.EH("Two-Point/Multi-Point Services")%>' narrative-desc='<%=E.EH("We offer <strong>facility to transport your cargo in a Train for more than one destinations</strong> using Two Point/multi point schemes while availing Train load freight rates")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("ML_POINT") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Two-Point/Multi-Point (Permitted Combinations)")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('TIME_TABLED');" class="main-link main-link3" narrative-head='<%=E.EH("Timetabled Services")%>' narrative-desc='<%=E.EH("We understand the time sensitiveness of your cargo. We run <strong>Time Tabled Freight Services to ensure timely delivery of your cargo</strong>")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("TIME_TABLED") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Timetabled Services")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('MINI_RAKE');" class="main-link main-link3" narrative-head='<%=E.EH("Mini Rake Services")%>' narrative-desc='<%=E.EH("We offer <strong>mini rake option to transport cargo which is less than Train Load at special freight rates</strong>")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("MINI_RAKE") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Mini Rake Services")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('PRCL_TRAN');" class="main-link main-link3" narrative-head='<%=E.EH("Parcel Services")%>' narrative-desc='<%=E.EH("For small packages and shipments, try experiencing our <strong>fast, economical and secure parcel services<strong>")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("PRCL_TRAN") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Parcel Services")%></a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc3"><%=E.EH("Welcome to This Page")%></div>
+											</div></div>
+				   </div>
+                                    </li><li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="PU"><%=E.EH("Partner With Us")%></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title"><%=E.EH("Join the Indian Railways Freight Business")%></h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-4 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('OWN_TRML');" class="main-link main-link4" narrative-head='<%=E.EH("Join Our Network")%>' narrative-desc='<%=E.EH("Join our network to make railways part of your supply chain. We will help you in development of Private Railway Siding, Private Freight Terminal (PFT), become a partner in operation of Railway Good sheds")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("OWN_TRML") class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Join Our Network")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('OWN_WGON');" class="main-link main-link4" narrative-head='<%=E.EH("Invest in Rolling Stock")%>' narrative-desc='<%=E.EH("We encourage you to invest in Railway wagons, become partners of Indian Railways and avail numerous benefits")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("OWN_WGON") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Invest in Rolling Stock")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('SMART');" class="main-link main-link4" narrative-head='<%=E.EH("First & Last Mile Logistics Services")%>' narrative-desc='<%=E.EH("Partner with Indian Railways to avail visibility on this portal as First & Last Mile Logistics service provider to offer Aggregation, Warehousing, Trucking and Labour facilities to freight customers of Indian Railways")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("SMART") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("First & Last Mile Logistics Services")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('BUSINESS_PARTNER');" class="main-link main-link4" narrative-head='<%=E.EH("Business Partnerships")%>' narrative-desc='<%=E.EH("Partner with Indian Railways to avail various benefits in freight charges like Station to Station (STS) Rates, Long Term Tariff Contract (LTTC) and so on")%>' narrative-links='<a href="javascript:void(0)" onclick=showPage("BUSINESS_PARTNER") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Business Partnerships")%></a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc4"><%=E.EH("Welcome to This Page")%></div>
+											</div></div>
+				   </div>
+                                    </li>
+                                    </li>
+                                    <li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="CU"><%=E.EH("Contact Us")%></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title"><%=E.EH("Directly Connect to IR Officials")%></h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-4 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="javascript:void(0)" onclick="gotoRailMadad();" class="main-link main-link5" narrative-head='<%=E.EH("Raise A Concern")%>' narrative-desc='<%=E.EH("<strong>Write your queries and concerns</strong> to Indian Railways freight officials and get the instant resolution")%>' narrative-links='<a href="javascript:void(0)" onclick="gotoRailMadad();" class="narr-link"><%=E.EH("Learn More")%> ></a>' ><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Raise a Concern")%></a>
+													</li>
+													<li>
+														<a href="javascript:void(0)" onclick="showPage('NODL_OFCR');" class="main-link main-link5" narrative-head='<%=E.EH("Nodal Officers Contacts")%>' narrative-desc='<%=E.EH("<strong>Get connected to Indian Railways divisional officers</strong> through their contact numbers")%>'  narrative-links='<a href="javascript:void(0)" onclick=showPage("NODL_OFCR") class="narr-link"><%=E.EH("Learn More")%> ></a>'><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Nodal Officers Contacts")%></a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-8 col-sm-0 main-links-desc"><div class="link-desc link-desc5"><%=E.EH("Welcome to This Page")%></div>
+											</div></div>
+				   </div>
+                                    </li>
+				    <% if(!strCustID.equals("")) {  %>
+                        <li class="cr-dropdown">
+                        <a href="javascript:;" class="head-menu"><%=E.EH("My Account")%></a>
+                                        <ul>
+                                            
+                                            <li>
+                                                <a href="/RailSAHAY/pages/SAHAYDashboard.jsp" class="nav-link"><i class="fas fa-chart-pie"></i>&nbsp;<%=E.EH("My Dashboard")%></a>
+                                            </li>
+                                            <li>
+                                                <a href="/RailSAHAY/Logout" class="nav-link"><i class="fas fa-sign-out-alt"></i>&nbsp;<%=E.EH("Sign Out")%></a>
+                                            </li>
+                                        </ul>                        </li>
+                        <% } %>
+                                    <li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu no-arrow" optn-trigger="CU"><i class="fa fa-search form-control-feedback"></i></a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<input type="text" id="inptSearch" class="form-control" placeholder='<%=E.EH("Enter Search")%>..'>
+												<button class="btn btn-danger btn-sm mt-2 float-right" onclick="searchWord();"><%=E.EH("Search")%></button>
+											</div>
+				   </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+<header class="site-navbar js-sticky-header site-navbar-target d-sm-inline-block d-md-none d-lg-none" role="banner">
+        <?audit suppress oracle.ide.xml.mismatched-end-tag?>
+        <div class="container">
+<div class="row align-items-center position-relative">
+
+<div class="site-logo">
+<img src="/RailSAHAY/resources/images/irlogo4.png" style="margin-right:1rem;"  alt='<%=E.EH("IR Logo")%>' class="govwebicon" >
+</div>
+
+<div class="col-12">
+			  <nav class="site-navigation text-right ml-auto " role="navigation">
+		  <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+		 <li><a href="/RailSAHAY/index.jsp" class="nav-link homelink"><%=E.EH("Home")%></a></li>
+		 <li class="has-children">
+		  <a href="#bkngsctn" class="nav-link"><%=E.EH("New to Rail")%></a>
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="showPage('BKNG_PROCESS');" class="nav-link"><%=E.EH("Booking Process")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('TRML_DASHBOARD');" class="nav-link"><%=E.EH("Find a Suitable Terminal")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('FIND_WGON');" class="nav-link"><%=E.EH("Select the Right Wagon")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="nav-link"><%=E.EH("Expected Freight Charges")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('POLICY');" class="nav-link"><%=E.EH("Rebate Schemes")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('STTN_HELP');" class="nav-link"><%=E.EH("First & Last Mile Providers")%></a></li>
+				<li><a href="javascript:void(0)" onclick="regUser;" class="nav-link"><%=E.EH("User Registration")%></a></li>
+				<li><a href="javascript:void(0)" onclick="gotoeDmnd();" class="nav-link"><%=E.EH("Register your Demand")%></a></li>
+				<li><a href="javascript:void(0)" onclick="gotoRailMadad();" class="nav-link"><%=E.EH("Support Services")%></a></li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#fctysctn" class="nav-link"><%=E.EH("Existing Customers")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="gotoECust();" class="nav-link"><%=E.EH("Corporate Login")%></a></li>
+				 <% if(strCustID.equals("")) { %>
+				<li><a href="javascript:void(0)" onclick="showPage('IND_LOGIN');" class="nav-link"><%=E.EH("Individual Login")%></a></li>
+				<% } %>
+				<li><a href="javascript:void(0)" onclick="showPage('TRACK_TRACE');" class="nav-link"><%=E.EH("Track & Trace")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="nav-link"><%=E.EH("Expected Freight Charges")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('RAISE_REQ');" class="nav-link"><%=E.EH("Raise a Request")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('TRACK_REQ');" class="nav-link"><%=E.EH("Track your Request")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('ODR_RAS');" class="nav-link"><%=E.EH("Indents Outstanding and Rake Allotments")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('TAX_INVC');" class="nav-link"><%=E.EH("GST Tax Invoice")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('POLICY');" class="nav-link"><%=E.EH("Rebate Schemes")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('STTN_HELP');" class="nav-link"><%=E.EH("First & Last Mile Providers")%></a></li>
+				<li><a href="javascript:void(0)" onclick="gotoeDmnd();" class="nav-link"><%=E.EH("Register your Demand")%></a></li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#cmdtsctn" class="nav-link"><%=E.EH("Commodities")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('COAL','COAL & COKE');" class="nav-link"><%=E.EH("Coal & Coke")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('ORES','MINERALS & ORES');" class="nav-link"><%=E.EH("Minerals & Ores")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('FG','FOOD GRAINS, FLOURS & PULSES');" class="nav-link"><%=E.EH("Food Grains, Flours & Pulses")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('CEMT','CEMENT & CLINKER');" class="nav-link"><%=E.EH("Cement & Clinker")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('CHEM','CHEMICAL MANURES');" class="nav-link"><%=E.EH("Chemical Manures")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('IS','IRON & STEEL');" class="nav-link"><%=E.EH("Iron & Steel")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('POL','PETROLEUM PRODUCTS & GASES');" class="nav-link"><%=E.EH("Petroleum Products & Gases")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('CONT','CONTAINER SERVICES');" class="nav-link"><%=E.EH("Container Services")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('AUTO','AUTOMOBILES');" class="nav-link"><%=E.EH("Automobiles")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('SSSO','SUGAR, SALT, SPICES, OILS AND MORE..');" class="nav-link"><%=E.EH("Sugar, Salt, Spices, Oils")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('PIGI','PIG, SPONGE, WROUGHT IRON AND MORE..');" class="nav-link"><%=E.EH("Pig, Sponge, Wrought Iron")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('STON','STONE/BAMBOO CHIPS, GRANITE AND MORE..');" class="nav-link"><%=E.EH("Stone/Bamboo Chips, Granite")%></a></li>
+				<li><a href="javascript:void(0)" onclick="setMainCmdt('OTHR','OTHERS');" class="nav-link"><%=E.EH("More")%>..</a></li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#toolsctn" class="nav-link"><%=E.EH("Tools & Services")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="showPage('TRML_DASHBOARD');" class="nav-link"><%=E.EH("Terminal Selector")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('FIND_WGON');" class="nav-link"><%=E.EH("Wagon Selector")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('FRGT_CALC');" class="nav-link"><%=E.EH("Freight & Transit Time Estimator")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('TRACK_TRACE');" class="nav-link"><%=E.EH("Track & Trace")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('RATE_SLAB');" class="nav-link"><%=E.EH("Rate Slabs")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('ML_POINT');" class="nav-link"><%=E.EH("Permitted Two Point Combinations")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('TIME_TABLED');" class="nav-link"><%=E.EH("Timetabled Services")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('MINI_RAKE');" class="nav-link"><%=E.EH("Mini Rake Services")%></a></li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#prtnsctn" class="nav-link"><%=E.EH("Partner with Us")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="showPage('OWN_TRML');" class="nav-link"><%=E.EH("Join our network")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('OWN_WGON');" class="nav-link"><%=E.EH("Invest in Rolling Stock")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('SMART');" class="nav-link"><%=E.EH("First & Last Mile Services")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('BUSINESS_PARTNER');" class="nav-link"><%=E.EH("Business Partnerships")%></a></li>
+		  </ul>
+		</li>
+		<li class="has-children">
+		  <a href="#contsctn" class="nav-link"><%=E.EH("Contact Us")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="javascript:void(0)" onclick="gotoRailMadad();" class="nav-link"><%=E.EH("Raise a Concern")%></a></li>
+				<li><a href="javascript:void(0)" onclick="showPage('NODL_OFCR');" class="nav-link"><%=E.EH("Nodal Officers Contacts")%></a></li>
+		  </ul>
+		</li>
+                      <% if(!strCustID.equals("")) { %>			
+		<li class="has-children">
+		  <a href="#contsctn" class="nav-link"><%=E.EH("My Account")%></a>		 
+		  <ul class="dropdown arrow-top">
+				<li><a href="/RailSAHAY/pages/SAHAYDashboard.jsp"  class="nav-link"><%=E.EH("My Dashboard")%></a></li>
+				<li><a href="/RailSAHAY/Logout"  class="nav-link"><%=E.EH("Sign Out")%></a></li>
+		  </ul>
+		</li>
+                        <% } %>
+          
+		  </ul>
+</nav>
+</div>
+<div class="toggle-button"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
+</div>
+</header>
+
+ 

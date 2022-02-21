@@ -1,0 +1,219 @@
+.subcaption
+{
+	font-size:1rem;
+	color:#4d4d4d;
+	font-weight:600;
+}
+.trmllistdata {
+    min-height: 10vh;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.inpttext
+{
+	height:35px;
+	text-transform:uppercase;
+	font-size:12px;
+}
+.inpttext:focus {
+  box-shadow: 0 0 2px rgba(81, 203, 238, 1);
+  border: 1px solid rgba(81, 203, 238, 1);
+}
+.col-inpt
+{
+	padding-left:3px !important;
+	padding-right:3px !important;
+}
+.img-circle {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    margin:1rem;
+}
+p.prashedr
+{
+	font-weight:600;
+	font-size:1rem;
+	color:#000;
+	text-align:center;
+	margin-top:10px;
+}
+.heading-title1 {
+    position: relative;
+    font-weight: 600;
+    color: #262626 !important;
+    /* text-transform: uppercase; */
+    font-size: 20px;
+    /* font-family: 'Josefin Sans', sans-serif; */
+    margin-top: 10px !important;
+    margin-bottom: 1.5rem;
+    /*text-align: center;*/
+}
+.raslink
+{
+	font-size:1.2rem;
+	font-family: 'Roboto', sans-serif;
+	font-weight:600;
+}
+.rasmorelink
+{
+	font-size:0.8rem;
+	font-family: 'Roboto', sans-serif;
+	font-weight:600;
+	color:#4d4d4d;
+}
+.pprasdesc
+{
+	font-size:0.8rem;
+	color:#4d4d4d;
+	font-family: 'Roboto', sans-serif;	
+}
+.tdrasrprt
+{
+	text-align:left;
+	/*border-bottom:1px dotted #efefef;*/
+	border:0px;
+}
+a.narr-link {
+    background: #f2f2f2;
+    /* padding: 5px !important; */
+	padding-left:5px;
+	padding-right:5px;
+	font-weight:600;
+    border: 1px solid #e6e6e6;
+}
+.animate-bottom{position:relative;animation:animatebottom 2.2s}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
+
+
+.pCmdtHeadLbl
+{
+	font-size:1.3rem;
+	color:#b32400;
+	font-weight:600;
+	margin-block-end:5px;
+	margin-top:1rem;
+	font-family:'Josefin Sans','Roboto Condensed',Sans serif;
+}
+.pCmdtDesc
+{
+	font-weight:500;
+	color:#4d4d4d;
+	font-size:1rem;
+	text-align:justify;
+}
+.row-left
+{
+	border:1px dashed #efefef;
+	margin-10px;
+	/*cursor:pointer;*/
+	padding:1rem;
+}
+.row-right
+{
+	border:1px dashed #efefef;
+	margin-10px;
+	/*cursor:pointer;*/
+	padding:1rem;
+ }
+.img-optn
+{
+ -webkit-box-shadow: 0 10px 6px -6px #777;
+     -moz-box-shadow: 0 10px 6px -6px #777;
+          box-shadow: 0 10px 6px -6px #777;
+}
+.statsfig
+{
+	font-size:2.5rem !important;
+	font-weight:600;
+	color:#b32400;
+	font-family:'Josefin Sans','Roboto Condensed', Sans serif;
+	margin-block-end:2px;
+}	
+.cmdtstatdesc
+{
+	font-size:1rem;
+	font-size:600;
+	color:#4d4d4d;
+	font-family:'Josefin Sans","Roboto Condensed", Sans serif;
+}
+h3, .h3, h2, .h2 {
+    text-transform: none !important;
+}
+.ras-link
+{
+	font-weight:600;
+	color:#4d4d4d;
+	font-size:1.2rem;
+	font-family:'Roboto Condensed', Sans serif;
+}
+/* The side navigation menu */
+.sidenav1 {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 50; /* Stay on top */
+  left: 0;
+  background-color: #fff; /* white*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+/* Position and style the close button (top right corner) */
+.sidenav1 .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+.span-filter
+{
+	font-size:18px;
+	padding:5px;
+	position:fixed;
+	left:0px;
+	top:50vh;
+	z-index:40;
+	cursor:pointer;
+	background: rgba(0, 0, 0, 0.3);
+}
+.span-filter:hover
+{
+	font-size:18px;
+	padding:5px;
+	position:fixed;
+	left:0px;
+	top:50vh;
+	z-index:40;
+	cursor:pointer;
+	background: rgba(0, 0, 0, 1);
+}
+
+.ras-link1
+{
+	font-weight:600;
+	color:#4d4d4d;
+	font-size:1rem;
+	font-family:'Roboto Condensed', Sans serif;
+}
+.trmllistdata
+{
+	min-height:55vh;
+	padding:5px;
+}
+.dtls-link
+{
+	font-weight:600;
+	color:#4d4d4d;
+	cursor:pointer;
+	font-family:'Roboto Condensed',Sans serif;
+}

@@ -1,0 +1,114 @@
+<br/><br/>
+<br/><br/>
+
+<div class="row" role="contentinfo" aria-label='<%=E.EHR("Last Update Time")%>' align="center">
+<div class="col-lg-12">
+<div class="alert alert-info alert-lastupdt">
+	<%=E.EH("This page has last been updated by Admin on")%>: <strong><%=strLastUpdate%></strong>
+</div>
+</div>
+</div><br/><br/>
+<hr/>
+<div class="row">
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/irlogo1.jpg" class="govwebicon" onclick="openExtnLink('INDIAN RAILWAYS','http://indianrailways.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/datagovlogo1.jpg" class="govwebicon" onclick="openExtnLink('DATA GOV','https://data.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/digitalindialogo1.png" class="govwebicon" onclick="openExtnLink('DIGITAL INDIA','https://www.digitalindia.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/indiagovlogo1.png" class="govwebicon" onclick="openExtnLink('INDIA GOV','https://www.india.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/mygovlogo1.jpg" class="govwebicon" onclick="openExtnLink('MY GOV','https://www.mygov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/wimicon1.jpg" class="govwebicon" onclick="showPage('WIM');" />
+	</div>
+</div>
+<footer class="site-footer">
+<div class="container"> 
+<div class="row">
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-7">
+	<h2 class="footer-heading mb-4">About Us</h2>
+	<p>We, the Indian Railways, are the backbone of logistics sector of the country carrying  more than 1.2 Billon tonnes of freight traffic every year over 68000 km of our network.</p>
+      </div>
+      <div class="col-md-4 ml-auto">
+	<h2 class="footer-heading mb-4">Features</h2>
+	<ul class="list-unstyled">
+	  <li><a href="/RailSAHAY/pages/BkngRegProcess.jsp" target="_self">Transport with Us</a></li>
+	  <li><a href="/RailSAHAY/pages/Policy.jsp" target="_self">Innovative Schemes</a></li>
+	  <li><a href="/RailSAHAY/pages/TimeTblTran.jsp" target="_self">Timetabled Movements</a></li>
+	  <li><a href="/RailSAHAY/pages/SMART.jsp" target="_self">Logistics Partners</a></li>
+	  <li><a href="javascript:void(0)" onclick="gotoRailMadad();">Contact Us</a></li>
+	  <li><a href="/RailSAHAY/pages/Feedback.jsp" target="_self">Website Feedback</a></li>
+	</ul>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-4 ml-auto">
+
+
+    <h2 class="footer-heading mb-4"><a href="https://www.youtube.com/channel/UCZB-E4AHWbh9vYSfqb7nsEg?reload=9&app=desktop&persist_app=1" target="_blank">Follow Us on Youtube</a></h2>
+  </div>
+</div>
+<div class="row pt-5 mt-5 text-center">
+  <div class="col-md-12">
+    <div class="border-top pt-5">
+      <p class="copyright">
+    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Portal has been designed and developed by CRIS
+    </p>
+    </div>
+  </div>
+
+</div>
+</div>
+</footer>
+<div class="container">
+    <div class="row">
+        <div class="modal fade" id="extnLinkWarn" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label=""><span>×</span></button>
+                     </div>
+					
+                    <div class="modal-body">
+                       
+						<div class="thank-you-pop">
+							<img src="http://goactionstations.co.uk/wp-content/uploads/2017/03/Green-Round-Tick.png" alt="">
+							<h1>Thank You!</h1>
+							<p>Your submission is received and we will contact you soon</p>
+							<h3 class="cupon-pop">Your Id: <span>12345</span></h3>
+							
+ 						</div>
+                         
+                    </div>
+					
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+    <script src="/RailSAHAY/resources/js/popper.min.js"></script>
+    <script src="/RailSAHAY/resources/js/bootstrap.min.js"></script>
+    <script src="/RailSAHAY/resources/js/owl.carousel.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.sticky.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.waypoints.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.animateNumber.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.fancybox.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.easing.1.3.js"></script>
+    <script src="/RailSAHAY/resources/js/aos.js"></script>
+    <script src="/RailSAHAY/resources/js/stepform.js"></script>
+    <script src="/RailSAHAY/resources/js/main.js"></script>
+  </body>
+
+</html>

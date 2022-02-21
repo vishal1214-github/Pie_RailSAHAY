@@ -1,0 +1,279 @@
+<%@ page import="util.GenFunc.GG_SahayUtil,java.util.*,java.text.SimpleDateFormat" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<!DOCTYPE html>
+<%
+String strUserId	= (String)session.getAttribute("UserID"); 
+String strUserName	= (String)session.getAttribute("UserName");
+	String strClntId	= (String)session.getAttribute("ClntID"); 
+	String strProjName	= (String)session.getAttribute("ProjName"); 
+	String strLocnFlag	= (String)session.getAttribute("LognLocnFlag");
+	String strLognLocnFlag	= (String)session.getAttribute("LognLocnFlag");
+	String strLangFlag = (String)session.getAttribute("LangFlag");
+        String strLognLocn = (String)session.getAttribute("LognLocn");
+	String strCrntZone="";
+	String strCrntDvsn="";
+	/*
+        String strLognZone		= (String)session.getAttribute("CrntZone");
+        String strLognDvsn		= (String)session.getAttribute("CrntDvsn");
+          */      
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+        Date date = new Date();  
+        String strCrntTime=formatter.format(date);  
+	String sIPAddress = request.getRemoteAddr();
+	String strUserType =""; 
+        System.out.println("strUserId   "+ strUserId+"   strClntId  "+strClntId); 
+	System.out.println("strProjName   "+ strProjName+"   strLognLocnFlag  "+strLognLocnFlag); 
+        System.out.println("strLognLocn   "+ strLognLocn); 
+	String strPswdExpd =(String)session.getAttribute("PswdExpd");
+	System.out.println("strPswdExpd"+strPswdExpd);
+	 System.out.println("strUserName   "+ strUserName); 
+		
+%>
+<html>
+    <head>        
+        <title>Welcome Indian Railways Officials..</title>
+<meta charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="Expires" content="-1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- Google font (font-family: 'Roboto Condensed', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/irbdu/welcome_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/RailSAHAY/resources/js/irbdu/irbducommon.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap4.min.css">
+    </head>
+    <body>
+   
+<div class="container-fluid px-0">
+    <div class="top-bar"><span class="pull-right" style="font-weight:600;margin-right:1rem;">Welcome user <%=strUserName%>
+    <% if(strLognLocnFlag.equals("D")) { %>
+    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Division: <%=strLognLocn%>
+    <% } %>
+    <% if(strLognLocnFlag.equals("Z")) { %>
+    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Zone: <%=strLognLocn%>
+    <% } %>
+    <% if(strLognLocnFlag.equals("I") || strLognLocnFlag.equals("R")) { %>
+    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IR User
+    <% } %>
+</span></div>
+    <nav class="navbar navbar-expand-md navbar-light bg-white p-0"> <a class="navbar-brand mr-4" href="#"><strong>IR.BDU</strong></a> <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">            
+                <li class="nav-item"> <a class="nav-link" href="/RailSAHAY/pages/Welcome.jsp"  aria-haspopup="true" aria-expanded="false" target="_self">Home</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks<span class="fa fa-angle-down"></span></a>
+                    <div class="dropdown-menu dropdown-main-menu" id="dropdown-menu1" aria-labelledby="navbarDropdown1">
+                        <div class="container">
+			   <% if(strLognLocnFlag.equals("Z")) { %>
+                            <div class="row" style="width:100%;">				
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDUUploadPlan.jsp" target="_self">
+                                                <h6 class="mb-0">BD Plan (for Sep-2021)</h6> <small class="text-muted">Zonal Plan Document</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_UpdateZonalPlan.jsp" target="_self">
+                                                <h6 class="mb-0">Business Development & Acquisition Plan</h6> <small class="text-muted">Enter/Update Zonal Plan Data</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> 
+                                                <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Proposal.jsp" target="_self"><h6 class="mb-0">Business Proposals</h6> <small class="text-muted">Upload and Track Business Proposals</small></a>
+                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Resource.jsp" target="_self">
+                                                <h6 class="mb-0">Resource Centre</h6> <small class="text-muted">Enter Resources Detail</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>			    
+			   <% } %>
+			   <% if(strLognLocnFlag.equals("D")) { %>
+                            <div class="row" style="width:100%;">	
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_UpdateZonalPlan.jsp" target="_self">
+                                                <h6 class="mb-0">Business Development & Acquisition Plan</h6> <small class="text-muted">Enter/Update Zonal Plan Data</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> 
+						<% if(strLognLocnFlag.equals("Z") || strLognLocnFlag.equals("D")) { %>
+                                                <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Proposal.jsp" target="_self"><h6 class="mb-0">Business Proposals</h6> <small class="text-muted">Upload and Track Business Proposals</small></a>
+						<% } %>
+						<% if(strLognLocnFlag.equals("R") || strLognLocnFlag.equals("I")) { %>
+                                                <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Decision.jsp" target="_self"><h6 class="mb-0">Redress Business Proposals</h6> <small class="text-muted">Upload Decision Letters</small></a>
+						<% } %>
+                                         </div>
+                                    </div>
+                                </div>
+			    </div>
+                            <div class="row" style="width:100%;">	
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Resource.jsp" target="_self">
+                                                <h6 class="mb-0">Resource Centre</h6> <small class="text-muted">Enter Resources Detail</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>			    
+			   <% } %>
+			   <% if(strLognLocnFlag.equals("R") || strLognLocnFlag.equals("I")) { %>
+                            <div class="row" style="width:100%;">	
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> 
+                                                <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Decision.jsp" target="_self"><h6 class="mb-0">Redress Zonal Proposals</h6> <small class="text-muted">Upload Decision Letters on Zonal Proposals</small></a>
+                                         </div>
+                                    </div>
+                                </div>
+			    </div>		    
+			   <% } %>
+			   <% if(strLognLocnFlag.equals("Z")) { %>
+                            <div class="row" style="width:100%;">	
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> 
+                                                <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_Decision.jsp" target="_self"><h6 class="mb-0">Redress Divisional Proposals</h6> <small class="text-muted">Respond to Divisional Proposals</small></a>
+                                         </div>
+                                    </div>
+                                </div>
+			    </div>		    
+			   <% } %>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">MIS Queries<span class="fa fa-angle-down"></span></a>
+                    <div class="dropdown-menu dropdown-main-menu" id="dropdown-menu2" aria-labelledby="navbarDropdown2">
+                        <div class="container">
+                            <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_RailRoadCmpr.jsp" target="_self">
+                                                <h6 class="mb-0">Rail Road Comparison</h6> <small class="text-muted">Transportation Costs Analysis</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDUAqsnPlan.jsp" target="_self">
+                                                <h6 class="mb-0">Zonal Action Plans</h6> <small class="text-muted">View Zonal Data</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+			   </div>
+			   <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_AllProposals.jsp" target="_self">
+                                                <h6 class="mb-0">Business Proposals</h6> <small class="text-muted">Track and Monitor Business Proposals</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDUSmry.jsp" target="_self">
+                                                <h6 class="mb-0">Business Development Analysis</h6> <small class="text-muted">Monitoring Progress</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+			    </div>
+			    <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_TrfcBoost.jsp">
+                                                <h6 class="mb-0">Measures for Progress</h6> <small class="text-muted">Action Plans, Initiatives, Outreach..</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDUPlanDocs.jsp">
+                                                <h6 class="mb-0">Development Plans (Sep-2021)</h6> <small class="text-muted">Zonal Plan Documents</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+			   </div>
+			    <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDU_ResourceCentre.jsp" target="_self">
+                                                <h6 class="mb-0">Resource Centre</h6> <small class="text-muted">Contact Detail of Industry Resources</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="/RailSAHAY/pages/IRBDUDvsnStats.jsp" target="_self">
+                                                <h6 class="mb-0">Divisional Statistics</h6> <small class="text-muted">Month-wise Divisional Statistics</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+		<li class="nav-item"> <a class="nav-link" href="/RailSAHAY/pages/Welcome.jsp"  aria-haspopup="true" aria-expanded="false" target="_self">Performance Dashboard</a></li>
+		<%--
+                <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Performance Dashboards<span class="fa fa-angle-down"></span></a>
+                    <div class="dropdown-menu dropdown-main-menu" id="dropdown-menu3" aria-labelledby="navbarDropdown3">
+                        <div class="container">
+                            <div class="row" style="width:100%;">
+                                <div class="col-lg-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="#">
+                                                <h6 class="mb-0">Zonal/Divisional Dashboard</h6> <small class="text-muted">KPIs Analysis</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row d-flex tab">
+                                        <div class="d-flex flex-column"> <a class="dropdown-item" href="#">
+                                                <h6 class="mb-0">Dummy</h6> <small class="text-muted">Dummy Link</small>
+                                            </a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+		--%>
+		<li class="nav-item"> <a class="nav-link" href="/RailSAHAY/pages/GG_Logout.jsp"  aria-haspopup="true" aria-expanded="false" target="_self" style="font-weight:600;"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;Logout</a></li>
+
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="menu-border"></div>

@@ -1,0 +1,669 @@
+package model;
+
+import tuxedo.*;
+import util.logger.FoisLogger;
+import org.apache.log4j.Logger;
+import org.apache.log4j.NDC;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.text.SimpleDateFormat;
+
+public class FrgtPymtSrvc
+{
+	static Logger logger = FoisLogger.getLogger(FrgtPymtSrvc.class.getName());
+	private String strAddlData[][]=null;
+	private String strAddlData1[][]=null;	
+	private String strAddlData2[][]=null;
+	String si_CustID="";
+        String si_ClntId="";
+	String si_CustCode="";
+	private String strCallStts="S";
+	private String strCallMesg="";
+        
+	public FrgtPymtSrvc()
+	{
+		super();
+	}
+	public FrgtPymtSrvc(String si_CustID, String si_CustCode, String si_ClntId)
+	{
+		this.si_CustID=si_CustID;
+		this.si_CustCode=si_CustCode;
+                this.si_ClntId=si_ClntId;
+	}	
+	public String[][] getOtsgPymtList(String si_Sttn, String si_DateFrom, String si_DateTo, String si_InvcFlag)
+	{
+		String strData[][] = null;   // Variable to be returned as output of function
+
+		logger.info("Entering getOtsgPymtList....");
+		logger.info("Function called with inputs :");
+		logger.info("si_CustID  #"+si_CustID+"#");
+		logger.info("si_CustCode  #"+si_CustCode+"#");
+		logger.info("si_Sttn  #"+si_Sttn+"#");
+		logger.info("si_DateFrom  #"+si_DateFrom+"#");
+		logger.info("si_DateTo  #"+si_DateTo+"#");
+		logger.info("si_InvcFlag  #"+si_InvcFlag+"#");
+
+		FOISTuxedo TQOSTDCHRGS	= null;
+
+		try
+		{
+			logger.info("Calling Tuxedo");
+			TQOSTDCHRGS = new FOISTuxedo();
+			logger.info("Client Object Got.");
+		}
+		catch (Exception ne)
+		{
+			logger.fatal("Unable to get the Client Object: " + ne.toString());
+			strCallStts="F";
+			strCallMesg="Client Object Problem";
+			return null;
+		}
+
+		try
+		{
+			TQOSTDCHRGS.tuxInit("TQOSTDCHRGS");
+			TQOSTDCHRGS.setString("F_USERID",	0,	si_CustID);
+			TQOSTDCHRGS.setString("F_STTN",		0,	si_Sttn);
+			TQOSTDCHRGS.setString("F_CUSTCODE",	0,	si_CustCode);
+			TQOSTDCHRGS.setString("F_DATEFROM",	0,	si_DateFrom);
+			TQOSTDCHRGS.setString("F_DATETO",       0,	si_DateTo);
+			TQOSTDCHRGS.setString("F_INVCFLAG",     0,	si_InvcFlag);
+		}
+		catch(Exception e)
+		{
+			logger.fatal("Unable to write to buffer : " + e.toString());
+			strCallStts="F";
+			strCallMesg="Problem in Writing Buffer";
+			return null;
+		}
+		try
+		{
+			logger.info("Calling Tuxedo Service SRVCNAME ...");
+			TQOSTDCHRGS.call("N");
+			logger.info("CALL COMPLETED !");
+		}
+		catch(Exception e)
+		{
+			logger.fatal("Exception while call to the service is " + e.toString());
+			strCallStts="F";
+			strCallMesg="Service Call Problem";
+			return null;
+		}
+			//*************************************************************************************
+		 						//END of WTC calling
+			//*************************************************************************************
+		// Checking For Any Error from Service
+		String erorCode1			= null;  
+		try
+		{
+			erorCode1				= TQOSTDCHRGS.getStringItemDef("F_ERORNO",0,"0");
+		}
+		catch(Exception e)
+		{
+			// F_ERORNO is not set by Developer, So, it is not an Error
+		}
+		if(erorCode1 != null && (!erorCode1.equals("")))
+		{
+			logger.fatal(erorCode1);
+			strCallStts="F";
+			strCallMesg=erorCode1;
+			return null;
+		}
+		String startRowCount1   = null;
+		int start1				= 0;
+
+		try
+		{
+			startRowCount1 = TQOSTDCHRGS.getStringItemDef("F_ROWCONT",0,"0");
+			start1 = new Integer(startRowCount1.trim()).intValue();
+		}
+		catch(Exception d)
+		{
+			logger.fatal("Problem in Calling Service SRVCNAME and filling Row Count into array" + d.toString());
+			strCallStts="F";
+			strCallMesg="Row Count Problem";
+			return null;
+		}
+
+		logger.info("start1 : " + start1);
+                logger.info("Start reading data for Outstanding Payments");
+                
+                if(si_InvcFlag.equals("I"))
+                {
+                    strData = new String[start1][18];
+                    for(int i=0; i<=start1-1; i++)
+                    {
+                            try
+                            {
+                                    
+                                    strData[i][0]           = TQOSTDCHRGS.getStringItemDef("F_FNOTNUMB",i,"0").trim();
+                                    strData[i][1]           = TQOSTDCHRGS.getStringItemDef("F_FNOTDATE",i,"0").trim();
+                                    strData[i][2]           = TQOSTDCHRGS.getStringItemDef("F_INVCNUMB",i,"0").trim();
+                                    strData[i][3]           = TQOSTDCHRGS.getStringItemDef("F_INVCDATE",i,"0").trim();                               
+                                    strData[i][4]           = TQOSTDCHRGS.getStringItemDef("F_STTNFROM",i,"0").trim();                               
+                                    strData[i][5]           = TQOSTDCHRGS.getStringItemDef("F_STTNTO",i,"0").trim();                               
+                                    strData[i][6]           = TQOSTDCHRGS.getStringItemDef("F_CNSG",i,"0").trim();                               
+                                    strData[i][7]           = TQOSTDCHRGS.getStringItemDef("F_WRFGOTSG",i,"0").trim();                               
+                                    strData[i][8]           = TQOSTDCHRGS.getStringItemDef("F_FRGTOTSG",i,"0").trim();                               
+                                    strData[i][9]           = TQOSTDCHRGS.getStringItemDef("F_DMRGOTSG",i,"0").trim();                              
+                                    strData[i][10]          = TQOSTDCHRGS.getStringItemDef("F_LOCLCHRGOTSG",i,"0").trim();                              
+                                    strData[i][11]          = TQOSTDCHRGS.getStringItemDef("F_FNOTID",i,"0").trim();                             
+                                    strData[i][12]          = TQOSTDCHRGS.getStringItemDef("F_INVCID",i,"0").trim();                             
+                                    strData[i][13]          = TQOSTDCHRGS.getStringItemDef("F_CCHGFLAG",i,"0").trim();                                  
+                                    strData[i][14]          = TQOSTDCHRGS.getStringItemDef("F_CHNGDATE",i,"0").trim();                             
+                                    strData[i][15]          = TQOSTDCHRGS.getStringItemDef("F_CHRGACRDDATE",i,"0").trim();                             
+                                    strData[i][16]          = TQOSTDCHRGS.getStringItemDef("F_CHRGCODE",i,"0").trim();                             
+                                    strData[i][17]          = TQOSTDCHRGS.getStringItemDef("F_PAIDTYPE",i,"0").trim();                             
+                                }
+                                catch(Exception d)
+                                {
+                                    logger.fatal("Problem in Calling Service TQOSTDCHRGS and filling data into array" + d.toString());
+                                    strCallStts="F";
+                                    strCallMesg="Data Problem";
+                                    return null;
+                                }
+                    
+                        } // End of for Loop
+                }
+                else
+                {
+                    strData = new String[start1][6];
+
+                    for(int i=0; i<=start1-1; i++)
+                    {
+                            try
+                            {
+                                strData[i][0]           = TQOSTDCHRGS.getStringItemDef("F_FNOTID",i,"0").trim();
+                                strData[i][1]           = TQOSTDCHRGS.getStringItemDef("F_FNOTDATE",i,"0").trim();
+                                strData[i][2]           = TQOSTDCHRGS.getStringItemDef("F_FRSTPLCTTIME",i,"0").trim();
+                                strData[i][3]           = TQOSTDCHRGS.getStringItemDef("F_FITTIME",i,"0").trim();                               
+                                strData[i][4]           = TQOSTDCHRGS.getStringItemDef("F_GOVTAMNT",i,"0").trim();                               
+                                strData[i][5]           = TQOSTDCHRGS.getStringItemDef("F_INKMRDNG",i,"0").trim();                               
+                            }
+                            catch(Exception d)
+                            {
+                                logger.fatal("Problem in Calling Service TQOSTDCHRGS and filling data into array" + d.toString());
+                                strCallStts="F";
+                                strCallMesg="Data Problem";
+                                return null;
+                            }
+                
+                    } // End of for Loop
+                }
+		try
+		{
+			TQOSTDCHRGS.endSession();
+		}
+		catch(Exception e)
+		{
+			logger.fatal("Error In End Session:" + e.toString());
+			strCallStts="F";
+			strCallMesg="Session Problem";
+			return null;
+		}
+		return strData;
+	}
+    public String getOtsgChrgSmry()
+    {
+            String strData[][] = null;   // Variable to be returned as output of function
+
+            logger.info("Entering getOtsgChrgSmry....");
+            logger.info("Function called with inputs :");
+            logger.info("si_CustID  #"+si_CustID+"#");
+            logger.info("si_CustCode  #"+si_CustCode+"#");
+            
+            FOISTuxedo RQFBDFRGTPYMT  = null;
+
+            try
+            {
+                    logger.info("Calling Tuxedo");
+                    RQFBDFRGTPYMT = new FOISTuxedo();
+                    logger.info("Client Object Got.");
+            }
+            catch (Exception ne)
+            {
+                    logger.fatal("Unable to get the Client Object: " + ne.toString());
+                    strCallStts="F";
+                    strCallMesg="Client Object Problem";
+                    return null;
+            }
+
+            try
+            {
+                    RQFBDFRGTPYMT.tuxInit("RQFBDFRGTPYMT");
+                    RQFBDFRGTPYMT.setString("F_USERID",       0,      si_CustID);
+                    RQFBDFRGTPYMT.setString("F_CLNTID",       0,      si_ClntId);
+                    RQFBDFRGTPYMT.setString("F_FLAG",         0,      "OTSG_CHRG_SMRY");
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     0,      si_CustCode);
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Unable to write to buffer : " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Problem in Writing Buffer";
+                    return null;
+            }
+            try
+            {
+                    logger.info("Calling Tuxedo Service SRVCNAME ...");
+                    RQFBDFRGTPYMT.call("N");
+                    logger.info("CALL COMPLETED !");
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Exception while call to the service is " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Service Call Problem";
+                    return null;
+            }
+                    //*************************************************************************************
+                                                            //END of WTC calling
+                    //*************************************************************************************
+            // Checking For Any Error from Service
+            String erorCode1                        = null;
+            try
+            {
+                    erorCode1                               = RQFBDFRGTPYMT.getStringItemDef("F_ERORNO",0,"0");
+            }
+            catch(Exception e)
+            {
+                    // F_ERORNO is not set by Developer, So, it is not an Error
+            }
+            if(erorCode1 != null && (!erorCode1.equals("")))
+            {
+                    logger.fatal(erorCode1);
+                    strCallStts="F";
+                    strCallMesg=erorCode1;
+                    return null;
+            }
+            String startRowCount1   = null;
+            int start1                              = 0;
+
+            try
+            {
+                    startRowCount1 = RQFBDFRGTPYMT.getStringItemDef("F_ROWCONT",0,"0");
+                    start1 = new Integer(startRowCount1.trim()).intValue();
+            }
+            catch(Exception d)
+            {
+                    logger.fatal("Problem in Calling Service SRVCNAME and filling Row Count into array" + d.toString());
+                    strCallStts="F";
+                    strCallMesg="Row Count Problem";
+                    return null;
+            }
+            logger.info("Payments Count:"+startRowCount1);
+            return startRowCount1;            
+        }
+    public String[][] getOtsgChrg(String si_Sttn)
+    {
+            String strData[][] = null;   // Variable to be returned as output of function
+
+            logger.info("Entering getOtsgChrg....");
+            logger.info("Function called with inputs :");
+            logger.info("si_CustID  #"+si_CustID+"#");
+            logger.info("si_CustCode  #"+si_CustCode+"#");
+            logger.info("si_Sttn  #"+si_Sttn+"#");
+            
+            FOISTuxedo RQFBDFRGTPYMT  = null;
+
+            try
+            {
+                    logger.info("Calling Tuxedo");
+                    RQFBDFRGTPYMT = new FOISTuxedo();
+                    logger.info("Client Object Got.");
+            }
+            catch (Exception ne)
+            {
+                    logger.fatal("Unable to get the Client Object: " + ne.toString());
+                    strCallStts="F";
+                    strCallMesg="Client Object Problem";
+                    return null;
+            }
+
+            try
+            {
+                    RQFBDFRGTPYMT.tuxInit("RQFBDFRGTPYMT");
+                    RQFBDFRGTPYMT.setString("F_USERID",       0,      si_CustID);
+                    RQFBDFRGTPYMT.setString("F_CLNTID",       0,      si_ClntId);
+                    RQFBDFRGTPYMT.setString("F_FLAG",         0,      "OTSG_CHRG");
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     0,      si_CustCode);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     1,      si_Sttn);
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Unable to write to buffer : " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Problem in Writing Buffer";
+                    return null;
+            }
+            try
+            {
+                    logger.info("Calling Tuxedo Service SRVCNAME ...");
+                    RQFBDFRGTPYMT.call("N");
+                    logger.info("CALL COMPLETED !");
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Exception while call to the service is " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Service Call Problem";
+                    return null;
+            }
+                    //*************************************************************************************
+                                                            //END of WTC calling
+                    //*************************************************************************************
+            // Checking For Any Error from Service
+            String erorCode1                        = null;
+            try
+            {
+                    erorCode1                               = RQFBDFRGTPYMT.getStringItemDef("F_ERORNO",0,"0");
+            }
+            catch(Exception e)
+            {
+                    // F_ERORNO is not set by Developer, So, it is not an Error
+            }
+            if(erorCode1 != null && (!erorCode1.equals("")))
+            {
+                    logger.fatal(erorCode1);
+                    strCallStts="F";
+                    strCallMesg=erorCode1;
+                    return null;
+            }
+            String startRowCount1   = null;
+            int start1                              = 0;
+
+            try
+            {
+                    startRowCount1 = RQFBDFRGTPYMT.getStringItemDef("F_ROWCONT",0,"0");
+                    start1 = new Integer(startRowCount1.trim()).intValue();
+            }
+            catch(Exception d)
+            {
+                    logger.fatal("Problem in Calling Service SRVCNAME and filling Row Count into array" + d.toString());
+                    strCallStts="F";
+                    strCallMesg="Row Count Problem";
+                    return null;
+            }
+
+            logger.info("start1 : " + start1);
+            logger.info("Start reading data for Outstanding Payments");
+            
+            strData = new String[start1][22];
+            for(int i=0; i<=start1-1; i++)
+            {
+                try
+                {
+                        
+                        strData[i][0]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY1",i,"0").trim();
+                        strData[i][1]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY2",i,"0").trim();
+                        strData[i][2]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY3",i,"0").trim();
+                        strData[i][3]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY4",i,"0").trim();                               
+                        strData[i][4]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY5",i,"0").trim();                               
+                        strData[i][5]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY6",i,"0").trim();                               
+                        strData[i][6]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY7",i,"0").trim();                               
+                        strData[i][7]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY8",i,"0").trim();                               
+                        strData[i][8]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY9",i,"0").trim();                               
+                        strData[i][9]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY10",i,"0").trim();                              
+                        strData[i][10]          = RQFBDFRGTPYMT.getStringItemDef("F_OWNGZONE",i,"0").trim();                              
+                        strData[i][11]          = RQFBDFRGTPYMT.getStringItemDef("F_OWNGZONE1",i,"0").trim();                             
+                        strData[i][12]          = RQFBDFRGTPYMT.getStringItemDef("F_OWNGZONE2",i,"0").trim();                             
+                        strData[i][13]          = RQFBDFRGTPYMT.getStringItemDef("F_OWNGZONE3",i,"0").trim();                                  
+                        strData[i][14]          = RQFBDFRGTPYMT.getStringItemDef("F_RPWBNUMB",i,"0").trim();                             
+                        strData[i][15]          = RQFBDFRGTPYMT.getStringItemDef("F_RPWBNUMB1",i,"0").trim();                             
+                        strData[i][16]          = RQFBDFRGTPYMT.getStringItemDef("F_RPWBNUMB2",i,"0").trim();                             
+                        strData[i][17]          = RQFBDFRGTPYMT.getStringItemDef("F_RPWBNUMB3",i,"0").trim();                             
+                        strData[i][18]          = RQFBDFRGTPYMT.getStringItemDef("F_RAKEID",i,"0").trim();                             
+                        strData[i][19]          = RQFBDFRGTPYMT.getStringItemDef("F_RAKETYPE",i,"0").trim();                             
+                        strData[i][20]          = RQFBDFRGTPYMT.getStringItemDef("F_UNTS",i,"0").trim();                           
+                        strData[i][21]          = RQFBDFRGTPYMT.getStringItemDef("F_FRWH",i,"0").trim();                           
+                    }
+                    catch(Exception d)
+                    {
+                        logger.fatal("Problem in Calling Service RQFBDFRGTPYMT and filling data into array" + d.toString());
+                        strCallStts="F";
+                        strCallMesg="Data Problem";
+                        return null;
+                    }
+        
+            } // End of for Loop
+            return strData;
+        }
+    public String[][] getOtsgChrgBrkup(String si_Sttn, String si_InvcId, String si_FNOTId, String si_ChrgType, String si_IWOWFlag)
+    {
+            String strData[][] = null;   // Variable to be returned as output of function
+
+            logger.info("Entering getOtsgChrgBrkup....");
+            logger.info("Function called with inputs :");
+            logger.info("si_CustID  #"+si_CustID+"#");
+            logger.info("si_CustCode  #"+si_CustCode+"#");
+            logger.info("si_Sttn  #"+si_Sttn+"#");
+            logger.info("si_InvcId  #"+si_InvcId+"#");
+            logger.info("si_FNOTId  #"+si_FNOTId+"#");
+            logger.info("si_ChrgType  #"+si_ChrgType+"#");
+            logger.info("si_IWOWFlag  #"+si_IWOWFlag+"#");
+            
+            FOISTuxedo RQFBDFRGTPYMT  = null;
+
+            try
+            {
+                    logger.info("Calling Tuxedo");
+                    RQFBDFRGTPYMT = new FOISTuxedo();
+                    logger.info("Client Object Got.");
+            }
+            catch (Exception ne)
+            {
+                    logger.fatal("Unable to get the Client Object: " + ne.toString());
+                    strCallStts="F";
+                    strCallMesg="Client Object Problem";
+                    return null;
+            }
+
+            try
+            {
+                    RQFBDFRGTPYMT.tuxInit("RQFBDFRGTPYMT");
+                    RQFBDFRGTPYMT.setString("F_USERID",       0,      si_CustID);
+                    RQFBDFRGTPYMT.setString("F_CLNTID",       0,      si_ClntId);
+                    RQFBDFRGTPYMT.setString("F_FLAG",         0,      "CHRG_BRKUP");
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     0,      si_CustCode);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     1,      si_Sttn);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     2,      si_InvcId);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     3,      si_FNOTId);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     4,      si_ChrgType);
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     5,      si_IWOWFlag);
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Unable to write to buffer : " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Problem in Writing Buffer";
+                    return null;
+            }
+            try
+            {
+                    logger.info("Calling Tuxedo Service SRVCNAME ...");
+                    RQFBDFRGTPYMT.call("N");
+                    logger.info("CALL COMPLETED !");
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Exception while call to the service is " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Service Call Problem";
+                    return null;
+            }
+                    //*************************************************************************************
+                                                            //END of WTC calling
+                    //*************************************************************************************
+            // Checking For Any Error from Service
+            String erorCode1                        = null;
+            try
+            {
+                    erorCode1                               = RQFBDFRGTPYMT.getStringItemDef("F_ERORNO",0,"0");
+            }
+            catch(Exception e)
+            {
+                    // F_ERORNO is not set by Developer, So, it is not an Error
+            }
+            if(erorCode1 != null && (!erorCode1.equals("")))
+            {
+                    logger.fatal(erorCode1);
+                    strCallStts="F";
+                    strCallMesg=erorCode1;
+                    return null;
+            }
+            String startRowCount1   = null;
+            int start1                              = 0;
+
+            try
+            {
+                    startRowCount1 = RQFBDFRGTPYMT.getStringItemDef("F_ROWCONT",0,"0");
+                    start1 = new Integer(startRowCount1.trim()).intValue();
+            }
+            catch(Exception d)
+            {
+                    logger.fatal("Problem in Calling Service SRVCNAME and filling Row Count into array" + d.toString());
+                    strCallStts="F";
+                    strCallMesg="Row Count Problem";
+                    return null;
+            }
+
+            logger.info("start1 : " + start1);
+            logger.info("Start reading data for Breakup of Outstanding Payments");
+            
+            strData = new String[start1][3];
+            for(int i=0; i<=start1-1; i++)
+            {
+                try
+                {
+                        
+                        strData[i][0]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY1",i,"0").trim();
+                        strData[i][1]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY2",i,"0").trim();
+                        strData[i][2]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY3",i,"0").trim();
+                    }
+                    catch(Exception d)
+                    {
+                        logger.fatal("Problem in Calling Service RQFBDFRGTPYMT and filling data into array" + d.toString());
+                        strCallStts="F";
+                        strCallMesg="Data Problem";
+                        return null;
+                    }
+        
+            } // End of for Loop
+            return strData;
+        }
+
+    public String[] getChrgDesc(String si_ChrgId)
+    {
+            String strData[] = null;   // Variable to be returned as output of function
+
+            logger.info("Entering getChrgDesc....");
+            logger.info("Function called with inputs :");
+            logger.info("si_CustID  #"+si_CustID+"#");
+            logger.info("si_CustCode  #"+si_CustCode+"#");
+            logger.info("si_ChrgId  #"+si_ChrgId+"#");
+            
+            FOISTuxedo RQFBDFRGTPYMT  = null;
+
+            try
+            {
+                    logger.info("Calling Tuxedo");
+                    RQFBDFRGTPYMT = new FOISTuxedo();
+                    logger.info("Client Object Got.");
+            }
+            catch (Exception ne)
+            {
+                    logger.fatal("Unable to get the Client Object: " + ne.toString());
+                    strCallStts="F";
+                    strCallMesg="Client Object Problem";
+                    return null;
+            }
+
+            try
+            {
+                    RQFBDFRGTPYMT.tuxInit("RQFBDFRGTPYMT");
+                    RQFBDFRGTPYMT.setString("F_USERID",       0,      si_CustID);
+                    RQFBDFRGTPYMT.setString("F_CLNTID",       0,      si_ClntId);
+                    RQFBDFRGTPYMT.setString("F_FLAG",         0,      "CHRG_DESC");
+                    RQFBDFRGTPYMT.setString("F_HLDGZONE",     0,      si_ChrgId);
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Unable to write to buffer : " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Problem in Writing Buffer";
+                    return null;
+            }
+            try
+            {
+                    logger.info("Calling Tuxedo Service SRVCNAME ...");
+                    RQFBDFRGTPYMT.call("N");
+                    logger.info("CALL COMPLETED !");
+            }
+            catch(Exception e)
+            {
+                    logger.fatal("Exception while call to the service is " + e.toString());
+                    strCallStts="F";
+                    strCallMesg="Service Call Problem";
+                    return null;
+            }
+                    //*************************************************************************************
+                                                            //END of WTC calling
+                    //*************************************************************************************
+            // Checking For Any Error from Service
+            String erorCode1                        = null;
+            try
+            {
+                    erorCode1                               = RQFBDFRGTPYMT.getStringItemDef("F_ERORNO",0,"0");
+            }
+            catch(Exception e)
+            {
+                    // F_ERORNO is not set by Developer, So, it is not an Error
+            }
+            if(erorCode1 != null && (!erorCode1.equals("")))
+            {
+                    logger.fatal(erorCode1);
+                    strCallStts="F";
+                    strCallMesg=erorCode1;
+                    return null;
+            }
+            
+            strData = new String[25];
+            for(int i=0; i<=24; i++)
+            {
+                try
+                {       
+                        strData[i]           = RQFBDFRGTPYMT.getStringItemDef("F_ORDRBY1",i,"0").trim();
+                }
+                catch(Exception d)
+                {
+                  logger.fatal("Problem in Calling Service RQFBDFRGTPYMT and filling data into array" + d.toString());
+                  strCallStts="F";
+                  strCallMesg="Data Problem";
+                  return null;
+                 }
+        
+            } // End of for Loop
+            return strData;
+        }
+	public String[][] getAddlData()
+	{
+		return strAddlData;
+	}
+	public String[][] getAddlData1()
+	{
+		return strAddlData1;
+	}
+	public String[][] getAddlData2()
+	{
+		return strAddlData2;
+	}
+	public String getCallStts()
+	{
+		return strCallStts;
+	}	
+	public String getCallMesg()
+	{
+		return strCallMesg;
+	}
+}

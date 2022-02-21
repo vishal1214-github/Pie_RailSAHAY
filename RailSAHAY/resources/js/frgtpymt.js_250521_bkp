@@ -1,0 +1,879 @@
+$(document).ready(function(){
+	fetchOtsgChrgSmry();
+});
+
+
+function fetchTrxIdHist()
+{
+	fetchPymtHist($("#txtTrxnId").val());
+}
+
+function fetchPymtHist(inptrxnid)
+{
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+        	custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+                
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divFrgtPymt").html('<div class="spinner-border text-danger"></div>');
+
+	$("#dataD").hide();
+	$("#frmSr").hide();
+	$("#frmCncrn").hide();
+	$("#trmlProf").hide();
+	$("#divTrmlProf").html("");
+	$("#NodlOfcr").hide();
+	$("#divFrgtPymt").show();
+        
+        //var htmlotsgpymt="<div class='float-center'><p class='ctgr-title'>Payment Transaction History</p></div>";  
+
+	var htmlotsgpymt='<div class="row"><div class="col-lg-4 col-sm-12"><p class="ctgr-title">Payment Transaction History</p></div><div class="col-lg-8 col-sm-12"><div class="input-group mb-3 float-right" style="width:300px;font-size:12px;"><input type="text" class="form-control" placeholder="Transaction Id" maxlength="20" id="txtTrxnId" value="'+inptrxnid+'" style="width:180px;"><div class="input-group-append"><button class="btn btn-primary" onclick="fetchTrxIdHist();">Go</button></div></div></div></div>';
+
+      	htmlotsgpymt+='<div class="table-responsive"><table class="table table-striped .table-condensed" id="tblPymtHist"><thead><tr><th>SR.NO.</th><th></th><th>TRANSACTION ID</th><th>DATE</th><th>STATION</th><th>CHARGE TYPE</th><th>STATUS</th><th>AMOUNT</th></tr></thead><tbody>';
+
+//	var htmlotsgpymt='<div class="row"><div class="col-lg-4 col-sm-12"><p class="ctgr-title">Payments Transaction History</p></div><div class="col-lg-8 col-sm-12"><div class="input-group mb-3 float-right" style="width:300px;font-size:12px;"><input type="text" class="form-control text-uppercase" list="frgtpymtlocnlist" placeholder="Station" id="txtFrgtPymtSttn" value="'+sttn+'" style="width:150px;"><datalist id="frgtpymtlocnlist"></datalist><div class="input-group-append"><button class="btn btn-primary" onclick="fetchSttnOtsgPymt();">Go</button></div></div></div></div>';
+	$.ajax({
+		url : myurl,
+		type : "post",
+        data: {Optn:'PYMT_TRXN_HIST',CustCode:custcode,TrxnId:inptrxnid},
+		async : true,
+		success : function(data) {
+        		var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+                        
+			if(obj.PymtHist.length==0)
+			{
+                            htmlotsgpymt+='<tr><td colspan="8">NO DATA FOUND</td></tr>';
+			}
+			for(var i=0;i<obj.PymtHist.length;i++)
+			{                                
+				var sttn1=obj.PymtHist[i].Sttn;
+				var sttnname=obj.PymtHist[i].SttnName;
+				var chrgid=obj.PymtHist[i].ChrgId;
+				var trxnid=obj.PymtHist[i].TrxnId;
+				var trxntime=obj.PymtHist[i].TrxnTime;
+				var invcnumb=obj.PymtHist[i].InvcNumb;
+				var invcdate=obj.PymtHist[i].InvcDate;
+				var chrgtype=obj.PymtHist[i].ChrgType;
+				var sttnfrom=obj.PymtHist[i].SttnFrom;
+				var sttnfromname=obj.PymtHist[i].SttnFromName;
+				var sttnto=obj.PymtHist[i].SttnTo;
+				var sttntoname=obj.PymtHist[i].SttnToName;
+				var pymtmode=obj.PymtHist[i].PymtMode;
+				var trxnamnt=obj.PymtHist[i].TrxnAmnt;
+				var trxnstts=obj.PymtHist[i].TrxnStts.toUpperCase();
+                                var bankTrxnId=obj.PymtHist[i].BankTrxnId;	
+                                var bankTrxnDate=obj.PymtHist[i].BankTrxnDate;		
+                                var colr = "text-info";
+                                console.log(trxnstts);
+                                if (trxnstts == "SUCCESS")
+                                    colr   =   "text-success";
+                                else
+                                    colr   =   "text-danger";
+                           htmlotsgpymt+='<tr data-toggle="collapse" data-target="#demo'+i+'">';
+                           htmlotsgpymt+='<td class="left"><button class="btn btn-warning">'+(i+1)+'</button></td><td class="left"><i class="fas fa-caret-down"></i></td><td class="left">'+trxnid+'</td><td class="left">'+trxntime+'</td><td class="left">'+sttnname+'('+sttn1+')'+'</td><td class="left">'+chrgtype+'</td><td class="left '+colr+'">'+trxnstts+'</td><td class="right"><i class="fas fa-rupee-sign"></i>&nbsp;'+trxnamnt+'</td></tr>';
+                            
+                            htmlotsgpymt+='<tr class="collapse" id="demo'+i+'"><td></td><td></td>';
+                            htmlotsgpymt+='<td colspan="5"><div>';
+                            htmlotsgpymt+='<p class="p-stts"><i class="fas fa-credit-card"></i> '+pymtmode+' Payment Mode </p>';
+                            htmlotsgpymt+='<p class="p-od"><a href="javascript:void(0)" onclick="showTrmlProf(\''+sttnfromname+'('+sttnfrom+')'+'\');"><i class="fas fa-circle text-success"></i>&nbsp;'+sttnfromname+'('+sttnfrom+')'+'</a>&nbsp;<i class="fas fa-long-arrow-alt-right"></i>&nbsp;<a href="javascript:void(0)" onclick="showTrmlProf(\''+sttntoname+'('+sttnto+')'+'\');"><i class="fas fa-circle text-danger"></i>&nbsp;'+sttntoname+'('+sttnto+')'+'</a></p>';
+                            if(invcnumb != "")
+                                htmlotsgpymt+='<p class="p-stts">Invoice No '+invcnumb+' dated '+invcdate+'</p>';
+                            if(bankTrxnId != "")
+                                htmlotsgpymt+='<p class="p-stts">Bank Transaction Id '+bankTrxnId+' On '+bankTrxnDate+'</p>';
+                            htmlotsgpymt+='</div></td></tr>';
+                            
+                            /*
+
+                            htmlotsgpymt+='<div class="project"><div class="row bg-white has-shadow"><div class="col-lg-1 col-sm-2">';
+                            htmlotsgpymt+='<button class="btn btn-warning">'+(i+1)+'</button></div>';
+                            htmlotsgpymt+='<div class="col-lg-9 col-sm-8"><h3 class="h4"><span class="sttn-chrg">'+sttnname+' ('+sttn1+')</span>' + '</h3><hr/>';
+                            htmlotsgpymt+='<p class="p-stts"><i class="far fa-credit-card"></i> '+pymtmode+' Payment Mode Status: '+trxnstts+'</p>';
+                            htmlotsgpymt+='<p class="p-stts"> Transaction ID: ' +trxnid + ' / ' + trxntime+'</p>';
+                            //'<a href="/RailSAHAY/pages/CnmtOnMap.jsp?FNR='+obj[i].cnmtid+'" target="fnrFr" class="fnr-link" onclick="showFNRRoute();">';  
+                            //htmlotsgpymt+=obj[i].rakecmdt+'/'+obj[i].loddunts+'/'+obj[i].raketype+' (FNR: '+obj[i].cnmtid+')</a></h3>';
+			    htmlotsgpymt+='<p class="p-od"><a href="javascript:void(0)" onclick="showTrmlProf(\''+sttnfromname+'('+sttnfrom+')'+'\');"><i class="fas fa-circle text-success"></i>&nbsp;'+sttnfromname+'('+sttnfrom+')'+'</a>&nbsp;<i class="fas fa-long-arrow-alt-right"></i>&nbsp;<a href="javascript:void(0)" onclick="showTrmlProf(\''+sttntoname+'('+sttnto+')'+'\');"><i class="fas fa-circle text-danger"></i>&nbsp;'+sttntoname+'('+sttnto+')'+'</a></p>';
+                            htmlotsgpymt+='<p class="p-stts">Invoice No.:'+invcnumb+' Dated '+invcdate+'</p>';
+                            htmlotsgpymt+='</div>';
+                            htmlotsgpymt+='<div class="col-lg-2 col-sm-2" ' +               
+                            'data-trigger="hover"  data-toggle="popover"  data-html="true" data-container="body" title="Amount2"  data-content="<div>hello</div>"  data-placement="right"' +
+                            '><h2><i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;'+trxnamnt+'</h2><p class="p-stts">'+chrgtype+'</p></div>';
+                            htmlotsgpymt+='</div></div>';
+                            
+                            */
+                          }
+                        htmlotsgpymt+='</tbody></table></div>';
+			$("#divFrgtPymt").html(htmlotsgpymt);
+		}
+	});
+}
+
+
+function fetchOtsgPymt()
+{
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+	var sttn='';
+	var datefrom='';
+	var dateto='';
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divFrgtPymt").html('<div class="spinner-border text-danger"></div>');
+
+	$("#dataD").hide();
+	$("#frmSr").hide();
+	$("#frmCncrn").hide();
+	$("#trmlProf").hide();
+	$("#divTrmlProf").html("");
+	$("#NodlOfcr").hide();
+	$("#divFrgtPymt").show();
+
+	var htmlotsgpymt='';
+	$.ajax({
+		url : myurl,
+		type : "post",
+        data: {Optn:'OTSG_PYMT_LIST',CustCode:custcode,Sttn:sttn,DateFrom:datefrom,DateTo:dateto},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			for(var i=0;i<obj.OtsgPymt.length;i++)
+			{
+				var fnotnumb=obj.OtsgPymt[i].FNotNumb;
+				var fnotid=obj.OtsgPymt[i].FNotId;
+				var fnotdate=obj.OtsgPymt[i].FNotDate;
+				var invcnumb=obj.OtsgPymt[i].InvcNumb;
+				var invcdate=obj.OtsgPymt[i].InvcDate;
+				var sttnfrom=obj.OtsgPymt[i].SttnFrom;
+				var sttnto=obj.OtsgPymt[i].SttnTo;
+				var cust=obj.OtsgPymt[i].Cust;
+				var wrfg=obj.OtsgPymt[i].Wrfg;
+				var frgtotsg=obj.OtsgPymt[i].FrgtOtsg;
+				var dmrg=obj.OtsgPymt[i].Dmrg;
+				var loclchrg=obj.OtsgPymt[i].LoclChrg;
+				var invcid=obj.OtsgPymt[i].InvcId;
+				var iwowflag=obj.OtsgPymt[i].IWOWFlag;
+				var perdfrom=obj.OtsgPymt[i].PerdFrom;
+				var perdto=obj.OtsgPymt[i].PerdTo;
+				var chrgcode=obj.OtsgPymt[i].ChrgCode;
+				var paidtype=obj.OtsgPymt[i].PaidType;
+
+				htmlotsgpymt+='<div class="fnot-card"><div class="row">';
+				htmlotsgpymt+='<div class="col-lg-4 col-sm-12"><span class="fnot-lbl">Forwarding Note No.</span><span class="fnot-val">'+fnotnumb+'</span><span class="fnot-lbl">Date</span><span class="fnot-val">'+fnotdate+'</span></div>';
+				htmlotsgpymt+='<div class="col-lg-4 col-sm-12"><span class="fnot-lbl">Invoice No.</span><span class="fnot-val">'+invcnumb+'</span><span class="fnot-lbl">Date</span><span class="fnot-val">'+invcdate+'</span></div>';
+				htmlotsgpymt+='<div class="col-lg-4 col-sm-12"><span class="fnot-lbl">From</span><span class="fnot-val">'+sttnfrom+'</span><span class="fnot-lbl">To</span><span class="fnot-val">'+sttnto+'</span></div>';
+				htmlotsgpymt+='</div><p class="chrg-head">Pending Charges</p>';
+				htmlotsgpymt+='<table class="table table-striped table-charges"><thead><tr><th>Charge Type</th><th>Amount (Rs.)</th><th>&nbsp;</th></tr></thead><tbody>';
+				if((wrfg!="") && (wrfg!="0"))
+					htmlotsgpymt+='<tr><td>Wharfage</td><td><td><a href="javascript:void(0)" onclick="showBrkUp(this, \'W\',\''+fnotid+'\',\''+invcid+'\');" class="link-brkup">'+wrfg+'</a></td><td><button class="btn btn-sm btn-warning"><i class="fas fa-rupee-sign"></i>&nbsp;Pay Now</button></td></tr>';
+				if((frgtotsg!="") && (frgtotsg!="0"))
+					htmlotsgpymt+='<tr><td>Freight Outstanding</td><td><td><a href="javascript:void(0)" onclick="showBrkUp(\'FO\',\''+fnotid+'\',\''+invcid+'\');" class="link-brkup">'+frgtotsg+'</a></td><td><button class="btn btn-sm btn-warning"><i class="fas fa-rupee-sign"></i>&nbsp;Pay Now</button></td></tr>';
+				if((dmrg!="") && (dmrg!="0"))
+					htmlotsgpymt+='<tr><td>Demurrage</td><td><td><a href="javascript:void(0)" onclick="showBrkUp(\'D\',\''+fnotid+'\',\''+invcid+'\');" class="link-brkup">'+dmrg+'</a></td><td><button class="btn btn-sm btn-warning"><i class="fas fa-rupee-sign"></i>&nbsp;Pay Now</button></td></tr>';
+				if((loclchrg!="") && (loclchrg!="0"))
+					htmlotsgpymt+='<tr><td>Local Charges</td><td><td><a href="javascript:void(0)" onclick="showBrkUp(\'LC\',\''+fnotid+'\',\''+invcid+'\');" class="link-brkup">'+loclchrg+'</a></td><td><button class="btn btn-sm btn-warning"><i class="fas fa-rupee-sign"></i>&nbsp;Pay Now</button></td></tr>';
+
+				htmlotsgpymt+='</table></div>';
+			}
+			$("#divFrgtPymt").html(htmlotsgpymt);
+		}
+	});
+
+}
+
+function fetchOtsgChrgSmry()
+{
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+	var myurl="/RailSAHAY/FrgtPymtJson";
+
+	$.ajax({
+		url : myurl,
+		type : "post",
+        	data: {Optn:'OTSG_CHRG_SMRY',CustCode:custcode},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			$("#pymtOtsg").html('<strong>'+obj.OtsgChrgSmry+'</strong>');
+		}
+	});
+
+}
+
+function fetchOtsgChrg(sttn)
+{
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+	var datefrom='';
+	var dateto='';
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divFrgtPymt").html('<div class="spinner-border text-danger"></div>');
+
+	$("#dataD").hide();
+	$("#frmSr").hide();
+	$("#frmCncrn").hide();
+	$("#trmlProf").hide();
+	$("#divTrmlProf").html("");
+	$("#NodlOfcr").hide();
+	$("#divFrgtPymt").show();
+
+	var htmlotsgpymt='<div class="row"><div class="col-lg-4 col-sm-12"><p class="ctgr-title">Pending Payments</p></div><div class="col-lg-8 col-sm-12"><div class="input-group mb-3 float-right" style="width:300px;font-size:12px;"><input type="text" class="form-control text-uppercase" list="frgtpymtlocnlist" placeholder="Station" id="txtFrgtPymtSttn" value="'+sttn+'" style="width:150px;"><datalist id="frgtpymtlocnlist"></datalist><div class="input-group-append"><button class="btn btn-primary" onclick="fetchSttnOtsgPymt();">Go</button></div></div></div></div>';
+
+	$.ajax({
+		url : myurl,
+		type : "post",
+        data: {Optn:'OTSG_CHRG',CustCode:custcode,Sttn:sttn},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+
+			var prevsttn="";
+			var prevfnotid="";
+			var cntr=0;
+			for(var i=0;i<obj.OtsgChrg.length;i++)
+			{
+				var chrgid=obj.OtsgChrg[i].ChrgId;
+				var zone=obj.OtsgChrg[i].Zone;
+				var dvsn=obj.OtsgChrg[i].Dvsn;
+				var sttn=obj.OtsgChrg[i].Sttn;
+				var sttnname=obj.OtsgChrg[i].SttnName;
+				var chrgtype=obj.OtsgChrg[i].ChrgType;
+				var fnotid=obj.OtsgChrg[i].FNOTId;
+				var invcid=obj.OtsgChrg[i].InvcId;
+				var amnt=obj.OtsgChrg[i].Amnt;
+				var fnotnumb=obj.OtsgChrg[i].FNOTNumb;
+				var fnotdate=obj.OtsgChrg[i].FNOTDate;
+				var sttnfrom=obj.OtsgChrg[i].SttnFrom;
+				var sttnto=obj.OtsgChrg[i].SttnTo;
+				var cmdt=obj.OtsgChrg[i].Cmdt;
+				var invcnumb=obj.OtsgChrg[i].InvcNumb;
+				var invcdate=obj.OtsgChrg[i].InvcDate;
+				var invcfrom=obj.OtsgChrg[i].InvcFrom;
+				var totlamnt=obj.OtsgChrg[i].TotlAmnt;
+				var pctg=Number(obj.OtsgChrg[i].Pctg);
+				var iwowflag=obj.OtsgChrg[i].IWOWFlag;
+				var chrgtypecode=obj.OtsgChrg[i].ChrgTypeCode;
+				var zonecode=obj.OtsgChrg[i].ZoneCode;				
+				var cnfmdate=obj.OtsgChrg[i].CnfmDate;	
+				var chrgtype1='';
+				if(chrgtype=='LOCAL CHARGES')
+					chrgtype1="L";
+				if(chrgtype=='FREIGHT CHARGES')
+					chrgtype1="F";
+				if(chrgtype=='DEMURRAGE CHARGES')
+					chrgtype1="D";
+				if(chrgtype=='WHARFAGE CHARGES')
+					chrgtype1="W";
+
+				
+				if((sttn==prevsttn) && (fnotid==prevfnotid))
+				{
+					if((chrgtype=="LOCAL CHARGES") || (chrgtype=="FREIGHT CHARGES"))
+						htmlotsgpymt+='<tr><td style="width:55%;"><i class="fas fa-caret-right"></i>&nbsp;'+chrgtype+'</td><td style="width:30%;"><table><tr><td><div class="progress" style="width:100px;margin-top:10px;height:4px;"><div role="progressbar" style="width:'+pctg+'%;height:4px;" aria-valuenow="'+pctg+'" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div></div></td><td><a href="javascript:void(0)" onclick="fetchPopOverChrgBrkup(this, \''+sttn+'\', \''+invcid+'\', \''+chrgtype1+'\', \''+iwowflag+'\', \''+invcdate+'\', \''+totlamnt+'\');" class="link-brkup"><i class="fas fa-rupee-sign"></i>&nbsp;'+amnt+'</a></td></tr></table></td><td style="width:15%;"><button class="btn btn-sm btn-success btn-pay float-right text-light" onclick="vldtTrxnStatus(this,\''+zonecode+'\',\''+chrgtype1+'\',\''+chrgtypecode+'\',\''+chrgid+'\',\''+totlamnt+'\',\''+cnfmdate+'\',\''+sttn+'\',\''+invcid+'\',\''+iwowflag+'\',\''+invcdate+'\');">Pay Now</button></td></tr>';
+					else
+						htmlotsgpymt+='<tr><td style="width:55%;"><i class="fas fa-caret-right"></i>&nbsp;'+chrgtype+'</td><td style="width:30%;"><table><tr><td><div class="progress" style="width:100px;margin-top:10px;height:4px;"><div role="progressbar" style="width:'+pctg+'%;height:4px;" aria-valuenow="'+pctg+'" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div></div></td><td><i class="fas fa-rupee-sign"></i>&nbsp;'+amnt+'</td></tr></table></td><td style="width:15%;"><button class="btn btn-sm btn-success btn-pay float-right text-light" onclick="vldtTrxnStatus(this,\''+zonecode+'\',\''+chrgtype1+'\',\''+chrgtypecode+'\',\''+chrgid+'\',\''+totlamnt+'\',\''+cnfmdate+'\',\''+sttn+'\',\''+invcid+'\',\''+iwowflag+'\',\''+invcdate+'\');">Pay Now</button></td></tr>';
+				}
+				else
+				{
+					if(cntr>0)
+					{
+						htmlotsgpymt+='</table></div>';
+					}
+
+					if((fnotid=="") && (invcid==""))
+						htmlotsgpymt+='<div class="sttn-card"><div class="fnot-card-head"><span class="sttn-chrg">'+sttnname+' ('+sttn+')</span><span class="dvsn-chrg float-right">'+dvsn+'/'+zone+'</div><hr/>';
+					else
+						htmlotsgpymt+='<div class="fnot-card"><div class="fnot-card-head"><span class="sttn-chrg">'+sttnname+' ('+sttn+')</span><span class="dvsn-chrg float-right">'+dvsn+'/'+zone+'</div><hr/>';
+
+
+					if(fnotnumb!="") 
+					{
+						htmlotsgpymt+='<div class="row"><div class="col-lg-4 col-sm-12"><span class="fnot-lbl">F/Note</span><span class="fnot-val">'+fnotnumb+' / '+fnotdate+'</span>&nbsp;&nbsp;<span class="fnot-od">('+sttnfrom+'&nbsp;<i class="fas fa-long-arrow-alt-right"></i>&nbsp;'+sttnto+')</div>';
+						htmlotsgpymt+='<div class="col-lg-4 col-sm-12"><span class="fnot-lbl">Invoice</span><span class="fnot-val">'+invcnumb+' / '+invcdate+'</span></div></div>';
+					}
+					
+					if((fnotid=="") && (invcid==""))
+						htmlotsgpymt+='<p class="chrg-head">Pending Charges for Station (Total: <i class="fas fa-rupee-sign"></i>&nbsp;'+totlamnt+')</p>';
+					else
+						htmlotsgpymt+='<p class="chrg-head">Pending Charges (Total: <i class="fas fa-rupee-sign"></i>&nbsp;'+totlamnt+')</p>';
+
+					htmlotsgpymt+='<table class="table table-charges" style="width:100%;"><tbody>';
+
+					if((chrgtype=="LOCAL CHARGES") || (chrgtype=="FREIGHT CHARGES"))
+						htmlotsgpymt+='<tr><td style="width:55%;"><i class="fas fa-caret-right"></i>&nbsp;'+chrgtype+'</td><td style="width:30%;"><table><tr><td><div class="progress" style="width:100px;margin-top:10px;height:4px;"><div role="progressbar" style="width:'+pctg+'%;height:4px;" aria-valuenow="'+pctg+'" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div></div></td><td><a href="javascript:void(0)" onclick="fetchPopOverChrgBrkup(this, \''+sttn+'\', \''+invcid+'\', \''+chrgtype1+'\', \''+iwowflag+'\', \''+invcdate+'\', \''+totlamnt+'\');" class="link-brkup"><i class="fas fa-rupee-sign"></i>&nbsp;'+amnt+'</a></td></tr></table></td><td style="width:15%;"><button class="btn btn-sm btn-success btn-pay float-right text-light" onclick="vldtTrxnStatus(this,\''+zonecode+'\',\''+chrgtype1+'\',\''+chrgtypecode+'\',\''+chrgid+'\',\''+totlamnt+'\',\''+cnfmdate+'\',\''+sttn+'\',\''+invcid+'\',\''+iwowflag+'\',\''+invcdate+'\');">Pay Now</button></td></tr>';
+					else
+						htmlotsgpymt+='<tr><td style="width:55%;"><i class="fas fa-caret-right"></i>&nbsp;'+chrgtype+'</td><td style="width:30%;"><table><tr><td><div class="progress" style="width:100px;margin-top:10px;height:4px;"><div role="progressbar" style="width:'+pctg+'%;height:4px;" aria-valuenow="'+pctg+'" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div></div></td><td><i class="fas fa-rupee-sign"></i>&nbsp;'+amnt+'</td></tr></table></td><td style="width:15%;"><button class="btn btn-sm btn-success btn-pay float-right text-light" onclick="vldtTrxnStatus(this,\''+zonecode+'\',\''+chrgtype1+'\',\''+chrgtypecode+'\',\''+chrgid+'\',\''+totlamnt+'\',\''+cnfmdate+'\',\''+sttn+'\',\''+invcid+'\',\''+iwowflag+'\',\''+invcdate+'\');">Pay Now</button></td></tr>';
+				}
+				cntr++;
+				prevsttn=sttn;
+				prevfnotid=fnotid;
+				
+			}
+			if(cntr>0)
+			{
+				htmlotsgpymt+='</table></div>';
+			}
+
+			$("#divFrgtPymt").html(htmlotsgpymt);
+
+			 $(document).on("click",function() {
+        			$('.btn-pay').popover('hide');
+    			  });
+			 $("a").on("click",function() {
+        			$('.btn-pay').popover('hide');
+    			  });
+
+			
+			var str='';
+		        for (var i=0; i < aSttn.length;++i){
+            			str += '<option value="'+aSttn[i]+'" />'; // Helplist for station
+	               }
+            	      var my_list=document.getElementById("frgtpymtlocnlist");
+	              my_list.innerHTML = str;
+
+		}
+	});
+
+}
+function fetchSttnOtsgPymt()
+{
+	var sttn='';
+	var sttndesc=$("#txtFrgtPymtSttn").val();
+	if(sttndesc.indexOf("-")>-1)
+	{
+		var sttn=sttndesc.substring(sttndesc.lastIndexOf("-")+1);
+		sttn=(sttn.substring(0,sttn.lastIndexOf("("))).trim();
+	}	
+	else
+	{
+		sttn=sttndesc.toUpperCase();
+	}
+	fetchOtsgChrg(sttn);
+}
+function showBrkUp(link,sttn,chrgtype, fnotid, invcid, iwowflag)
+{
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+
+	var datefrom='';
+	var dateto='';
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divChrgBrkup").html('<div class="spinner-border text-danger"></div>');
+
+	var htmchrgbrkup='<table class="table table-striped table-bordered table-responsive" style="margin-bottom:0px;"><tbody>';
+
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'CHRG_BRKUP',CustCode:custcode,Sttn:sttn,InvcId:invcid,FNOTId:fnotid,ChrgType:chrgtype,IWOWFlag:iwowflag},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			var cntr=0;
+			for(var i=0;i<obj.Brkup.length;i++)
+			{
+				var chrgcode=obj.Brkup[i].ChrgCode;
+				var chrgname=obj.Brkup[i].ChrgName;
+				var amnt=obj.Brkup[i].Amnt;
+				htmchrgbrkup+='<tr><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+			}
+			htmchrgbrkup+='</tbody></table><a class="link-chrg-close" onclick="closeChrgBrkUp();" href="javascript:void(0)"><i class="fas fa-times"></i>&nbsp;Close</a>';
+
+   		       $('.link-brkup').not(link).popover('hide');
+
+			$(link).popover({
+				html:true,
+				title: 'Break-up of Charges',
+        			content: htmchrgbrkup,
+        			placement: 'left', 
+				sanitize:false
+		       }).popover('show');
+
+		}
+	});	
+}
+function closeChrgBrkUp()
+{
+	$('.link-brkup').popover('hide');
+}
+function payNow(zonecode,chrgtypecode,chrgid,amnt,cnfmdate)
+{	
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+
+	$("#txtChrgZone").val(zonecode);
+	$("#txtChrgType").val(chrgtypecode);
+	$("#txtChrgId").val(chrgid);
+	$("#txtAmnt").val(amnt);
+	$("#txtCustCode").val(custcode);
+	$("#txtCnfmDate").val(cnfmdate);
+	$("#frmFrgtPymt").submit();
+}
+function makePayment(sttn,invcid,chrgtype,chrgtypecode,iwowflag,invcdate,amnt,chrgid,chrgzone,cnfmdate)
+{	
+	$("#Sttn").val(sttn);
+	$("#ChrgType").val(chrgtype);
+	$("#ChrgTypeCode").val(chrgtypecode);
+	$("#InvcId").val(invcid);
+	$("#IWOWFlag").val(iwowflag);
+	$("#InvcDate").val(invcdate);
+	$("#Amnt").val(amnt);
+	$("#ChrgId").val(chrgid);
+	$("#ChrgZone").val(chrgzone);
+	$("#CnfmDate").val(cnfmdate);
+
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+
+	$("#CustCode").val(custcode);
+	$("#frmFrgtPymtInit").submit();
+}
+function fetchChrgDesc(chrgid)
+{
+	var custcode='';
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divChrgDesc").html('<div class="spinner-border text-danger"></div>');
+
+	var htmchrgdesc='<div class="container"><div class="chrg-desc-card"><a class="link-download float-right mb-2" onclick="downloadRcpt(\''+chrgid+'\');" href="javascript:void(0)"><i class="fas fa-download"></i>&nbsp;Download Payment Receipt</a><table class="table table-bordered table-chrgdesc" style="margin-bottom:0px;"><tbody>';
+
+
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'CHRG_DESC',CustCode:custcode,ChrgId:chrgid},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+
+			var sttn=obj.Sttn;
+			var sttnname=obj.SttnName;
+			var dvsn=obj.Dvsn;
+			var chrgtype=obj.ChrgType;
+			var iwowflag=obj.IWOWFlag;
+			var cust=obj.Cust;
+			var amnt=obj.Amnt;
+			var fnot=obj.FNOT;
+			var fnotfrom=obj.FNOTFrom;
+			var fnotdvsnfrom=obj.FNOTDvsnFrom;
+			var fnotto=obj.FNOTTo;
+			var fnotdvsnto=obj.FNOTDvsnTo;
+			var invc=obj.Invc;
+			var invcfrom=obj.InvcFrom;
+			var invcdvsnfrom=obj.InvcDvsnFrom;
+			var invcto=obj.InvcTo;
+			var invcdvsnto=obj.InvcDvsnTo;
+			var fnr=obj.FNR;
+			var rrnumb=obj.RRNumb;
+			var rrdate=obj.RRDate;
+			var cnsr=obj.Cnsr;
+			var cnsg=obj.Cnsg;
+			var cmdt=obj.Cmdt;
+			var ldunts=obj.LdUnts;
+			var emunts=obj.EmUnts;
+
+			htmchrgdesc+='<tr><td class="lbl">Customer</td><td class="val">'+cust+'</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Charge</td><td class="val">'+chrgtype+' (Amount: <i class="fas fa-rupee-sign"></i> '+amnt+')</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Station</td><td class="val">'+sttn+' ('+sttnname+')</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+dvsn+'</td></tr>';
+			if(fnot!="/")
+			{
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">Consignment Detail</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">RR Detail</td><td class="val">'+rrnumb+' ('+rrdate+')</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">FNR</td><td class="val">'+fnr+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Consignor/Consignee</td><td class="val">'+cnsr+'/'+cnsg+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Commodity</td><td class="val">'+cmdt+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Units (Loaded/Empty)</td><td class="val">'+ldunts+'/'+emunts+'</td></tr>';
+
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">F/Note Detail</td></tr>';				
+				htmchrgdesc+='<tr><td class="lbl">Source</td><td class="val">'+fnotfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+fnotdvsnfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Destination</td><td class="val">'+fnotto+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+fnotdvsnto+'</td></tr>';
+
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">Invoice Detail</td></tr>';				
+				htmchrgdesc+='<tr><td class="lbl">Source</td><td class="val">'+invcfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+invcdvsnfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Destination</td><td class="val">'+invcto+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+invcdvsnto+'</td></tr>';
+
+			}
+
+			htmchrgdesc+='</tbody></table></div></div>';
+			$("#divChrgDesc").html(htmchrgdesc);
+
+		}
+	});	
+}
+function fetchChrgDescFailed(chrgid)
+{
+	var custcode='';
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$("#divChrgDesc").html('<div class="spinner-border text-danger"></div>');
+
+	var htmchrgdesc='<div class="container"><div class="chrg-desc-card"><table class="table table-bordered table-chrgdesc" style="margin-bottom:0px;"><tbody>';
+
+
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'CHRG_DESC',CustCode:custcode,ChrgId:chrgid},
+		async : true,
+		success : function(data) {
+			var obj= JSON.parse(data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+
+			var sttn=obj.Sttn;
+			var sttnname=obj.SttnName;
+			var dvsn=obj.Dvsn;
+			var chrgtype=obj.ChrgType;
+			var iwowflag=obj.IWOWFlag;
+			var cust=obj.Cust;
+			var amnt=obj.Amnt;
+			var fnot=obj.FNOT;
+			var fnotfrom=obj.FNOTFrom;
+			var fnotdvsnfrom=obj.FNOTDvsnFrom;
+			var fnotto=obj.FNOTTo;
+			var fnotdvsnto=obj.FNOTDvsnTo;
+			var invc=obj.Invc;
+			var invcfrom=obj.InvcFrom;
+			var invcdvsnfrom=obj.InvcDvsnFrom;
+			var invcto=obj.InvcTo;
+			var invcdvsnto=obj.InvcDvsnTo;
+			var fnr=obj.FNR;
+			var rrnumb=obj.RRNumb;
+			var rrdate=obj.RRDate;
+			var cnsr=obj.Cnsr;
+			var cnsg=obj.Cnsg;
+			var cmdt=obj.Cmdt;
+			var ldunts=obj.LdUnts;
+			var emunts=obj.EmUnts;
+
+			htmchrgdesc+='<tr><td class="lbl">Customer</td><td class="val">'+cust+'</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Charge</td><td class="val">'+chrgtype+' (Amount: <i class="fas fa-rupee-sign"></i> '+amnt+')</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Station</td><td class="val">'+sttn+' ('+sttnname+')</td></tr>';
+			htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+dvsn+'</td></tr>';
+			if(fnot!="/")
+			{
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">Consignment Detail</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">RR Detail</td><td class="val">'+rrnumb+' ('+rrdate+')</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">FNR</td><td class="val">'+fnr+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Consignor/Consignee</td><td class="val">'+cnsr+'/'+cnsg+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Commodity</td><td class="val">'+cmdt+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Units (Loaded/Empty)</td><td class="val">'+ldunts+'/'+emunts+'</td></tr>';
+
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">F/Note Detail</td></tr>';				
+				htmchrgdesc+='<tr><td class="lbl">Source</td><td class="val">'+fnotfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+fnotdvsnfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Destination</td><td class="val">'+fnotto+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+fnotdvsnto+'</td></tr>';
+
+				htmchrgdesc+='<tr><td class="head-desc" colspan="2">Invoice Detail</td></tr>';				
+				htmchrgdesc+='<tr><td class="lbl">Source</td><td class="val">'+invcfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+invcdvsnfrom+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Destination</td><td class="val">'+invcto+'</td></tr>';
+				htmchrgdesc+='<tr><td class="lbl">Division</td><td class="val">'+invcdvsnto+'</td></tr>';
+
+			}
+
+			htmchrgdesc+='</tbody></table></div></div>';
+			$("#divChrgDesc").html(htmchrgdesc);
+		}
+	});	
+}
+
+function vldtTrxnStatus(link,zone,chrgtype,chrgtypecode, chrgid, amnt,cnfmdate,sttn,invcid,iwowflag,invcdate)
+{
+	$('.btn-pay').attr("disabled","disabled");
+
+	console.log("inside validate transaction status:"+zone+", "+chrgtype+", "+chrgid+", "+amnt);	
+	var myurl="/RailSAHAY/FrgtPymtTrxn";
+	$(link).text('Please wait..');
+	var htmlPymtStts="";
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'VLDT_TRXN_STATUS',txtChrgZone:zone,txtChrgType:chrgtypecode,txtChrgId:chrgid,txtAmnt:amnt},
+		async : true,
+		success : function(data) {
+			console.log("data received:"+data);
+			var obj= JSON.parse(data);
+			console.log("data parsed:"+data);
+			var stts=obj.Stts;
+					
+			if(stts=="PENDING")
+			{
+				$('.btn-pay').not(link).popover('hide');
+				$(link).popover({
+				html:true,
+				title: 'Payment Pending',
+        			content: '<p style="color:#4d4d4d;font-size:12px;font-weight:600;">Payment status is <span style="font-weight:600;color:#b32400;">PENDING</span> in the System, Please check it after 10 minutes again!</p>',
+        			placement: 'left', 
+				sanitize:false
+			       }).popover('show');
+				
+
+				$(link).removeClass("btn-success");				
+				$(link).addClass("btn-warning");
+				$(link).addClass("text-dark");
+				$(link).text('In Process');
+				$('.btn-pay').removeAttr("disabled");
+	
+			}
+			else
+			{
+				if(stts=="SUCCESS")
+				{
+					$('.btn-pay').not(link).popover('hide');
+				
+					$(link).popover({
+					html:true,
+					title: 'Payment already Received',
+        				content: '<p style="color:#4d4d4d;font-size:12px;font-weight:600;">Payment has already been <span style="font-weight:600;color:#2d862d;">SUCCESSFULLY ACCRUED</span> in the System, Please refresh your screen!</p>',
+	        			placement: 'left', 
+					sanitize:false
+				       }).popover('show');
+
+					$(link).text('Payment Done');
+					$('.btn-pay').removeAttr("disabled");	
+
+				}
+				else
+				{	
+					$(link).removeClass("btn-success");				
+					$(link).addClass("btn-primary");
+					$(link).text('In Process..');
+					/*payNow(zone,chrgtype,chrgid,amnt,cnfmdate);*/
+					makePayment(sttn,invcid,chrgtype,chrgtypecode,iwowflag,invcdate,amnt,chrgid,zone,cnfmdate);
+				}
+				
+			}
+		}
+	});	
+}
+function fetchPopOverChrgBrkup(link, sttn, invcid, chrgtype, iwowflag, invcdate, amnt)
+{
+	console.log("inside fetchPopOverChrgBrkup:"+sttn+", "+invcid+", "+chrgtype+", "+iwowflag+", "+invcdate+", "+amnt);	
+	var custcode='';
+	var custOrgn =$("#custList").val();
+	var custOrgn1=$("#custList1").html();
+	if((custOrgn!='') && (custOrgn!=undefined) && (custOrgn!=null))
+		custcode=custOrgn;
+	else
+		custcode=custOrgn1;
+
+
+	$("#divChrgBrkup").html('<div class="spinner-border text-danger"></div>');
+	var htmchrgbrkup='<table class="table table-striped table-bordered table-responsive" style="margin-bottom:0px;"><tbody>';
+
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'CHRG_BREAKUP',Sttn:sttn,CustCode:custcode,InvcId:invcid,ChrgType:chrgtype,IWOWFlag:iwowflag,InvcDate:invcdate,Amnt:amnt,RlyGstin:'',CnsrGstin:'',CnsgGstin:''},
+		async : true,
+		success : function(data) {
+			console.log("data received:"+data);
+			var obj= JSON.parse(data);
+			console.log("data parsed:"+data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			var cntr=0;
+			for(var i=0;i<obj.Breakup.length;i++)
+			{
+				var chrgcode=obj.Breakup[i].ChrgCode;
+				var chrgname=obj.Breakup[i].ChrgName;
+				var amnt=obj.Breakup[i].Amnt;
+				htmchrgbrkup+='<tr><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+			}
+			htmchrgbrkup+='</tbody></table><a class="link-chrg-close" onclick="closeChrgBrkUp();" href="javascript:void(0)"><i class="fas fa-times"></i>&nbsp;Close</a>';
+
+   		       $('.link-brkup').not(link).popover('hide');
+
+			$(link).popover({
+				html:true,
+				title: 'Break-up of Charges',
+        			content: htmchrgbrkup,
+        			placement: 'left', 
+				sanitize:false
+		       }).popover('show');
+
+		}
+	});
+
+}
+function fetchGTotlChrg(sttn, custcode, invcid, chrgtype, iwowflag, invcdate, amnt, rlygstin, cnsrgstin, cnsggstin)
+{
+	console.log("inside fetchGTotlChrg:"+sttn+", "+custcode+", "+invcid+", "+chrgtype+", "+iwowflag+", "+invcdate+", "+amnt+", "+rlygstin+", "+cnsrgstin+", "+cnsggstin);	
+
+	$("#divChrgBrkup").html('<div class="spinner-border text-danger"></div>');
+	var htmchrgbrkup='<p class="chrg-type">Breakup of Charges</p><table class="table table-bordered" style="margin-bottom:0px;"><tbody>';
+
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'CHRG_BREAKUP',Sttn:sttn,CustCode:custcode,InvcId:invcid,ChrgType:chrgtype,IWOWFlag:iwowflag,InvcDate:invcdate,Amnt:amnt,RlyGstin:rlygstin,CnsrGstin:cnsrgstin,CnsgGstin:cnsggstin},
+		async : true,
+		success : function(data) {
+			console.log("data received:"+data);
+			var obj= JSON.parse(data);
+			console.log("data parsed:"+data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			var cntr=0;
+			for(var i=0;i<obj.Breakup.length;i++)
+			{
+				var chrgcode=obj.Breakup[i].ChrgCode;
+				var chrgname=obj.Breakup[i].ChrgName;
+				var amnt=obj.Breakup[i].Amnt;
+				if((chrgname=="Total GST") || (chrgname=="Total Amount") || (chrgname=="Grand Total") || (chrgname=="Total Weighment Registration Fee"))					
+					htmchrgbrkup+='<tr class="totl-row"><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+				else
+					htmchrgbrkup+='<tr><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+
+			}
+			htmchrgbrkup+='<tr><td colspan="2"><p class="chrg-levy">*Transaction Charges as applicable will be levied (applied in the next page)</p></td></tr>';
+			htmchrgbrkup+='<tr><td colspan="2" class="text-center"><button class="btn btn-secondary btn-action" id="btnBackDB" onclick="cancelPayment();"><i class="fas fa-angle-double-left"></i>&nbsp;Go To Dashboard</button>&nbsp;&nbsp;<button class="btn btn-secondary btn-action" onclick="cancelPayment();"><i class="fas fa-angle-double-left"></i>&nbsp;Cancel and Go Back</button>&nbsp;&nbsp;<button class="btn btn-success text-light btn-action" onclick="proceedForPayment();">Continue with Payment&nbsp;<i class="fas fa-angle-double-right"></i></button></td></tr></tbody></table>';
+			$("#divChrgBrkup").html(htmchrgbrkup);
+		}
+	});
+}
+function proceedForPayment()
+{
+	$(".btn-action").hide();
+	$("#btnBackDB").show();
+	$("#frmFrgtPymt").submit();
+}
+function cancelPayment()
+{	
+	window.history.back();
+}
+function fetchGSTList()
+{
+	var htmchrgbrkup='<p class="chrg-type">Breakup of Charges</p><table class="table table-bordered" style="margin-bottom:0px;"><tbody>';
+
+	/*https://www.foistest.indianrail.gov.in/RailSAHAY/FrgtPymtJson?Optn=GST_LIST&RptgSttn=GZB&SttnFrom=GZB&SttnTo=PNP&Cnsr=AMFC&Cnsg=AMFC&TrxnFlag=F&TrxnId=GZB37.00120211&HndlFlag=N*/
+	var myurl="/RailSAHAY/FrgtPymtJson";
+	$.ajax({
+		url : myurl,
+		type : "post",
+	        data: {Optn:'GST_LIST',RptgSttn:sttn,Cnsr:custcode,Cnsg:custcode,SttnFrom:sttnfrom,SttnTo:sttnto,TrxnFlag:'F',TrxnId:fnotid,HndlFlag:'N'},
+		async : true,
+		success : function(data) {
+			console.log("data received:"+data);
+			var obj= JSON.parse(data);
+			console.log("data parsed:"+data);
+			var stts=obj.Stts;
+			var erormesg=obj.ErorMesg;
+			if(stts=="F")
+			{
+				alert("Not able to connect to Server:"+erormesg);
+				return false;
+			}
+			var cntr=0;
+			for(var i=0;i<obj.Breakup.length;i++)
+			{
+				var chrgcode=obj.Breakup[i].ChrgCode;
+				var chrgname=obj.Breakup[i].ChrgName;
+				var amnt=obj.Breakup[i].Amnt;
+				if((chrgname=="Total GST") || (chrgname=="Total Amount") || (chrgname=="Grand Total") || (chrgname=="Total Weighment Registration Fee"))					
+					htmchrgbrkup+='<tr class="totl-row"><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+				else
+					htmchrgbrkup+='<tr><td class="chrg-code">'+chrgname+'</td><td class="chrg-amnt">'+amnt+'</td></tr>';
+
+			}
+			htmchrgbrkup+='<tr><td colspan="2"><p class="chrg-levy">*Transaction Charges as applicable will be levied (applied in the next page)</p></td></tr>';
+			htmchrgbrkup+='<tr><td colspan="2" class="text-center"><button class="btn btn-secondary" onclick="cancelPayment();"><i class="fas fa-angle-double-left"></i>&nbsp;Cancel and Go Back</button>&nbsp;&nbsp;<button class="btn btn-success text-light" onclick="proceedForPayment();">Continue with Payment&nbsp;<i class="fas fa-angle-double-right"></i></button></td></tr></tbody></table>';
+			$("#divChrgBrkup").html(htmchrgbrkup);
+		}
+	});
+}

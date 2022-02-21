@@ -1,0 +1,925 @@
+<%@ include file="/pages/GG_Header.jspf" %>
+<% 
+
+strLastUpdate=Logg.setPortal(si_UserId,si_ClntId,si_Theme,si_LangFlag,"DASHBOARD","/RailSAHAY/pages/SAHAYDashboard.jsp",UserDevice,Browser);
+%>
+<%@ page import = "user.UserProfDtls,java.util.*;" %>
+
+<% 
+String strUserID=(String)session.getAttribute("custuserid");  
+
+ if(strUserID==null) strUserID="";
+ 
+ System.out.println("strUserID::"+strUserID+"||||");
+ 
+      if(strUserID.equals(""))
+      {
+   %>
+        <jsp:forward page="eDmndLogin.jsp"/>
+   <%
+      }
+      UserProfDtls userdtls = new UserProfDtls((String)session.getAttribute("custuserid"));  
+      
+      ArrayList<String> orgList =userdtls.getCustOrgn();
+   %>
+
+
+
+<script src="/RailSAHAY/resources/js/trmlutil.js"></script>
+<script src="/RailSAHAY/resources/js/miscutil.js"></script>
+    <script>
+    var fnrList="";
+    	function fetchODRDtls()
+    	{
+        $("#dataD").show();
+        $("#frmSr").hide();
+        $("#frmCncrn").hide();
+        $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+         $("#NodlOfcr").hide();
+    		//alert("Outstanding Indents Detail");
+                var custuserid  = "<%= userdtls.getTavcustid()%>";
+               // alert(custuserid);
+               var custOrgn="";
+                if('<%=orgList.size()%>'*1 >1){
+                    custOrgn =document.getElementById("custList").value;
+                }else{
+                    custOrgn=document.getElementById("custList1").innerHTML;
+                }
+                //alert(custOrgn);
+               
+                       $.ajax({
+                        url: "/RailSAHAY/UserDashboard?callfor=ODR&custuserid=" + custuserid+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                      // alert("data:"+data);
+                      
+                       var obj= data;
+                     var htmlD="";
+                     for(var i=0;i<obj.length;i++)
+			{
+                        htmlD+='<div class="project"><div class="row bg-white has-shadow"><div class="left-col col-lg-6 d-flex align-items-center justify-content-between">';
+                        htmlD+='<div class="project-title d-flex align-items-center"><button class="btn btn-warning mr-3">'+(i+1)+'</button><div class="text"><h3 class="h4">';
+                        htmlD+=obj[i].sttnfrom+'/'+obj[i].dmndNo+'/'+obj[i].dmndTime+'</h3></div>';   
+                        htmlD+='</div><div class="project-date"><span class="hidden-sm-down">'+obj[i].sttnfrom+'->'+obj[i].sttnto+'</span></div>';
+                        htmlD+='</div><div class="right-col col-lg-6 d-flex align-items-center"><div class="time"><i class="far fa-clock"></i>  '+obj[i].rakecmdt+'/'+obj[i].raketype+'/'+obj[i].unts+' </div>';
+                        htmlD+='</div></div></div>';
+                        
+                        }
+                         $("#dataD").html(htmlD);
+                },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+                
+    	}
+    	function fetchCnmtDtls()
+    	{
+        fnrList="";
+        $("#dataD").show();
+        $("#frmSr").hide();
+        $("#frmCncrn").hide();
+        $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+         $("#NodlOfcr").hide();
+            
+    		//alert("Consignment Detail");
+                var custuserid  = "<%= userdtls.getTavcustid()%>";
+              //  alert(custuserid);
+              var custOrgn="";
+                if('<%=orgList.size()%>'*1 >1){
+                    custOrgn =document.getElementById("custList").value;
+                }else{
+                    custOrgn=document.getElementById("custList1").innerHTML;
+                }
+                //alert(custOrgn);
+              
+                       $.ajax({
+                        url: "/RailSAHAY/UserDashboard?callfor=ONRUN&custuserid=" + custuserid+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                     // alert("data:"+data);
+                     var obj= data;
+                     var htmlD="";
+                     for(var i=0;i<obj.length;i++)
+			{
+                            htmlD+='<div class="project"><div class="row bg-white has-shadow"><div class="left-col col-lg-6 d-flex align-items-center justify-content-between">';
+                            htmlD+='<div class="project-title d-flex align-items-center"><button class="btn btn-warning mr-3">'+(i+1)+'</button><div class="text"><h3 class="h4">';
+                            htmlD+=obj[i].rakecmdt+'/'+obj[i].loddunts+'/'+obj[i].raketype+'</h3><small>'+obj[i].sttnfrom+'->'+obj[i].sttnto+'</small></div>';
+                            htmlD+='</div><div class="project-date"><span class="hidden-sm-down">'+obj[i].loadstts+'/'+obj[i].sttn+'('+obj[i].dvsn+')/'+obj[i].sttstime+'</span></div>';
+                            htmlD+='</div><div class="right-col col-lg-6 d-flex align-items-center"><div class="time"><i class="far fa-clock"></i> ETA ('+obj[i].sttnto+'): '+obj[i].etaDstn+' </div>';
+                            htmlD+='<div class="text"><small> (FNR: '+obj[i].cnmtid+')</small></div></div></div></div>';                       
+                            fnrList+='<option value="'+obj[i].cnmtid+'" />';
+                        }
+                        $("#dataD").html(htmlD);
+                        $("#fnrlist").html(fnrList);
+                        
+                },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+    	}
+        function fetchCountDtls()
+    	{
+      //  $("#dataD").show();
+      //  $("#frmSr").hide();
+    		//alert("Total Count Detail");
+                var custuserid  = "<%= userdtls.getTavcustid()%>";
+                //alert(custuserid);
+                
+                
+                var custOrgn="";
+        if('<%=orgList.size()%>'*1 >1){
+            custOrgn =document.getElementById("custList").value;
+        }else{
+            custOrgn=document.getElementById("custList1").innerHTML;
+        }
+       // alert(custOrgn);
+                       $.ajax({
+                        url: "/RailSAHAY/UserDashboard?callfor=CONT&custuserid=" + custuserid+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                       //alert("data:"+data);
+                       var obj= data;
+                       var fnrCont=obj[0].fnrCont;
+                       var odrCont=obj[0].odrCont;
+                       var srCont=obj[0].srCont;
+                       var cncrn=obj[0].cnrnCont;
+                       //alert("fnrCont:"+fnrCont);
+                       $("#fnrCont").html('<strong>'+fnrCont+'</strong>');
+                       $("#cncrn").html('<strong>'+cncrn+'</strong>');
+                       $("#srCont").html('<strong>'+srCont+'</strong>');
+                       $("#odrCont").html('<strong>'+odrCont+'</strong>');
+                       
+                },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+    	}
+    	function fetchCncnDtls()
+    	{
+        $("#dataD").show();
+        $("#frmSr").hide();
+        $("#frmCncrn").hide();
+        $("#trmlProf").hide();
+         $("#NodlOfcr").hide();
+        
+    		//alert("Concern Detail");
+                
+                var custOrgn="";
+        if('<%=orgList.size()%>'*1 >1){
+            custOrgn =document.getElementById("custList").value;
+        }else{
+            custOrgn=document.getElementById("custList1").innerHTML;
+        }
+        //alert(custOrgn);
+        
+        
+    		//alert("Service Request Detail");
+               
+                 var custuserid  = "<%= userdtls.getTavcustid()%>";
+               // alert(custuserid);
+                       $.ajax({
+                        url: "/RailSAHAY/UserDashboard",
+                        type: 'POST',
+                        data: {callfor:'CR',custuserid:custuserid,org:custOrgn},
+                        dataType: 'json',                  
+                        success: function (data) {
+                       //alert("data:"+data);
+                       
+                        var obj= data;
+                     var htmlD="";
+                     for(var i=0;i<obj.length;i++)
+			{
+                       htmlD+='<div class="project"><div class="row bg-white has-shadow"><div class="left-col col-lg-7 d-flex align-items-center justify-content-between">';
+                        htmlD+='<div class="project-title d-flex align-items-center"><button class="btn btn-warning mr-3">'+(i+1)+'</button><div class="text"><a href="#txt'+i+'" data-toggle="collapse"><h3 class="h4">'
+                        htmlD+=obj[i].crType+'</h3><small>'+obj[i].crId+' AT '+obj[i].sttn+'</small></a></div>';
+                        htmlD+='</div><div class="project-date"><span class="hidden-sm-down">'+obj[i].crCtgr+':'+obj[i].crSubCtgr+' </span></div>';
+                        htmlD+='</div><div class="right-col col-lg-5 d-flex align-items-center"><div class="time"><i class="far fa-clock"></i>  '+obj[i].sttsDesc+'/'+obj[i].sttsTime+' </div>';
+                        htmlD+='</div><div id="txt'+i+'" class="collapse offset-md-1 col-md-10"><small>'+obj[i].rmrk+'</small></div></div></div>';                        
+                        }
+                        $("#dataD").html(htmlD); 
+                
+                 },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+    	}
+        function raiseSR(){
+            $("#dataD").hide();;
+            $("#frmSr").show();
+        $("#frmCncrn").hide();
+             $("#alert1").hide();
+        $("#alert2").hide();
+        $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+         $("#NodlOfcr").hide();
+        }
+        function raiseCncrn(){
+            $("#dataD").hide();;
+            $("#frmSr").hide();
+        $("#frmCncrn").show();
+             $("#alert3").hide();
+        $("#alert4").hide();
+        $("#trmlProf").hide();
+            $("#divTrmlProf").html("");
+         $("#NodlOfcr").hide();
+        }
+        function profTrml(){
+            $("#dataD").hide();;
+            $("#frmSr").hide();
+            $("#frmCncrn").hide();
+            $("#alert1").hide();
+            $("#alert2").hide();
+            $("#trmlProf").show();
+            $("#alert3").hide();
+            $("#alert4").hide();
+            $("#divTrmlProf").html("");
+         $("#NodlOfcr").hide();
+        }
+        function submitSR(){
+        
+        $("#alert1").hide();
+        $("#alert2").hide();
+        var custuserid  = "<%= userdtls.getTavcustid()%>";
+        var srtype=document.getElementById("srtype").value;
+        var locn=document.getElementById("locn").value;
+        var fnr=document.getElementById("fnr").value;
+        var mesg=document.getElementById("mesg").value;
+                    var sttncode='';
+	            
+				if(locn.indexOf("-")>-1)
+				{
+					var sttn=locn.substring(locn.indexOf("-")+1);
+					sttncode=(sttn.substring(0,sttn.indexOf("("))).trim();
+				}	
+				else
+				{
+					sttncode=locn.toUpperCase();
+				}
+                                
+        var custOrgn="";
+        if('<%=orgList.size()%>'*1 >1){
+            custOrgn =document.getElementById("custList").value;
+        }else{
+            custOrgn=document.getElementById("custList1").innerHTML;
+        }
+        //alert(custOrgn);
+        
+         $.ajax({
+                        url: "/RailSAHAY/RaiseSR?custuserid="+custuserid+"&srtype="+srtype+"&locn="+sttncode+"&fnr"+fnr+"&mesg="+mesg+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                      // alert("data:"+data);
+                       
+                        var obj= data;//JSON.parse(data);
+                        var errorC=obj[0].errorC;
+                        var reply=obj[0].reply;
+                        var htmlA="";
+                        
+                        if(reply!="FAIL") {
+                           htmlA="<strong>Success!</strong>"+reply; 
+                           $("#alert1").html(htmlA);
+                           $("#alert1").show();
+                        }else{
+                            htmlA="<strong>Error!</strong>"+errorC; 
+                            $("#alert2").html(htmlA);
+                            $("#alert2").show();
+                        }
+                         
+
+                 },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+                
+            fetchCountDtls();
+        }
+        function submitCncrn(){
+       // alert("in Raise concern");
+        $("#alert3").hide();
+        $("#alert4").hide();
+        var crType=document.getElementById('hidval').value;
+        var custuserid  = "<%= userdtls.getTavcustid()%>";
+        var cncrctgr=document.getElementById("cncrctgr").value;
+        var locncr=document.getElementById("locncr").value;
+        var subctgr=document.getElementById("subctgr").value;
+        var mesgcr=document.getElementById("mesgcr").value;
+                    
+	          //alert("/RailSAHAY/RaiseConcern?custuserid="+ custuserid+"&crType="+crType+"&cncrctgr="+cncrctgr+"&locncr"+locncr+"&subctgr="+subctgr+"&mesgcr="+mesgcr);  
+                  
+                   var sttncode='';
+	            
+                if(locncr.indexOf("-")>-1)
+                {
+                        var sttn=locncr.substring(locncr.indexOf("-")+1);
+                        sttncode=(sttn.substring(0,sttn.indexOf("("))).trim();
+                }	
+                else
+                {
+                        sttncode=locncr.toUpperCase();
+                }
+		
+        var custOrgn="";
+        if('<%=orgList.size()%>'*1 >1){
+            custOrgn =document.getElementById("custList").value;
+        }else{
+            custOrgn=document.getElementById("custList1").innerHTML;
+        }
+        //alert(custOrgn);		
+        
+         $.ajax({
+                        url: "/RailSAHAY/RaiseConcern?custuserid="+ custuserid+"&crType="+crType+"&cncrctgr="+cncrctgr+"&locncr="+sttncode+"&subctgr="+subctgr+"&mesgcr="+mesgcr+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                      // alert("data:"+data);
+                       
+                        var obj= data;//JSON.parse(data);
+                        var errorC=obj[0].errorC;
+                        var reply=obj[0].reply;
+                        var htmlA="";
+                        
+                        if(reply!="FAIL") {
+                           htmlA="<strong>Success!</strong>"+reply; 
+                           $("#alert3").html(htmlA);
+                           $("#alert3").show();
+                        }else{
+                            htmlA="<strong>Error!</strong>"+errorC; 
+                            $("#alert4").html(htmlA);
+                            $("#alert4").show();
+                        }
+                         
+
+                 },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+                
+            fetchCountDtls();
+        }
+    	function fetchSRDtls()
+    	{
+        
+        var custOrgn="";
+        if('<%=orgList.size()%>'*1 >1){
+            custOrgn =document.getElementById("custList").value;
+        }else{
+            custOrgn=document.getElementById("custList1").innerHTML;
+        }
+        //alert(custOrgn);
+        
+        
+    		//alert("Service Request Detail");
+                $("#dataD").show();
+                 $("#frmSr").hide();
+                $("#trmlProf").hide();
+                $("#divTrmlProf").html("");
+                 $("#NodlOfcr").hide();
+                 var custuserid  = "<%= userdtls.getTavcustid()%>";
+               // alert(custuserid);
+                       $.ajax({
+                        url: "/RailSAHAY/UserDashboard?callfor=SR&custuserid="+custuserid+"&org="+custOrgn,
+                        type: 'POST',
+                        dataType: 'json',                  
+                        success: function (data) {
+                     //  alert("data:"+data);
+                       
+                        var obj= data;
+                     var htmlD="";
+                     for(var i=0;i<obj.length;i++)
+			{
+                       htmlD+='<div class="project"><div class="row bg-white has-shadow"><div class="left-col col-lg-7 d-flex align-items-center justify-content-between">';
+                        htmlD+='<div class="project-title d-flex align-items-center"><button class="btn btn-warning mr-3">'+(i+1)+'</button><div class="text"><a href="#txt'+i+'" data-toggle="collapse"><h3 class="h4">'
+                        htmlD+=obj[i].srvcType+'</h3></a></div>';
+                        htmlD+='</div><div class="project-date"><span class="hidden-sm-down">'+obj[i].srvcId+'(FNR:'+obj[i].fnr+') </span></div>';
+                        htmlD+='</div><div class="right-col col-lg-5 d-flex align-items-center"><div class="time"><i class="far fa-clock"></i>  '+obj[i].srvcStts+'/'+obj[i].postTime+' </div>';
+                        htmlD+='</div><div id="txt'+i+'" class="collapse offset-md-1 col-md-10"><small>'+obj[i].srvcTxt+'</small></div></div></div>';                        
+                        }
+                        $("#dataD").html(htmlD);
+                
+                 },
+                        error:function(data,status,er) {
+                                alert("error: "+data+" status: "+status+" er:"+er);
+                        }
+                }); 
+                
+                
+    	}
+        function copyVal(val)
+        {
+        
+         document.getElementById('hidval').value = val;
+          $(".btn-concern").removeClass("btn-success");
+            $(".btn-concern").addClass("btn-primary");
+         
+         if(val=="QUERY")
+                {
+                        $("#btnQ").removeClass("btn-primary");	
+                        $("#btnQ").addClass("btn-success");
+                        $("#cncrctgr").empty();
+                        $("#cncrctgr").append('<option class="hidden" selected disabled>Category</option>');
+                        $("#cncrctgr").append('<option value="Booking">Booking</option>');
+                        $("#cncrctgr").append('<option value="Delivery">Delivery</option>');
+                        $("#cncrctgr").append('<option value="Track_Trace">Track and Trace Facility</option>');
+                        $("#cncrctgr").append('<option value="Station_Facilities">Station Facilities</option>');
+                        $("#cncrctgr").append('<option value="Station_Open_Goods_Traffic">Station Open Goods Traffic</option>');
+                        $("#cncrctgr").append('<option value="Commodity">Commodity</option>');
+                        $("#cncrctgr").append('<option value="Wagon_Type">Wagon Type</option>');
+                        $("#cncrctgr").append('<option value="NearestGoodsShed">Nearest Goods Shed</option>');
+                        $("#cncrctgr").append('<option value="Freight_Charges">Freight Charges</option>');
+                        $("#cncrctgr").append('<option value="Freight_Schemes">Freight Schemes</option>');
+                        $("#cncrctgr").append('<option value="Dummurage">Demmurage</option>');
+                        $("#cncrctgr").append('<option value="Wharfage">Wharfage</option>');
+                        $("#cncrctgr").append('<option value="Others">Others</option>');
+                
+                }
+                if(val=="SUGGESTION")
+                {
+                        $("#btnS").removeClass("btn-primary");	
+                        $("#btnS").addClass("btn-success");
+                        $("#cncrctgr").empty();
+                        $("#cncrctgr").append('<option class="hidden" selected disabled>Category</option>');
+                        $("#cncrctgr").append('<option value="Booking">Booking</option>');
+                        $("#cncrctgr").append('<option value="Delivery">Delivery</option>');
+                        $("#cncrctgr").append('<option value="Station_Facilities">Station Facilities</option>');
+                        $("#cncrctgr").append('<option value="Station_Open_Goods_Traffic">Station Open Goods Traffic</option>');
+                        $("#cncrctgr").append('<option value="Wagon_Type">Wagon Type</option>');
+                        $("#cncrctgr").append('<option value="NearestGoodsShed">Nearest Goods Shed</option>');
+                        $("#cncrctgr").append('<option value="Freight_Charges">Freight Charges</option>');
+                        $("#cncrctgr").append('<option value="Freight_Schemes">Freight Schemes</option>');
+                        $("#cncrctgr").append('<option value="Dummurage">Demmurage</option>');
+                        $("#cncrctgr").append('<option value="Wharfage">Wharfage</option>');
+                        $("#cncrctgr").append('<option value="Security">Security</option>');
+                        $("#cncrctgr").append('<option value="Others">Others</option>');
+                }
+                
+                if(val=="GRIEVANCE")
+                {
+                         $("#btnG").removeClass("btn-primary");	
+                        $("#btnG").addClass("btn-success");
+                        $("#cncrctgr").empty();
+                        $("#cncrctgr").append('<option class="hidden" selected disabled>Category</option>');
+                        $("#cncrctgr").append('<option value="Employee_Behaviour">Behaviour of Employee</option>');
+                        $("#cncrctgr").append('<option value="Platform_Surface">Platform Surface</option>');
+                        $("#cncrctgr").append('<option value="Goods_Shed_Lighting">Lighting in Goods Shed</option>');
+                        $("#cncrctgr").append('<option value="Approach_Road">Approach Road Condition</option>');
+                        $("#cncrctgr").append('<option value="Consignment_Damage">Damage of Consignment</option>');
+                        $("#cncrctgr").append('<option value="Consignment_Loss">Loss of Consignment</option>');
+                        $("#cncrctgr").append('<option value="Corruption">Corruption</option>');
+                        $("#cncrctgr").append('<option value="Freight_Charges">Freight Charges</option>');
+                        $("#cncrctgr").append('<option value="Security">Security</option>');
+                        $("#cncrctgr").append('<option value="Others">Others</option>');
+                }
+            
+        
+        }
+       function fetchNodlOfcr(){
+       
+       $("#dataD").hide();;
+            $("#frmSr").hide();
+            $("#frmCncrn").hide();
+            $("#alert1").hide();
+            $("#alert2").hide();
+            $("#trmlProf").hide();
+            $("#alert3").hide();
+            $("#alert4").hide();
+            $("#divTrmlProf").html("");
+            $("#NodlOfcr").show();
+           fetchNodlOfcrList('','');
+       }
+       
+    </script>
+    <script>
+$(document).ready(function()
+{
+        //alert("Onload");
+	fetchCountDtls();fetchCnmtDtls();
+});
+</script>
+ 
+<nav class="navbar navbar-expand-sm bg-origprimary" style="margin-top:1px;max-height:10px;">
+	</nav>
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="title">
+              <h1 class="h4">Logged In As</h1>
+              <p class="pcustid"><%= userdtls.getTavcustuserid()%></p>
+            </div>
+          </div>
+          <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+          <ul class="list-unstyled">
+            <!--<li class="active"><a href="index.html"> <i class="icon-home"></i>Rail SAHAY Home</a></li>-->
+            <li><a href="#" onclick="raiseSR()"> <i class="fa fa-cogs" aria-hidden="true"></i>  Service Request</a></li>
+			<!--li><a href="#srvcReq" aria-expanded="false" data-toggle="collapse"><i class="fa fa-cogs" aria-hidden="true"></i>  Service Request</a>
+			  <ul id="srvcReq" class="collapse list-unstyled ">
+				<li><a href="#" onclick="raiseSR()">Night Unloading</a></li>
+				<li><a href="#">Demmurage Waiver</a></li>
+				<li><a href="#">Other</a></li>
+			  </ul>
+            </li-->
+            <li><a href="#" onclick="raiseCncrn()"> <i class="fa fa-edit" aria-hidden="true"></i>  Lodge a Concern</a></li>
+            <!--li><a href="#lodgeConcern" aria-expanded="false" data-toggle="collapse"> <i class="far fa-edit"></i>  Lodge a Concern</a>
+              <ul id="lodgeConcern" class="collapse list-unstyled ">
+                <li><a href="#">Query</a></li>
+                <li><a href="#">Suggestion</a></li>
+                <li><a href="#">Grievance</a></li>
+              </ul>
+            </li-->
+            <li><a href="#" onclick="profTrml()"> <i class="fa fa-map-marker"></i>  My Terminal</a></li>
+           <!-- <li><a href="charts.html"> <i class="fas fa-route"></i>  My Consignments</a></li>
+            <li><a href="charts.html"> <i class="far fa-copy"></i>  My Schemes</a></li>-->
+            <li><a href="#" onclick="fetchNodlOfcr();"> <i class="fa fa-phone-square"></i>  Nodal Officers</a></li>
+          </ul>
+        </nav>
+        <div class="content-inner">
+          <!-- Page Header-->
+          <header class="page-header">
+            <div class="container-fluid">
+              <table style="width:100%;"><tr><td><h3 class="no-margin-bottom">Welcome,<%= userdtls.getTavcustfrstname() %>  <%= userdtls.getTavcustlastname()%> !</h3></td>
+              <% if(orgList.size()>1){ %>
+               <td style="width:30%;" align="right"><select  id="custList" tabindex="5" name="cncrctgr" class="btn btn-primary btn-sm float-right" onchange="fetchCountDtls();fetchCnmtDtls();">
+                  <option value ="ALL">ALL</option>
+                  <% for(int i=0;i<orgList.size();i++){ %>
+                  <option value="<%=orgList.get(i)%>"><%=orgList.get(i) %></option>
+                  <% } %>
+                  
+              </select>
+              <%}else{ %>
+              <td style="width:30%;" align="right"><span class="badge badge-blue float-right" id="custList1"><%=orgList.get(0) %></span>
+              <% } %>
+	     </td></tr></table>
+            </div>
+          </header>
+          <!-- Dashboard Counts Section-->
+          <section class="dashboard-counts no-padding-bottom">
+            <div class="container-fluid">
+              <div class="row bg-white has-shadow">
+                <!-- Item -->
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center" onclick="fetchODRDtls();">
+                    <div class="icon bg-violet"><i class="fa fa-hourglass-start" aria-hidden="true"></i></div>
+                    <div class="title"><span>Outstanding<br>Indents</span>
+                      <div class="progress">
+                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                      </div>
+                    </div>
+                    <div class="number" id="odrCont"><strong></strong></div>
+                  </div>
+                </div>
+                <!-- Item -->
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center" onclick="fetchCnmtDtls();">
+                    <div class="icon bg-red"><i class="fa fa-train" aria-hidden="true"></i></div>
+                    <div class="title"><span>On Run<br>Consignments</span>
+                      <div class="progress">
+                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                      </div>
+                    </div>
+                    <div class="number" id="fnrCont"><strong></strong></div>
+                  </div>
+                </div>
+                <!-- Item -->
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center" onclick="fetchSRDtls();">
+                    <div class="icon bg-green"><i class="fa fa-cogs" aria-hidden="true"></i></div>
+                    <div class="title"><span>Service<br>Requests</span>
+                      <div class="progress">
+                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
+                      </div>
+                    </div>
+                    <div class="number" id="srCont"><strong></strong></div>
+                  </div>
+                </div>
+                <!-- Item -->
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center" onclick="fetchCncnDtls();">
+                    <div class="icon bg-orange"><i class="fas fa-paste" aria-hidden="true"></i></div>
+                    <div class="title"><span>Registered<br>Concerns</span>
+                      <div class="progress">
+                        <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
+                      </div>
+                    </div>
+                    <div class="number" id="cncrn"><strong></strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+           <section class="projects">
+            <div class="container-fluid" >
+            <div style="width:100%;height:400px;overflow-y:scroll;" id="dataD">
+            
+            </div>
+            <div style="width:100%;height:400px;overflow-y:scroll;" id="frmSr" >
+            <form class="form-horizontal" method="post"     id="frmInpt" name="frmInpt" >
+      <div class="container-fullwidth ">
+	                  <div class="row">
+
+	                      <div class="col-md-9 ">
+
+	                          <div class="tab-content" id="myTabContent">
+	                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+	                                  <h3 class="register-heading">Raise Your Service Request</h3>
+	                                  <div class="row ">
+	                                      <div class="col-md-4">
+	                                         
+	                                          <div class="form-group">
+                                                  <input type="hidden"  value="<%=userdtls.getTavcustid()%>" name="custuserid" />
+	                                              <select  id="srtype" tabindex="5" name="srtype" class="form-control">
+	                                                  <option class="hidden"  selected disabled>Category</option>
+	                                                  <option value="NU">Night Unloading</option>
+	                                                  <option value = "DV">Diversion</option>
+	                                                  <option value ="DW">Demmurage Waiver</option>
+	                                                  <option value ="O">Others</option>
+	                                              </select>
+	                                          </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+	                                          <div class="form-group">
+	                                              <input type="text" class="form-control"  tabindex="7" id="locn" name="locn"  style="text-transform:uppercase" required="required" list="locnlist" placeholder="Location *" value=""  size="4" >
+                                                      <datalist id="locnlist"></datalist></input>                                                      
+	                                          </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+	                                          <div class="form-group">
+	                                              <input type="number" class="form-control"  tabindex="7" id="fnr" name="fnr"  style="text-transform:uppercase" required="required" placeholder="For FNR *" value=""  maxlength="11" size="11" list="fnrlist" /><datalist id="fnrlist"></datalist>
+	                                          </div>
+	                                      </div>
+	                                      
+	                                  </div>
+					<div class="row">
+	                                      <div class="col-md-12">
+									<div class="form-group">
+									<textarea class="form-control" tabindex="9" id="mesg" name ="mesg" rows="6" cols="80" placeholder="Write your mesg (Max 1000 Words)" value=""    maxlength="1000"  onchange="validateMesg();" ></textarea>
+									</div>
+                                                                        
+									<div class="d-flex justify-content-center mb-10">
+									<button class="btn btn-primary float-right" tabindex="11"  type="button" onclick="submitSR()" >Submit</button>
+									</div>
+                                                                       
+                                                                      </div>
+									</div>
+	                              </div>
+	                             
+	                          </div>
+	                      </div>
+	                  </div>
+
+            </div>
+            	
+            </form>
+            <div class="alert alert-success" id="alert1"></div>
+            <div class="alert alert-danger" id="alert2"></div>
+            </div>
+            <div style="width:100%;height:400px;overflow-y:scroll;" id="frmCncrn" >
+            <form class="form-horizontal" method="post"  enctype="multipart/form-data"    id="frmInpt1" name="frmInpt1" >
+      <div class="container-fullwidth register">
+	                  <div class="row">
+	                      
+	                      <div class="col-md-12 ">
+                              <div>
+	                          <h3>Connect for your Grievance</h3>
+	                          <p>Lodge your concern directly to IR Officials!</p>
+
+								<div class="btn-group col-md-6">
+								<button type="button" id="btnQ" name="btnQ" value ="Q" onclick="copyVal('QUERY')" class="btn btn-primary btn-concern">Query</button>
+								<button type="button" id="btnS" name="btnS" value ="S" onclick="copyVal('SUGGESTION')" class="btn btn-primary btn-concern">Suggestion</button>
+								<button type="button" id="btn2" name="btn2" value ="G" onclick="copyVal('GRIEVANCE')" class="btn btn-success btn-concern">Grievance</button>
+								</div>
+						  	</div>
+                                                        <br/>
+
+	                          <div class="tab-content" id="myTabContent">
+	                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+	                                 
+	                                  <div class="row register-form">
+	                                      <div class="col-md-6">
+	                                         
+	                                          <div class="form-group">
+	                                              <select  id="cncrctgr" tabindex="5" name="cncrctgr" class="form-control">
+	                                                  <option class="hidden"  selected disabled>Category</option>
+	                                                  <option value="Behaviour">Behaviour of People</option>
+	                                                  <option value = "Platform">Platform Surface</option>
+	                                                  <option value ="Lighting">Lighting in Goods Shed</option>
+	                                                  <option value ="Road">Approach Road Condition</option>
+	                                                  <option value ="Consignment_Damage">Damage of Consignment</option>
+	                                                  <option value ="Consignment_Loss">Loss of Consignment</option>
+	                                                  <option value ="Corruption">Corruption</option>
+	                                                  <option value ="Freight">Freight Charges</option>
+	                                                  <option value ="Security">Security</option>
+	                                                  <option value ="Others">Others</option>
+	                                              </select>
+	                                          </div>
+	                                          <div class="form-group">
+	                                              <input type="text" class="form-control"  tabindex="7" id="locncr" name="locncr" list="locnlist" style="text-transform:uppercase" placeholder="Location *" value=""  />
+                                                      <datalist id="locnlist"></datalist></input>  
+	                                          </div>
+	                                      </div>
+	                                      <div class="col-md-6">
+	                                        
+	                                          <div class="form-group">
+	                                              <select id="subctgr" name="subctgr" tabindex="6" class="form-control">
+	                                                  <option  class="hidden"  selected disabled>Sub-Category</option>
+	                                              </select>
+	                                          </div>
+	                                          <div class="form-group">
+	                                              <input type="file" id="atch" name="atch" tabindex="8" class="form-control" placeholder="Upload (If any)" value="" />
+	                                          </div>
+	                                      </div>
+	                                  </div>
+									<div class="row">
+	                                      <div class="col-md-8">
+									<div class="form-group">
+									<textarea class="form-control" tabindex="9" id="mesgcr" name ="mesgcr" rows="6" cols="80" placeholder="Write your mesg (Max 1000 Words)" value=""    maxlength="1000"  onchange="validateMesg();" ></textarea>
+									</div>
+
+									<div class="d-flex justify-content-center mb-10">
+									<button class="btn btn-primary float-right" tabindex="11" onclick="submitCncrn()" type="button">Submit</button>
+									</div>
+                                                                        <input type=hidden id="hidval" name="hidval" value="GRIEVANCE">
+									<br/>
+                                                                         <div class="alert alert-danger" id="alert4" ></div>
+                                                                          <div class="alert alert-success" id="alert3" ></div>
+									</div>
+									</div>
+	                              </div>
+	                             
+	                          </div>
+	                      </div>
+	                  </div>
+
+            </div>
+            	
+            </form>
+            </div>
+           <div style="width:100%;height:400px;overflow-y:scroll;" id="trmlProf" >
+            
+      <div class="container-fullwidth register">
+	                  <div class="row">
+	                      
+	                      <div class="col-md-12 ">
+                               <div class="form-group col-md-4">
+	                                              <input type="text" class="form-control"  tabindex="7" id="locnP" name="locnP"  style="text-transform:uppercase" required="required" list="locnlist" placeholder="Location *" value=""  size="4" >
+                                                    <datalist id="locnlist"></datalist></input>                                                      
+                              </div>
+                              <div class="d-flex col-md-4">
+                                                    <button class="btn btn-primary float-right" tabindex="11"  type="button" onclick="getTrmlProf()" >Get Details</button>
+                               </div>
+	                      </div>
+                             
+	                  </div>
+
+            </div>
+            	 <div id="divTrmlProf">
+                  </div>
+            
+            </div>
+            
+    <div style="width:100%;height:400px;overflow-y:scroll;" id="NodlOfcr" >
+            
+      <div class="container-fullwidth register">
+      
+      <div class="row align-items-center justify-content-center text-center">
+          <div class="col-lg-12 ml-1">
+
+            <div class="box-shadow-content">
+              <div class="block-heading-1" style="margin-top:15px;">
+                <h3 class="mb-4" data-aos="fade-up" data-aos-delay="100">NODAL OFFICERS</h3>
+              </div>
+            </div>
+           </div>
+          </div>
+          <nav class="navbar navbar-expand-sm bg-light navbar-light">
+	    <div class="col-lg-4 col-md-5 col-sm-12">
+	      <form class="form-inline">
+	          <table><tr>
+	          	<td><input class="form-control mr-sm-2" id="txtZone" name="txtZone" type="text" list="zonelist" placeholder="Zone">
+			          <datalist id="zonelist"></datalist>
+			</td>
+			<td><input class="form-control mr-sm-2" id="txtDvsn" name="txtDvsn" type="text" list="dvsnlist" placeholder="Division">
+				  <datalist id="dvsnlist"></datalist>
+			</td>
+			<td><button class="btn btn-success" onclick="event.preventDefault();getData();">Check</button></td></tr></table>
+  	      </form>
+  	     </div>
+	</nav>
+             <div class="row">
+                <div class="col-lg-10 col-sm-12 offset-lg-1">
+                        <div id="divNodlOfcr" class="trmllistdata"></div>
+                </div>	
+              </div>
+            <!-- Project-->
+            </div>
+     </div>
+    </div>
+          </section>
+          <!-- Client Section-->
+         
+          <!-- Feeds Section-->
+         
+          </div>
+          </div>
+           <script>
+            var str='';
+            for (var i=0; i < aSttn.length;++i){
+            str += '<option value="'+aSttn[i]+'" />'; // Helplist for station
+            }
+            var my_list=document.getElementById("locnlist");
+            my_list.innerHTML = str;
+            function getData()
+            {
+	            var sttncode='';
+	            var sttndesc=$("#txtSttn").val();
+				if(sttndesc.indexOf("-")>-1)
+				{
+					var sttn=sttndesc.substring(sttndesc.indexOf("-")+1);
+					sttncode=(sttn.substring(0,sttn.indexOf("("))).trim();
+				}	
+				else
+				{
+					sttncode=sttndesc.toUpperCase();
+				}
+				//fetchTrmlProf(sttncode);
+            }       
+            function getTrmlProf() {
+                $("#divTrmlProf").show();
+                var sttndesc=document.getElementById("locnP").value;
+               // alert(sttndesc);
+                var sttncode='';
+	           // var sttndesc=$("#txtSttn").val();
+				if(sttndesc.indexOf("-")>-1)
+				{
+					var sttn=sttndesc.substring(sttndesc.indexOf("-")+1);
+					sttncode=(sttn.substring(0,sttn.indexOf("("))).trim();
+				}	
+				else
+				{
+					sttncode=sttndesc.toUpperCase();
+				}
+                               // alert(sttncode);
+				fetchTrmlProf(sttncode);
+                
+            }
+		</script>
+                <script>
+            var str='';
+            for (var i=0; i < aZone.length;++i){
+            str += '<option value="'+aZone[i]+'" />'; // Helplist for Zone
+            }
+            var my_list=document.getElementById("zonelist");
+            my_list.innerHTML = str;
+            
+            str='';
+	    for (var i=0; i < aDvsn.length;++i){
+	      str += '<option value="'+aDvsn[i]+'" />'; // Helplist for Division
+            }
+	    var my_list1=document.getElementById("dvsnlist");
+            my_list1.innerHTML = str;
+            
+            function getData()
+            {
+	            var zonecode='';
+	            var dvsncode='';
+	            var zonedesc=$("#txtZone").val();
+	            var dvsndesc=$("#txtDvsn").val();
+	            if(zonedesc!="")
+	            {
+			if(zonedesc.indexOf("-")>-1)
+			{
+				zonecode=zonedesc.substring(0,zonedesc.indexOf("-"));
+			}	
+			else
+			{
+				zonecode=zonedesc.toUpperCase();
+			}
+		    }
+	            if(dvsndesc!="")
+	            {
+			if(dvsndesc.indexOf("-")>-1)
+			{
+				dvsncode=dvsndesc.substring(0,dvsndesc.indexOf("-"));
+			}	
+			else
+			{
+				dvsncode=dvsndesc.toUpperCase();
+			}
+		    }
+		   fetchNodlOfcrList(zonecode,dvsncode);
+            }            
+		</script>
+          <!-- Page Footer-->
+          <%@ include file="/pages/GG_Footer.jspf" %>

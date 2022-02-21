@@ -1,0 +1,623 @@
+<%@ page import="util.GenFunc.GG_SahayUtil" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+ String strAccessCount ="";
+String strLastUpdate= "Thu, 10 Sep 2020 11:48:56";    
+String strTheme="";
+String strLangFlag="";
+String strClntId="";
+
+String strUserURL =   request.getRequestURL().toString();
+System.out.println("strUserURL"+ strUserURL );
+String strUserCheck = "";
+if (strUserURL.trim().toUpperCase().contains("INDIANRAIL")) 
+{
+	strUserCheck = "P";
+} else {
+	strUserCheck = "R";
+}
+System.out.println("strUserCheck"+ strUserCheck );
+
+
+GG_SahayUtil SahayUtil=new GG_SahayUtil();
+
+strTheme = (String)session.getAttribute("Theme");
+String strThemeClass="";
+if(strTheme==null)
+{	
+	try
+	{
+		strTheme=((String)request.getParameter("txtTheme")).trim();	
+	}
+	catch(Exception e)
+	{
+			strTheme="RD";
+	}
+}
+String strThemeCSS="style";
+if(strTheme.equals("GR")) {  strThemeClass="btn-success"; strThemeCSS="style_green"; }
+if(strTheme.equals("BL")) { strThemeClass="btn-primary-blue"; strThemeCSS="style";  }
+if(strTheme.equals("RD")) { strThemeClass="btn-danger"; strThemeCSS="style_red";  }
+if(strTheme.equals("OR")) { strThemeClass="btn-warning"; strThemeCSS="style_orange";  }
+if(strTheme.equals("GY")) { strThemeClass="btn-default"; strThemeCSS="style_grey";  }
+strLangFlag = (String)session.getAttribute("LangFlag"); 
+if(strLangFlag==null)
+	 {
+		try
+		{
+		strLangFlag=((String)request.getParameter("txtLangFlag")).trim();
+		}
+		catch(Exception e)
+		{
+				strLangFlag="E";
+		}
+	 }
+System.out.println("strLangFlag" + strLangFlag);  
+
+String si_LangCode="0";
+String si_SchmColr="";
+
+if(strLangFlag.equals("H")) { si_LangCode="1" ; }
+if(strTheme.equals("RD")) { si_SchmColr="cc2900"; }
+if(strTheme.equals("BL")) { si_SchmColr="1059c6"; }
+if(strTheme.equals("GR")) { si_SchmColr="2d8659"; }
+if(strTheme.equals("OR")) { si_SchmColr="b34700"; }
+
+strClntId = request.getHeader("X-FORWARDED-FOR");
+if (strClntId == null) 
+{
+	strClntId = request.getRemoteAddr();
+}
+if (strClntId.indexOf(",")>0)
+{
+	strClntId = strClntId.substring(0,strClntId.indexOf(","));
+}
+String si_ClntId=strClntId;
+String si_UserId="SAHAYPRTL";
+String si_Theme =strTheme;
+
+String L = "";
+String si_LangFlag=strLangFlag;
+if(si_LangFlag!=null)
+		L=si_LangFlag;
+util.HindiLocaleUtil E =new util.HindiLocaleUtil(L);
+
+
+
+util.GenFunc.GG_SahayCmmn Logg  = new util.GenFunc.GG_SahayCmmn();
+String  browserDetails  =   request.getHeader("User-Agent");
+String Info=Logg.getbrowserinfo(browserDetails);
+String UserDevice=(Info.substring(0,Info.indexOf('#'))).trim();
+String Browser=(Info.substring(Info.indexOf('#')+1)).trim();
+
+strAccessCount = Logg.getAccessCount(si_UserId,si_ClntId);
+System.out.println("strAccessCount"+ strAccessCount);
+session.setAttribute("UserID",		si_UserId.trim());
+session.setAttribute("ClntID",		si_ClntId.trim());
+session.setAttribute("Theme",		si_Theme.trim());
+session.setAttribute("LangFlag",		si_LangFlag.trim());
+session.setAttribute("AccessCount",		strAccessCount.trim());
+
+
+String LangFlag=(String)session.getAttribute("LangFlag");  
+String strMesg ="";
+try
+{
+	
+	 strMesg = Logg.getHomePageMsgs(si_UserId,si_ClntId,si_LangFlag,"L",strUserCheck);
+      }
+catch(Exception e)
+{
+	System.out.println("In Exception of Message:"+e.getMessage());
+	strMesg=null;
+	
+}
+
+
+%>
+<% 
+String strCustID=(String)session.getAttribute("custuserid");  
+if(strCustID==null) strCustID="";
+String custCtgr=(String)session.getAttribute("custCtgr");  
+if(custCtgr==null) custCtgr="";
+System.out.println("strCustID in ggheader::"+strCustID+":::::");
+%>
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>Welcome To Indian Railways' Freight Services</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- Google font (font-family: 'Roboto Condensed', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/all.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/fonts/icomoon/style.css">  
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/jquery.fancybox.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/aos.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/openextnlink.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/bootstrap-select.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!--Finish SAHAY Dashboard-->
+	<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/fontastic.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/fontNew.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/carddesign.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/portalcommon.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/theme/<%=strThemeCSS%>.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/accordion.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sahaydb/custom.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/RailSAHAY/resources/css/odometer-theme-car.css" />
+
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/plugins.css">
+    <link rel="stylesheet" href="/RailSAHAY/resources/css/megamenustyle.css">
+    <style>
+    </style>
+<script src="/RailSAHAY/resources/js/odometer.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/jqueryrotate.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/gspeech_pro.js?ver=2.7.0"></script>
+<link rel="stylesheet"  type="text/css" media="screen" href="/RailSAHAY/resources/css/gspeech.css">
+<script src="/RailSAHAY/resources/js/asttn.js"></script>
+<script src="/RailSAHAY/resources/js/aLocn.js"></script>
+<script src="/RailSAHAY/resources/js/NumCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/SData.js"></script>
+<script src="/RailSAHAY/resources/js/aRakeCmdt.js"></script>
+<script src="/RailSAHAY/resources/js/numscroll.js"></script>
+<script src="/RailSAHAY/resources/js/bootstrap-select.js"></script>
+
+    <script src="/RailSAHAY/resources/js/plugins.js"></script>
+    <script src="/RailSAHAY/resources/js/active.js"></script>
+    <script src="/RailSAHAY/resources/js/megamenuscripts.js"></script>
+
+    <script>
+    	$(document).ready(function(){
+    		$(".main-link").hover(function(){
+    			var nHead=$(this).attr("narrative-head");
+    			var nDesc=$(this).attr("narrative-desc");
+    			var nLinks=$(this).attr("narrative-links");
+    			var nLinkArr=nLinks.split('#');
+    			var htmlLinkDesc='<p class="n-head">'+nHead+'</p><p class="n-desc">'+nDesc+'</p>';
+    			for(var i=0;i<nLinkArr.length;i++)
+    			{
+    				htmlLinkDesc+=nLinkArr[i]+'</br>';
+    			}
+				$(".link-desc").html(htmlLinkDesc);
+    		});
+		$("a.head-menu").hover(function(){
+			var optntrg=$(this).attr("optn-trigger");
+			showIntro(optntrg);
+		});
+		
+    	});
+	function showIntro(optntrg)
+	{
+		var htmlText='';
+		switch(optntrg)
+		{
+			case 'NR':
+				htmlText='<img src="/RailSAHAY/resources/images/NewCustIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc">We welcome you onboard to the world of endless transporation opportunities with Indian Railways. Offering <b>Most Convenient, Economical and Transparent</b> logistics facilities across the length and breadth of the country. With our 67000 Kms of Rail Network, we are the biggest freight carrier of the country and fourth largest Railway in the world.</p>'; 
+				break;
+			case 'IN':
+				htmlText='<img src="/RailSAHAY/resources/images/IndustryIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc">We offer the <b>Fastest, Most Economical and Reliable</b> transporation solution for all the major industries of this country.'; 
+				break;
+			case 'SR':
+				htmlText='<img src="/RailSAHAY/resources/images/ServiceIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc">We offer <b>myriad of services with unmatched benefits</b> for all your transporation needs across the country. Timetabled Movement, Single/Multi-Point Movement and real-time Track and Trace of your cargo</p>'; 
+				break;
+			case 'PU':
+				htmlText='<img src="/RailSAHAY/resources/images/PartnerIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc">Join hands with Indian Railways for <b>endless business opportunities</b> in Freight Transporation domain. Scope of Investment across assets landscape and business partnerships through innumerable schemes with endless benefits</p>'; 
+				break;
+			case 'CU':
+				htmlText='<img src="/RailSAHAY/resources/images/ContUsIcon.jpg" class="img-fluid img-responsive img-menu"/>';
+				htmlText='<p class="main-desc">We value your invaluable relationship with Indian Railways and are commited to give you the <b>best in class transporation experience</b> with us. For all your queries and concerns, you may directly connect to Indian Railway Freight Officials to get the required assistance and best resolution in no time</p>'; 
+				break;
+		}
+		$(".link-desc").html(htmlText);
+	}
+    </script>
+
+<script>
+$(document).ready(function() {
+var langflag = '<%=LangFlag%>';
+
+	 if(document.getElementById("hidLangFlagDiv") == null)
+        {
+		var hidLangForm=document.createElement('FORM');
+		hidLangForm.name='frmLangFlag';
+		hidLangForm.method='POST';
+		hidLangForm.action='#';
+
+		var hidLangTB=document.createElement('INPUT');
+		hidLangTB.type='HIDDEN';
+		hidLangTB.name='hidLangFlagDiv';
+		hidLangTB.id='hidLangFlagDiv';
+		hidLangTB.value='<%=L%>';
+		hidLangForm.appendChild(hidLangTB);
+		document.body.appendChild(hidLangForm);
+	    }
+  });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35338650-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script>
+   function gotopage(pagen){
+   
+     var url="/RailSAHAY/Home.jsp";
+     document.getElementById("toPage").value=pagen;
+      $('#frmTheme').attr('action', url);
+      $('#frmTheme').submit();
+     
+   }
+</script>
+<script src="/RailSAHAY/resources/js/homepage.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/sahayutil.js"></script>
+
+ </head>
+
+  <body onload="initFunction()" data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+<%--
+<!-- Start - Code for audio -->
+<div style="display:none" >
+     	<span class="gspeech_selection gspeech_style_1" roll="1"></span>
+     	<span class="gspeech_pro_main_wrapper">&nbsp;
+     	<span class="audio_tooltip"><span class="the-tooltip top left audio_tooltip_1"><span class="tooltip_inner"></span></span></span>
+     	<span class="sound_container_pro greeting_block sound_div_1" language="en" roll="1" autoplaypro="1" speechtimeout="0" selector="" eventpro="" title="" style=""><span class="sound_text_pro"></span></span>
+</span></div>
+<span id="audio_tooltip_title"><span class="the-tooltip top left dark-midnight-blue"><span class="tooltip_inner"></span></span></span>
+<div id="sound_container" class="sound_div sound_div_basic size_1 speaker_32" title="" style=""><div id="sound_text"></div>
+</div><div id="sound_audio"></div>
+<!-- End - for audio -->
+--%>
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only"><%=E.EH("Loading")%>...</span>
+      </div>
+    </div>
+<div class="site-wrap" id="home-section">
+
+<div class="site-mobile-menu site-navbar-target">
+<div class="site-mobile-menu-header">
+  <div class="site-mobile-menu-close mt-3">
+    <span class="icon-close2 js-menu-toggle"></span>
+  </div>
+</div>
+<div class="site-mobile-menu-body"></div>
+</div>
+<div class="top-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            <span class="mainheadlbl d-none d-sm-none d-md-inline-block">  <%=SahayUtil.getCrntDateTime()%></span>
+             <span class="mx-md-2 d-inline-block"></span>
+              <a href="javascript:void(0)" onclick="showPage('SCREEN_READER');"><span class="d-none d-md-inline-block"><i class="fas fa-volume-up"></i>&nbsp;<span class="mainheadlbl"><%=E.EH("Screen Reader Access")%></span></span></a>
+              <span class="mx-md-2 d-inline-block"></span>
+              <span class="mr-2 mainheadlbl d-none d-sm-none d-md-inline-block"><%=E.EH("Text Size")%></span><span class="font-smallsize d-none d-sm-none d-md-inline-block" onclick="decFontSize();"><%=E.EH("A")%>-</span><span class="font-midsize d-none d-sm-none d-md-inline-block" onclick="setOrigFontSize();"><%=E.EH("A")%></span><span class="font-bigsize d-none d-sm-none d-md-inline-block" onclick="incFontSize();"><%=E.EH("A")%>+</span>
+              <%--<img src="/RailSAHAY/resources/images/speaker1.png" alt='<%=E.EH("NARRATOR")%>' class="d-none d-sm-none d-md-inline-block"  data-toggle="tooltip"   title='<%=E.EH("To use Narrator, select the text and press the button which comes thereafter")%>'>--%>
+              <div class="float-right">
+		<table><tr>
+		<td>			
+			<div class="form-group has-search">
+			 <input type="text" id="inptSearch" class="form-control" placeholder='<%=E.EH("Enter Search")%>..'>
+			 <span class="fa fa-search form-control-feedback" onclick="searchWord();"></span>
+			</div>
+		</td>
+		<td>
+                      <?audit suppress oracle.ide.xml.mismatched-end-tag?><form class="form-inline" method="post" id="frmTheme">
+		<div class="dropdown">
+		  <img src="/RailSAHAY/resources/images/color-scheme4.svg" class="dropdown-toggle" style="height:22px;width:22px;cursor:pointer;margin-right:10px;" data-toggle="dropdown" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selTheme">
+		    <a class="dropdown-item" href="javascript:void(0)" theme="RD" onclick="setTheme('RD');"><span class="badge theme-red badge-theme">&nbsp;&nbsp;</span><%=E.EH("Default")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="GR" onclick="setTheme('GR');"><span class="badge theme-green badge-theme">&nbsp;&nbsp;</span><%=E.EH("Green")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="BL" onclick="setTheme('BL');"><span class="badge theme-blue badge-theme">&nbsp;&nbsp;</span><%=E.EH("Blue")%></a>
+		    <a class="dropdown-item" href="javascript:void(0)" theme="OR" onclick="setTheme('OR');"><span class="badge theme-saffron badge-theme">&nbsp;&nbsp;</span><%=E.EH("Orange")%></a>
+		    <%--<a class="dropdown-item" href="javascript:void(0)" theme="GY" onclick="setTheme('GY');"><span class="badge theme-grey badge-theme">&nbsp;&nbsp;</span><%=E.EH("Grey")%></a>--%>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtTheme" name="txtTheme" type="hidden" value="<%=strTheme%>" maxlength="2" >
+  <input type="hidden" name="toPage" id="toPage" value="" />
+
+		  
+		</td>
+                
+                <td>
+
+		<div class="dropdown">
+		  <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    <%if(strLangFlag.equals("E")) { %> English <%} else { %>   &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;<%}%>
+		  </button>
+		  <div class="dropdown-menu theme-dropdown" aria-labelledby="dropdownMenuButton" id="selLang">
+		    <a class="dropdown-item" href="javascript:void(0)" lang="E" >English</a>
+		    <a class="dropdown-item" href="javascript:void(0)" lang="H" >&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+		  </div>
+		</div>
+  <input class="form-control input-sm" id="txtLangFlag" name="txtLangFlag" type="hidden"  value="<%=strLangFlag%>" maxlength="1" >
+</form>
+
+
+               </td> </tr></table>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    <div class="wrapper" id="wrapper">
+        <!-- Header -->
+        <header class="header header-style sticky-header">
+            <div class="container d-none d-lg-block">
+                <div class="row">
+		    <div class="col-lg-1">
+
+<div class="site-logo">
+<img src="/RailSAHAY/resources/images/irlogo4.png" style="margin-right:1rem;"  alt='<%=E.EH("IR Logo")%>' class="govwebicon" >
+</div>
+</div>
+                    <div class="col-lg-11">
+                        <div class="header-inner">
+                            <nav class="menu">
+
+                                <ul>
+                                    <li>
+                                        <a href="index.html" class="head-menu">Home</a>
+                                    </li>
+									<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="NR">New To Rail</a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title">New to Rail?</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-3 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Booking Process" narrative-desc="Narrative for <b>Booking Process</b> is very Interesting !!" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Booking Process</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Rate Slabs" narrative-desc="Narrative for <b>Rate Slabs</b> is very Interesting !!" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>' ><i class="fas fa-angle-right"></i>&nbsp;Rate Slabs</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Freight Wagon Catalogue" narrative-desc="Narrative for <b>Freight Wagon Catalogue</b> is very Interesting !!"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Freight Wagon Catalogue</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Expected Freight & Time" narrative-desc="Narrative for <b>Freight Calculator</b> is very Interesting !!"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Expected Freight and Time</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Online Booking" narrative-desc="Narrative for <b>e-Registration of Demands</b> is very Interesting !!"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Online Booking</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link1" narrative-head="Parcel Services" narrative-desc="Narrative for <b>Parcel Services</b> is very Interesting !!"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Parcel Services</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-9 col-sm-0 main-links-desc"><div class="link-desc link-desc1">Welcome to This Page</div>
+											</div></div>
+
+										</div>
+                                    </li>
+<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="IN">Industries</a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title">Industries we cater To</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-3 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Agri Products and Fertilizers" narrative-desc="1. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Agri Products and Fertilizers</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Automotive" narrative-desc="2. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>' ><i class="fas fa-angle-right"></i>&nbsp;Automotive</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Coal" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Coal</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Chemicals & Petroleum" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Chemicals & Petroleum</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Iron Ore & Steel" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Iron Ore & Steel</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Cement & Clinker" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Cement & Clinker</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Consumer Goods" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Consumer Goods</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link2" narrative-head="Others" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Others</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-9 col-sm-0 main-links-desc"><div class="link-desc link-desc2">Welcome to This Page</div>
+											</div></div>
+				   </div>
+                                    </li>
+									<li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="SR">Services</a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title">Services We Offer</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-3 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="#" class="main-link main-link3" narrative-head="Timetabled Movement" narrative-desc="2. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>' ><i class="fas fa-angle-right"></i>&nbsp;Timetabled Movement</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link3" narrative-head="Two-Point Movement" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Two-Point Movement</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link3" narrative-head="Multi-Point Movement" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Multi-Point Movement</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link3" narrative-head="FNR Track & Trace" narrative-desc="1. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;FNR Track & Trace</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-9 col-sm-0 main-links-desc"><div class="link-desc link-desc3">Welcome to This Page</div>
+											</div></div>
+				   </div>
+                                    </li><li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="PU">Parter With Us</a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title">Join the Indian Railways' Freight Business</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-3 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="#" class="main-link main-link4" narrative-head="Join Our Network" narrative-desc="2. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>' ><i class="fas fa-angle-right"></i>&nbsp;Join Our Network</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link4" narrative-head="Invest in Rolling Stock" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Invest in Rolling Stock</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link4" narrative-head="End-mile Logistics Services" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;End-mile Logistics Services</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link4" narrative-head="Business Partnerships" narrative-desc="1. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Business Partnerships</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-9 col-sm-0 main-links-desc"><div class="link-desc link-desc4">Welcome to This Page</div>
+											</div></div>
+				   </div>
+                                    </li>
+                                    </li><li class="cr-megamenu">
+										<a href="javascript:;" class="head-menu" optn-trigger="CU">Contact Us</a>
+										<div class="cr-megamenu-wrap">
+											<!-- Megamenu Single Block -->
+											<div class="cr-megamenu-single">
+												<h6 class="heading-title">Directly Connect to IR Officials</h6>
+											<div class="row" style="height:85%;">
+											<div class="col-lg-3 col-sm-12 main-menu-links">
+												<ul>
+													<li>
+														<a href="#" class="main-link main-link5" narrative-head="Raise A Concern" narrative-desc="2. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal" narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>' ><i class="fas fa-angle-right"></i>&nbsp;Raise a Concern</a>
+													</li>
+													<li>
+														<a href="#" class="main-link main-link5" narrative-head="Nodal Officers Contacts" narrative-desc="3. raman arora is doing a wonderful R&D for Mega menu that would be used for our freight business development portal and has been suggested by Vikas Chaube Sir, CCM-Station Developoment, Baroda House and is very innovative implementation for this portal"  narrative-links='<a href="https://fois.indianrail.gov.in" class="narr-link">Learn More ></a>'><i class="fas fa-angle-right"></i>&nbsp;Nodal Officers Contacts</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-lg-9 col-sm-0 main-links-desc"><div class="link-desc link-desc5">Welcome to This Page</div>
+											</div></div>
+				   </div>
+                                    </li>
+                                    <li class="cr-dropdown">
+                                        <a href="javascript:;" class="head-menu">Sign In</a>
+                                        <ul>
+					   <%--
+                                            <li class="cr-sub-dropdown">
+                                                <a href="javascript:;">Home</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="index.html">Home</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="single.html">Single</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="contact.html">Contact</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="cr-sub-dropdown">
+                                                <a href="javascript:;">Single</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="index.html">Home</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="single.html">Single</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="contact.html">Contact</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="cr-sub-dropdown">
+                                                <a href="javascript:;">Contact</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="index.html">Home</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="single.html">Single</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="contact.html">Contact</a>
+                                                    </li>
+                                                </ul>
+                                            </li>--%>
+                                            <li>
+                                                <a href="#">Corporate Login</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Dashboard</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Administrator Login</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu-wrapper">
+                <div class="container d-block d-lg-none">
+                    <div class="mobile-menu clearfix">
+                        <a class="mobile-logo" href="index.html">
+                            <img src="images/logo.png" alt="mobile logo">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- //Mobile Menu -->
+
+        </header>
+ 

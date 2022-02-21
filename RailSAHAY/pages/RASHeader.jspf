@@ -1,0 +1,56 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/rasrprt.css">
+<script type="text/javascript"  src="/RailSAHAY/resources/js/aLocn.js"></script>
+
+	  <nav class="navbar navbar-expand-sm bg-origprimary navbar-light">
+	</nav>
+<div id="mySidenav" class="sidenav1">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+<div class="row mt-3">
+   <div class="col-lg-12 col-sm-12">
+        <div class="container">
+		<div class="row row-right">
+			<div class="col-lg-4 col-sm-12">
+				<p class="pCmdtHeadLbl"><%=E.EH("RAS Coal")%></p>
+				<hr/>
+				<p class="pCmdtDesc"><%=E.EH("Rake Allocation & Allotment System for Coal Demands")%></p>
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('COAL_ALOT');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Coal Allotments")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('COAL_ALOT_ODR');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Arrear of Allotments (ODR-Wise)")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('COAL_ALOT_30');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Arrear of Allotments (More than 30 Days)")%></a></li>
+				</ul>
+			</div>			
+			<div class="col-lg-4 col-sm-12">
+				<p class="pCmdtHeadLbl"><%=E.EH("RAS Iron Ore")%></p>
+				<hr/>
+				<p class="pCmdtDesc"><%=E.EH("Rake Allocation & Allotment System for Iron Ore Demands")%></p>
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('IORE_INDT');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Iron Ore Indents")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('STTN_OTSG_DMND');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Station-wise Outstanding Demands")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('RAKE_ALCN_PLAN');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Rake Allocation Plan")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('RAKE_ALOT');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Rake Allotments")%></a></li>
+				</ul>
+			</div>
+			<div class="col-lg-4 col-sm-12">
+				<p class="pCmdtHeadLbl"><%=E.EH("Indents Status")%></p>
+				<hr/>				
+				<p class="pCmdtDesc"><%=E.EH("Pendency of Indents across Indian Railways Freight Terminals")%></p>
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('ODR_INDT');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("ODR-Wise Outstanding Indents")%></a></li>
+				<li class="list-group-item"><a href="javascript:void(0);" onclick="showPage('MATURED_INDT');" class="ras-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Matured Indents")%></a></li>
+				</ul>
+			</div>			
+		</div>
+		<p class="mesg-cnt"><%=E.EH("For any query regarding rake allocation or indents pendency")%> <a href="javascript:void(0)" onclick="gotoRailMadad();" class="card-link1"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Contact Us")%></a></p>
+	</div>
+	</div>
+</div>
+</div>
+
+<!-- Use any element to open the sidenav -->
+<span onclick="openNav()" class="badge badge-info span-filter"><i class="fa fa-cog fa-spin"></i></span>
+
+<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+<div id="main">

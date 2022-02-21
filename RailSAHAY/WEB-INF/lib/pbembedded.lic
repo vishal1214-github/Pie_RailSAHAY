@@ -1,0 +1,7 @@
+database_size=30
+encryption=No
+licensee=BEA_Systems
+product=Pointbase_Embedded
+signature=AB1DE3017EB18CF4941BEB05779F837A3C9ABF369D2EF536889A8C86561DDA
+use_with=BEA weblogic
+version=5.1

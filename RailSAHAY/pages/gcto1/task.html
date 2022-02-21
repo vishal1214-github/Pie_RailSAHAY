@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <label for="pets">Choose your pets:</label>
+ 
+<select id="pets" multiple="multiple">
+    <option value="dog">Dog</option>
+    <option value="cat">Cat</option>
+    <option value="rabbit">Rabbit</option>
+    <option value="parrot">Parrot</option>
+</select>
+ 
+<button id="submit">Get Selected Values</button>
+
+<script>
+  document.getElementById('submit').onclick = function() {
+    var selected = [];
+    for (var option of document.getElementById('pets').options)
+    {
+        if (option.selected) {
+            selected.push(option.value);
+        }
+    }
+    alert(selected);
+}
+</script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<%@ page import="util.GenFunc.GG_SahayUtil,java.util.*,java.text.SimpleDateFormat" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<!DOCTYPE html>
+<%
+String strUserId	= (String)session.getAttribute("UserID"); 
+String strUserName	= (String)session.getAttribute("UserName");
+	String strClntId	= (String)session.getAttribute("ClntID"); 
+	String strProjName	= (String)session.getAttribute("ProjName"); 
+	String strLocnFlag	= (String)session.getAttribute("LognLocnFlag");
+	String strLognLocnFlag	= (String)session.getAttribute("LognLocnFlag");
+	String strLangFlag = (String)session.getAttribute("LangFlag");
+        String strLognLocn = (String)session.getAttribute("LognLocn");
+	String strCrntZone="";
+	String strCrntDvsn="";
+	/*
+        String strLognZone		= (String)session.getAttribute("CrntZone");
+        String strLognDvsn		= (String)session.getAttribute("CrntDvsn");
+          */      
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+        Date date = new Date();  
+        String strCrntTime=formatter.format(date);  
+	String sIPAddress = request.getRemoteAddr();
+	String strUserType =""; 
+        System.out.println("strUserId   "+ strUserId+"   strClntId  "+strClntId); 
+	System.out.println("strProjName   "+ strProjName+"   strLognLocnFlag  "+strLognLocnFlag); 
+        System.out.println("strLognLocn   "+ strLognLocn); 
+	String strPswdExpd =(String)session.getAttribute("PswdExpd");
+	System.out.println("strPswdExpd"+strPswdExpd);
+	 System.out.println("strUserName   "+ strUserName); 
+		
+%>
+<html>
+    <head>        
+        <title>Welcome Indian Railways Officials..</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- Google font (font-family: 'Roboto Condensed', sans-serif;) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+
+<script type="text/javascript" src="/RailSAHAY/resources/js/Chart.min.js"></script>
+<script type="text/javascript" src="/RailSAHAY/resources/js/cute-alert.js"></script>
+<link rel="stylesheet"  href="/RailSAHAY/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/sticky-alert.css">
+<link rel="stylesheet" href="/RailSAHAY/resources/css/cute-alert.css">
+<link data-n-head="ssr" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&amp;display=swap">
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/RailSAHAY/resources/css/irbdu/welcome_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/RailSAHAY/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/RailSAHAY/resources/js/irbdu/irbducommon.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap4.min.css">
+    </head>
+    <body>   
+
+<div class="menu-border"></div>

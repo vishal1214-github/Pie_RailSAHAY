@@ -1,0 +1,62 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+.collapsible-link {
+    width: 100%;
+    position: relative;
+    text-align: left;
+}
+
+.collapsible-link::before {
+    content: '\f107';
+    position: absolute;
+    top: 50%;
+    right: 0.8rem;
+    transform: translateY(-50%);
+    display: block;
+    font-family: 'FontAwesome';
+    font-size: 1.1rem;
+}
+
+.collapsible-link[aria-expanded='true']::before {
+    content: '\f106';
+}
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSES
+* ==========================================
+*
+*/
+body {
+    min-height: 100vh;
+}
+#accordion .panel-title a
+{
+	color:#000 !important;
+}
+h2,.h2
+{
+	text-transform:none;
+}
+.card-header {
+    padding: 0;
+}
+.accordion h2, .accordion .h2
+{
+	margin:5px;
+	font-family:'Josefin Sans','Roboto Condensed';
+}
+.card
+{
+	min-height:0px;
+}
+.card-head-yl
+{
+	background:#ffcc00;
+}

@@ -1,0 +1,258 @@
+<!-- Code starts for Accessibility Widget by UserWay.org -->
+<!-- <script>(function(d){var s = d.createElement("script");s.setAttribute("data-account", "dgcN7H4FvK");s.setAttribute("src", "https://cdn.userway.org/widget.js");(d.body || d.head).appendChild(s);})(document)</script><noscript>Please ensure Javascript is enabled for purposes of <a href="https://userway.org">website accessibility</a></noscript>
+Code ends for Accessibility Widget by UserWay.org -->
+<div class="modal" id="cntModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal body -->
+      <div class="modal-body" align="center">        
+        <p class="cnt-heading"><i class="far fa-comments"></i>&nbsp;&nbsp;<%=E.EH("Find your local contact person")%></p>
+	<p class="inpt-head"><%=E.EH("Please choose your Location (District)")%></p>
+        <form class="form-inline">
+           <div class="search_wrap" style="width:100%;">
+	     <div class="container">			
+		<div class="block_wrap clearfix row">                          
+		 <select data-size="7" data-live-search="true" class="custom_selectbox selectpicker btn-primary fill_selectbtn_in own_selectbox" data-title='<%=E.EH("Location")%>' id="cntdsttlist" data-width="100%">
+		 </select> 
+                </div>
+             </div>
+            </div>
+      </form>
+      <div id="divCntData"></div>
+      <p class="cnt-footer"><%=E.EH("Please give us an opportunity to serve you.  Let us know about your transportation needs")%>.</p>
+      <a href="javascript:void(0)" onclick="gotoRailMadad();" class="card-link1"><p class="cntftrlink"><i class="fas fa-angle-right"></i>&nbsp;<%=E.EH("Contact Us")%></p></a>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-sm" data-dismiss="modal"><%=E.EH("Close")%></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<a id="cntFinder" style="display:none" href="#" class="btn btn-light btn-lg cnt-finder" role="button"><p class="cntftrlink"><i class="far fa-comments"></i>&nbsp;<%=E.EH("Contact Finder")%></p></a>
+<a id="back-to-top" style="display:none;" href="#" class="btn btn-light btn-lg back-to-top" role="button"><i class="fas fa-chevron-up"></i></a>
+<div style="width:100vh;height:50px;display:none;" >
+</div>
+<% String visitCount=(String)session.getAttribute("pageVisit");%>
+<br/><hr/>
+<div class="row" style="display:none">
+	<div class="col col-lg-2 d-none d-sm-none d-md-inline-block" align="center">
+		<img src="/RailSAHAY/resources/images/logos/datagovlogo1.jpg" class="govwebicon" onclick="openExtnLink('DATA GOV','https://data.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 d-none d-sm-none d-md-inline-block" align="center">
+		<img src="/RailSAHAY/resources/images/logos/digitalindialogo1.png" class="govwebicon" onclick="openExtnLink('DIGITAL INDIA','https://www.digitalindia.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/indiagovlogo1.png" class="govwebicon" onclick="openExtnLink('INDIA GOV','https://www.india.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 d-none d-sm-none d-md-inline-block" align="center">
+		<img src="/RailSAHAY/resources/images/logos/mygovlogo1.jpg" class="govwebicon" onclick="openExtnLink('MY GOV','https://www.mygov.in/');" />
+	</div>
+	<div class="col col-lg-2 d-none d-sm-none d-md-inline-block" align="center">
+		<img src="/RailSAHAY/resources/images/logos/irlogo1.jpg" class="govwebicon" onclick="openExtnLink('INDIAN RAILWAYS','http://indianrailways.gov.in/');" />
+	</div>
+	<div class="col col-lg-2 col-sm-4" align="center">
+		<img src="/RailSAHAY/resources/images/logos/crislogo.jpg" class="govwebicon" onclick="openExtnLink('CRIS','http://cris.org.in/');" />
+	</div>
+</div>
+<div class="top-bar" style="display:none">
+        <div class="container">
+          <div class="row">
+            <div class="col-12" align="center">
+                 <b><%=E.EH("Site Visits")%></b>:&nbsp;&nbsp;<div id="odometer" class="odometer"><%=strAccessCount%></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+<footer class="site-footer" style="display:none">
+<div class="container"> 
+<div class="row">
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-7">
+	<h2 class="footer-heading mb-4"><%=E.EH("About Us")%></h2>
+	<p class="justify"><%=E.EH("Indian Railways is the backbone of the country's logistics sector. We carry more than 1.2 Billon tonnes of freight traffic every year over a network of 68000 kms")%>.</p>
+	<br/>
+	<img src="/RailSAHAY/resources/images/logos/wimicon1.jpg" class="govwebicon" onclick="showPage('WIM');" />
+      </div>
+      <div class="col-md-4 ml-auto">
+	<h2 class="footer-heading mb-4"><%=E.EH("Features")%></h2>
+	<ul class="list-unstyled">
+	  <li><a href="/RailSAHAY/pages/BkngRegProcess.jsp" target="_self"><%=E.EH("Transport with Us")%></a></li>
+	  <li><a href="/RailSAHAY/pages/Policy.jsp" target="_self"><%=E.EH("Innovative Schemes")%></a></li>
+	  <li><a href="/RailSAHAY/pages/TimeTblTran.jsp" target="_self"><%=E.EH("Timetabled Movements")%></a></li>
+	  <li><a href="/RailSAHAY/pages/SMART.jsp" target="_self"><%=E.EH("Logistics Partners")%></a></li>
+	  <li><a href="javascript:void(0)" onclick="gotoRailMadad();"><%=E.EH("Contact Us")%></a></li>
+	  <li><a href="/RailSAHAY/pages/Feedback.jsp" target="_self"><%=E.EH("Website Feedback")%></a></li>
+	</ul>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-4 ml-auto">
+    <%--<span class="numstats alert alert-danger">0</span>--%>
+    
+    <h2 class="footer-heading mb-4"><a href="javascript:void(0)" onclick="openExtnLink('YOU TUBE','https://www.youtube.com/user/RailMinIndia');"><i class="fab fa-youtube" style="margin-top:10px;"></i>&nbsp;<%=E.EH("Follow Us on Youtube")%></a></h2>
+
+	<h2 class="footer-heading mb-4"><%=E.EH("Links")%></h2>
+	<ul class="list-unstyled">
+	  <li><a href="/RailSAHAY/pages/Disclaim.jsp" target="_self"><%=E.EH("Disclaimer")%></a></li>
+	  <li><a href="/RailSAHAY/pages/Privacy.jsp" target="_self"><%=E.EH("Privacy Policy")%></a></li>
+	  <li><a href="/RailSAHAY/pages/Copyright.jsp" target="_self"><%=E.EH("Copyright Policy")%></a></li>
+	  <li><a href="/RailSAHAY/pages/RelatedLinks.jsp" target="_self"><%=E.EH("Related Links")%></a></li>
+	  <li><a href="/RailSAHAY/pages/sitemap.jsp" target="_self"><%=E.EH("Site Map")%></a></li>
+	  <li><a href="#" class="post" title='<%=E.EH("IR Login")%>'  style="color:#fff;" onclick='window.open("/RailSAHAY/pages/IRLogin.jsp","IRLogin");'><%=E.EH("IR Login")%></a></li> 						
+					
+	  <%--<li><a href="#" target="_self"><%=E.EH("Visitor Statistics")%></a></li>--%>
+	</ul>
+
+  </div>
+</div>
+
+<div class="row" role="contentinfo" aria-label='<%=E.EH("Last Update Time")%>' align="center">
+<div class="col-lg-12 mt-5 lastupdtinfo" >
+	<%=E.EH("This page has last been updated by Admin on")%>: <strong><%=strLastUpdate%></strong>
+</div>
+</div>
+
+<div class="row pt-5 text-center">
+  <div class="col-md-12">
+    <div class="border-top pt-5">
+      <p class="copyright">
+    <%=E.EH("Copyright")%> &copy;<script>document.write(new Date().getFullYear());</script> <%=E.EH("All rights reserved | This Portal has been designed and developed by CRIS")%>
+    </p>
+    </div>
+  </div>
+
+</div>
+</div>
+</footer>
+<div class="container">
+    <div class="row">
+        <div class="modal fade" id="extnLinkWarn" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label=""><span></span></button>
+                     </div>
+					
+                    <div class="modal-body">
+                       
+						<div class="thank-you-pop">
+							
+							<h1>Thank You!</h1>
+							<p>Your submission is received and we will contact you soon</p>
+							<h3 class="cupon-pop">Your Id: <span>12345</span></h3>
+							
+ 						</div>
+                         
+                    </div>
+					
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="popUpModal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div id="divPopUp" style="height:80vh;overflow:scroll;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+    </div>
+    <script src="/RailSAHAY/resources/js/popper.min.js"></script>
+    <script src="/RailSAHAY/resources/js/bootstrap.min.js"></script>
+    <script src="/RailSAHAY/resources/js/owl.carousel.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.sticky.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.waypoints.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.animateNumber.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.fancybox.min.js"></script>
+    <script src="/RailSAHAY/resources/js/jquery.easing.1.3.js"></script>
+    <script src="/RailSAHAY/resources/js/aos.js"></script>
+    <script src="/RailSAHAY/resources/js/stepform.js"></script>
+    <script src="/RailSAHAY/resources/js/main.js"></script>
+<%--
+    <form id="frmRailMadad" method="POST" action="https://railmadad.indianrailways.gov.in/madadtest/final/foishome.jsp" target="RailMadad">
+--%>
+<form id="frmRailMadad" method="POST" action="https://railmadad.indianrailways.gov.in/madad/final/foishome.jsp" target="RailMadad">
+
+	<input type="hidden" id="color1" name="color1" value="<%=si_SchmColr%>" />
+	<input type="hidden" id="color2" name="color2" value="<%=si_SchmColr%>" />
+	<input type="hidden" id="lang" name="lang" value="<%=si_LangCode%>" />
+    </form>
+    <form id="frmCmdt" method="POST" action="/RailSAHAY/GG_CmdtViewJson" target="_self">
+	<input type="hidden" id="MainCmdtCode" name="MainCmdtCode" value="<%=GG_MainCmdtCode%>" />
+	<input type="hidden" id="MainCmdtName" name="MainCmdtName" value="<%=GG_MainCmdtName%>" />
+	<input type="hidden" id="Help" name="Help" value="SETMAINCMDT" />
+    </form>
+     <form id="frmParcel" method="POST" action="http://parcel.indianrail.gov.in/PMST" target="Parcel">
+	    </form>
+    
+    
+     <!--<script>
+      window.botpressWebChat.init({ 
+      	host: 'https://www.foistest.indianrail.gov.in/botpress', 
+      	botId: 'foisbot',
+      	enableReset: false, // Whether or not reset button will be shown to the user
+  	extraStylesheet: 'https://www.foistest.indianrail.gov.in/botpress/assets/modules/channel-web/foisbot.css'
+      	})
+      //alert("userLng :"+userLng );
+	var txtUrl = window.location.href
+	var txtServer = txtUrl.split("/")[2].split(".")[1].toUpperCase();
+	
+	var userLat = localStorage.getItem("userLat");
+	var userLng = localStorage.getItem("userLng");
+  	var infoObj = { server: txtServer, lat: userLat, lng: userLng, ipaddr: '<%=si_ClntId%>'}
+  	
+      window.addEventListener('message', function(event) {
+	if (event.data.name === 'webchatReady') {
+		window.botpressWebChat.sendEvent({
+		  type: 'proactive-trigger',
+		  channel: 'web',
+		  payload: { text: infoObj }
+		})
+	}
+
+	if (event.data.data === 'getlocation') {
+		console.log(event);
+		if(userLat == '' || userLat==undefined)
+		{
+			console.log('inside main i.e dont have lat lng');
+			window.botpressWebChat.sendEvent({
+			      type: 'getLocation-trigger',
+			      channel: 'web',
+			      payload: { text: {'lat': 'NA', 'lng': 'NA'}}
+			      })
+
+		}else
+		{
+			console.log('inside else i.e already have lat lng');
+			console.log('userLat *'+userLat+'*');
+			window.botpressWebChat.sendEvent({
+			      type: 'getLocation-trigger',
+			      channel: 'web',
+			      payload: { text: {'lat': userLat, 'lng': userLng }}
+				})
+		}
+	}
+      });
+      
+      </script>-->
+  </body>
+</html>

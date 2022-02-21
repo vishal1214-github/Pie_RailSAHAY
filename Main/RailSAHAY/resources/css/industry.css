@@ -1,0 +1,132 @@
+.pCmdtHeadLbl
+{
+	font-size:1.3rem;
+	color:#b32400;
+	font-weight:600;
+	margin-block-end:5px;
+	margin-top:1rem;
+	font-family:'Josefin Sans','Roboto Condensed',Sans serif;
+}
+.pCmdtDesc
+{
+	font-weight:500;
+	color:#4d4d4d;
+	font-size:1rem;
+	text-align:justify;
+}
+.row-left
+{
+	border:1px dashed #efefef;
+	margin-10px;
+	cursor:pointer;
+	padding:1rem;
+}
+.row-right
+{
+	border:1px dashed #efefef;
+	margin-10px;
+	cursor:pointer;
+	padding:1rem;
+ }
+.img-optn
+{
+ -webkit-box-shadow: 0 10px 6px -6px #777;
+     -moz-box-shadow: 0 10px 6px -6px #777;
+          box-shadow: 0 10px 6px -6px #777;
+}
+.statsfig
+{
+	font-size:2.5rem !important;
+	font-weight:600;
+	color:#b32400;
+	font-family:'Josefin Sans','Roboto Condensed', Sans serif;
+	margin-block-end:2px;
+}	
+.cmdtstatdesc
+{
+	font-size:1rem;
+	font-size:600;
+	color:#4d4d4d;
+	font-family:'Josefin Sans","Roboto Condensed", Sans serif;
+}
+.p-cmdtdesc
+{
+	font-size:1.2rem;
+	font-family:"Roboto Condensed", Sans serif;
+	font-weight:500;
+	color:#4d4d4d;
+}
+h3, .h3, h2, .h2 {
+    text-transform: none !important;
+}
+.cmdt-cont {
+    font-size: 1.4rem !important;
+    font-weight: 600;
+    color: #b32400;
+    font-family: 'Josefin Sans','Roboto Condensed', Sans serif;
+    margin-block-end: 2px;
+}
+li
+{
+	color:#333333;
+}
+.animate-bottom{position:relative;animation:animatebottom 2.2s}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
+
+.stati{
+  background: #fff;
+  height: 5.5em;
+  padding:1em;
+  margin:1em 0; 
+    -webkit-transition: margin 0.5s ease,box-shadow 0.5s ease; /* Safari */
+    transition: margin 0.5s ease,box-shadow 0.5s ease; 
+  -moz-box-shadow:0px 2px 2px rgb(0, 0, 0,0.4);
+-webkit-box-shadow:0px 2px 2px rgb(0, 0, 0,0.4);
+box-shadow:0px 2px 2px rgb(0, 0, 0,0.4);
+}
+.stati:hover{ 
+  margin-top:0.5em;  
+  -moz-box-shadow:0px 2px 2px rgb(0, 0, 0,0.6); 
+-webkit-box-shadow:0px 2px 2px rgb(0, 0, 0,0.6); 
+box-shadow:0px 2px 2px rgb(0, 0, 0,0.6); 
+}
+.stati i{
+  font-size:3.5em; 
+} 
+.stati div{
+  width: calc(100% - 3.5em);
+  display: block;
+  float:right;
+  text-align:right;
+}
+.stati div b {
+  font-size:2.2em;
+  font-family:'Josefin Sans','Roboto Condensed';
+  width: 100%;
+  padding-top:0px;
+  margin-top:-0.2em;
+  margin-bottom:-0.2em;
+  display: block;
+}
+.stati div span {
+  font-size:1em;
+  font-family:'Roboto Condensed';
+  font-weight:600;
+  width: 100%;
+  color: rgb(0, 0, 0,0.8); !important;
+  display: block;
+}
+
+.stati.left div{ 
+  float:left;
+  text-align:left;
+}
+.stati.bg-pumpkin { background: rgb(211, 84, 0); color:white;} 
+.stati.pumpkin { color: rgb(211, 84, 0); } 
+  
+.cmdt-stats-head
+{
+	font-weight:600;
+	color:#000;
+	font-size:1.2rem;
+	font-family:'Roboto Condensed';
+}

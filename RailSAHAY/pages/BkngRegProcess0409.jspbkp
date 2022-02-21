@@ -1,0 +1,322 @@
+<%@ include file="/pages/GG_Header.jspf" %>
+	  <nav class="navbar navbar-expand-sm bg-origprimary navbar-dark" style="margin-top:12px;">
+	</nav>
+	<div class="container-fullwidth">
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-lg-12">
+
+            <div class="box-shadow-content">
+              <div class="block-heading-1" style="margin-top:15px;">
+                <h3 class="mb-4" data-aos="fade-up" data-aos-delay="100">BOOKING AND REGISTRATION</h3>
+              </div>
+            </div>
+           </div>
+          </div>
+          <div class="row">		
+				<div class="col-lg-10 col-sm-12 offset-lg-1">
+				<div class="optncard">
+				<ul class="nav nav-pills">
+				    <li class="nav-item">
+				        <a class="nav-link active" data-toggle="tab" href="#Booking">Booking</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" data-toggle="tab" href="#Mvmt">Movement</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" data-toggle="tab" href="#Delivery">Delivery</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" data-toggle="tab" href="#Register">Registration Process</a>
+				    </li>
+				</ul>
+				</div>
+				<div class="optncard">
+				<div class="tab-content">
+				  <div class="tab-pane container fade" id="Register">
+						  <div class="iconbgorng"><i class="fas fa-user-plus fa-lg"></i></div>
+						  <div class="container">
+							<h4><b>5-Step Process for Registration</b></h4>
+							<div class="list-group-flush">
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step1">1</button></td>
+								<td><p class="mb-0">Register your Individual/Company profile through FOIS Portal (e-Demand Facility) and Upload the KYC documents </p></td>
+								</tr>
+								</table>
+							  </div>
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step2">2</button></td>
+								<td>
+								<p class="mb-0">Save your e-Advice Note (System Generated) for Verification of Documents</p>
+								</td>
+								</tr>
+								</table>
+							  </div>
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step3">3</button></td>
+								<td>
+								<p class="mb-0">Contact the DRM Office with Original KYC Documents and the system generated e-Advice Note</p>
+								</td>
+								</tr>
+								</table>
+							  </div>
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step4">4</button></td>
+								<td>
+								<p class="mb-0">Collect your Login Credentials after Successful Verification of original Documents</p>
+								</td>
+								</tr>
+								</table>
+							  </div>
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step5">5</button></td>
+								<td>
+								<p class="mb-0">Login to e-Demand Facility (FOIS Portal) and Place your Indents conveniently</p>
+								</td>
+								</tr>
+								</table>
+							  </div>
+							  <div class="list-group-item">
+								<table class="table table-steplist">
+								<tr>
+								<td><button class="btn btn-step6"><i class="far fa-lightbulb fa-lg"></i></button></td>
+								<td>
+								<p class="mb-0"><b>Benefits of getting registered with Indian Railways</b></p>
+								<ul>
+									<li>Hassle-free Booking of Indents</li>
+									<li>Innovative Freight Transportation Schemes</li>
+									<li>Secured and Convenient Payment Options</li>
+									<li>End-to-End Consignment Track 'n' Trace</li>
+									<li>Notification of consignment status</li>
+									<li>Connecting Nodal Officers for any Concern</li>
+								</ul>
+								</td>
+								</tr>
+								</table>
+							  </div>
+							</div>
+						  </div>
+					</div>
+				  <div class="tab-pane container active" id="Booking">
+						 <div class="iconbgblue"><i class="far fa-edit fa-lg"></i></div>
+							  <div class="container">
+								<h4><b>Booking Process</b></h4>
+								<div class="list-group-flush">
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step8">1</button></td>
+									<td><p class="mb-0"><b>DEMAND REGISTRATION</b><br/>Register your demand for empty goods train, manually at your nearest freight terminal or electronically through <a href="https://www.fois.indianrail.gov.in/foisEfnote/OpenPages/Login_new.jsp" target="_blank">e-Demand</a> option </p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step8">1</button></td>
+									<td><p class="mb-0"><b>WAGON REGISTRATION FEE (WRF)</b><br/>Please pay the Wagon Registration Fee for the demand</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step7">2</button></td>
+									<td><p class="mb-0"><b>ALLOTMENT OF EMPTY TRAIN (RAKE)</b><br/>Railway will allot an empty rake and inform the customer about supply of rake through SMS</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step5">3</button></td>
+									<td><p class="mb-0"><b>RAKE SUPPLY</b><br/>Receive Information about Commercial Placement (Rake Supply) by Railways</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step4">4</button></td>
+									<td>
+									<p class="mb-0"><b>RAKE LOADING</b><br/>Loading for Booked Commodity and handing over the Loaded Wagons to Railways</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step2">5</button></td>
+									<td>
+									<p class="mb-0"><b>WEIGHMENT</b><br/>Weighment of Rake and Capturing of Loading Register</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step1">6</button></td>
+									<td>
+									<p class="mb-0"><b>PAYMENT OF FREIGHT</b><br/>Pay the Total/Pending Freight Amount for this booking</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step8">7</button></td>
+									<td>
+									<p class="mb-0"><b>GENERATION OF RR/eT-RR</b><br/>Generation of Railway Receipt (RR) by Railways Goods Clerk against the Loading</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step3">8</button></td>
+									<td>
+									<p class="mb-0"><b>FREIGHT COLLECTION</b><br/>Collection of freight charges against the booking and printing of eT-RR/RR</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+						  </div>
+				  </div>
+				</div>				
+				  <div class="tab-pane container fade" id="Mvmt">
+						 <div class="iconbggreen"><i class="fas fa-route fa-lg"></i></div>
+							  <div class="container">
+								<h4><b>Freight Train Movement</b></h4>
+								<div class="list-group-flush">
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step1">1</button></td>
+									<td><p class="mb-0"><b>RAKE DEPARTURE</b><br/>Loaded Freight Train departs from its source station</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step2">2</button></td>
+									<td><p class="mb-0"><b>RAKE TRACKING</b><br/>Tracking the real-time movement of rake through FNR Track n Trace Feature</p></td>
+									</tr>
+									</table>
+								  </div>
+
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step3">3</button></td>
+									<td><p class="mb-0"><b>RAKE ARRIVAL</b><br/>The loaded freight train arrives at its booked destination for unloading</p></td>
+									</tr>
+									</table>
+								  </div>
+						  </div>
+				  </div>
+				</div>
+				  <div class="tab-pane container fade" id="Delivery">
+						 <div class="iconbgblue"><i class="fas fa-handshake fa-lg"></i></div>
+							  <div class="container">
+								<h4><b>Delivery Process at Destination</b></h4>
+								<div class="list-group-flush">
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step8">1</button></td>
+									<td><p class="mb-0"><b>RR TRANSFER</b><br/>eT-RR / RR is transferred to Consignee, the recipient of the cargo</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step7">2</button></td>
+									<td><p class="mb-0"><b>HANDING OVER</b><br/>Rake is handed over to customer for unloading</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step5">3</button></td>
+									<td><p class="mb-0"><b>eT-RR SURRENDER</b><br/>e-Surrender of eT-RR for physical delivery</p></td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step4">4</button></td>
+									<td>
+									<p class="mb-0"><b>RAKE UNLOADING</b><br/>Unloading of the rake starts and Empty Rake is handed over to Railways after unloading completes</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step1">5</button></td>
+									<td>
+									<p class="mb-0"><b>PAYMENT OF CHARGES</b><br/>Payment of Delivery Book Charges</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step8">6</button></td>
+									<td>
+									<p class="mb-0"><b>REMOVAL</b><br/>Removal of Consignment is recorded in Railways</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step3">7</button></td>
+									<td>
+									<p class="mb-0"><b>CHARGES CLEARANCE</b><br/>Clearance of all the charges related to Demmurage/Wharfage, if any</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+								  <div class="list-group-item">
+									<table class="table table-steplist">
+									<tr>
+									<td><button class="btn btn-step4">8</button></td>
+									<td>
+									<p class="mb-0"><b>CLOSURE</b><br/>Delivery book is closed by Goods Clerk at destination station for that Booking</p>
+									</td>
+									</tr>
+									</table>
+								  </div>
+						  </div>
+				  </div>
+				</div>
+				</div>
+				</div>
+				</div>
+      </div>
+      </div>
+
+<%@ include file="/pages/GG_Footer.jspf" %>
+
+            
